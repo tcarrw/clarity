@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Clarity · Sigrid Field — clarity.plnt.earth</title>
-<meta name="description" content="Featured player with auto-advance, captions, 128/256 Hz tones (full-body + airy), lyric snippets, and live interviews.">
-<meta name="theme-color" content="#f1fbff" media="(prefers-color-scheme: light)">
+<meta name="description" content="Bioluminescent player with auto-advance, captions, 128/256 Hz tones, a ‘Clarity Burst’ full-body throb, and Red↔Blue color wash." />
+<meta name="theme-color" content="#0b0d11">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<!-- Performance: warm up YouTube origins -->
+<!-- Warm up YouTube -->
 <link rel="dns-prefetch" href="https://www.youtube.com">
 <link rel="dns-prefetch" href="https://i.ytimg.com">
 <link rel="dns-prefetch" href="https://www.google.com">
@@ -19,42 +19,58 @@
 
 <style>
   :root{
-    --bg:#f6fbff; --ink:#10222e; --muted:#5d6a75; --card:#ffffff; --ring:#dceaf3;
-    --accent:#6de1ff; --accent-2:#b9ffe6; --jelly:#9ad7ff; --shadow:0 10px 30px rgba(6,37,58,.12);
-
-    /* Duo mode palette (tweakable) */
-    --duoA:#ff375f;  /* red */
-    --duoB:#2a6bff;  /* blue */
+    /* —— Bluefire Dark —— */
+    --bg:#0b0d11; --ink:#e9ecf4; --muted:#9aa6b6; --card:#101425; --ring:#1b2433;
+    --accent:#7fd0ff; --accent-2:#b9ffe6; --jelly:#7abaff; --shadow:0 14px 40px rgba(3,8,14,.55);
+    /* Duo (R↔B wash) */
+    --duoA:#ff4766; --duoB:#3bb5ff;
+    /* Wash film colors */
+    --washA:#ff3d6b; --washB:#47baff; --washC:#b9ffe6; --washD:#9d7bff;
   }
+
   *{box-sizing:border-box} html,body{height:100%}
   body{
-    margin:0; font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;
-    color:var(--ink); background:linear-gradient(180deg,#fbffff 0%,#eff9ff 50%,#e7f6ff 100%);
+    margin:0; font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;
+    color:var(--ink);
+    background:
+      radial-gradient(120% 120% at 20% -10%, rgba(127,208,255,.12), transparent 50%),
+      radial-gradient(100% 100% at 120% 0%, rgba(185,255,230,.08), transparent 60%),
+      linear-gradient(180deg,#0b0d11 0%, #0b1018 60%, #0b0d11 100%);
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
   }
-  #snow{position:fixed; inset:0; z-index:-1; filter:drop-shadow(0 0 2px rgba(255,255,255,.6))}
-  .shimmer::before{
-    content:""; position:fixed; inset:-20vmax; pointer-events:none; z-index:-2;
-    background:radial-gradient(120% 120% at 20% 10%, rgba(109,225,255,.12), transparent 50%),
-               radial-gradient(100% 100% at 80% 0%, rgba(185,255,230,.10), transparent 60%);
-    animation:glow 10s ease-in-out infinite alternate;
-  }
-  @keyframes glow{from{opacity:.6; transform:translateY(-1%)} to{opacity:.9; transform:translateY(1%)}}
 
-  .wrap{max-width:1080px;margin:0 auto;padding:20px 14px 80px}
+  /* Global color wash veil (animated during Burst) */
+  #wash{
+    position:fixed; inset:-10vmax; pointer-events:none; z-index:0; opacity:.06;
+    background:
+      conic-gradient(from 0deg at 30% 40%, var(--washB), transparent 55%),
+      radial-gradient(60% 45% at 70% 20%, color-mix(in lab, var(--washA) 30%, transparent), transparent 70%),
+      radial-gradient(40% 35% at 10% 80%, color-mix(in lab, var(--washC) 30%, transparent), transparent 70%);
+    mix-blend-mode:screen;
+    filter:saturate(1.1) contrast(1.05);
+  }
+  body.wash-strong #wash{ opacity:.33 }   /* raised during burst */
+  body.wash-mid    #wash{ opacity:.18 }
+  body.wash-soft   #wash{ opacity:.10 }
+
+  /* Night shimmer/stars */
+  #stars{position:fixed; inset:0; z-index:-1; filter:drop-shadow(0 0 2px rgba(127,208,255,.25))}
+  .wrap{max-width:1080px;margin:0 auto;padding:20px 14px 80px; position:relative; z-index:1}
+
   header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 16px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
   .jelly{
     width:42px;height:42px;border-radius:14px;
-    background: radial-gradient(120% 120% at 20% 10%, var(--accent) 0%, #e0ffff 40%, #ffffff 70%) padding-box,
-                conic-gradient(from 0deg at 50% 60%, #e0ffff, var(--jelly), #e6fff9, #e0ffff) border-box;
-    border:2px solid transparent; box-shadow:var(--shadow),0 0 40px rgba(109,225,255,.65) inset; position:relative; overflow:hidden;
+    background:
+      radial-gradient(120% 120% at 20% 10%, #11304a 0%, #0e2133 50%, #0c1624 80%) padding-box,
+      conic-gradient(from 0deg at 50% 60%, #0f2236, #173a59, #123047, #0f2236) border-box;
+    border:2px solid transparent; box-shadow:var(--shadow),0 0 40px rgba(127,208,255,.25) inset; position:relative; overflow:hidden;
   }
   .jelly:after{content:"";position:absolute;left:50%;top:55%;width:70%;height:70%;transform:translate(-50%,-50%);
-    filter:blur(12px); background:radial-gradient(50% 60% at 50% 40%, rgba(109,225,255,.4), transparent 70%)}
+    filter:blur(12px); background:radial-gradient(50% 60% at 50% 40%, rgba(127,208,255,.18), transparent 70%)}
   h1{font-size:20px;margin:0}
   .small{font-size:12px;color:var(--muted)}
-  .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#e9fbff;border:1px solid var(--ring);color:#0e3948}
+  .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#0f1827;border:1px solid var(--ring);color:#b7c6dc}
 
   /* Controls */
   .tonebar{
@@ -62,80 +78,96 @@
     border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)
   }
   .btn{
-    appearance:none;border:1px solid var(--ring);background:linear-gradient(#ffffff,#f7fdff); color:var(--ink);
-    padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer; box-shadow:var(--shadow);
+    appearance:none;border:1px solid var(--ring);
+    background:linear-gradient(180deg,#122034,#0f1b2b); color:var(--ink);
+    padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer; box-shadow:var(--shadow);
     transition:transform .08s ease, box-shadow .2s ease, border-color .2s
   }
   .btn:active{transform:translateY(1px)}
-  .btn.primary{background:linear-gradient(180deg,#e9fdff,#d8f7ff); border-color:#bfefff; box-shadow:0 10px 24px rgba(86,205,255,.25), inset 0 0 0 1px #ffffff}
-  .btn.glow{animation:pulse 1.4s ease-in-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 rgba(109,225,255,0)}50%{box-shadow:0 0 24px rgba(109,225,255,.7)}100%{box-shadow:0 0 0 rgba(109,225,255,0)}}
+  .btn.primary{
+    background:
+      linear-gradient(180deg,#13263c,#0f1e30) padding-box,
+      conic-gradient(from 0deg, #3bb5ff, #b9ffe6, #7fd0ff, #3bb5ff) border-box;
+    border:1px solid transparent;
+    box-shadow:0 10px 24px rgba(29,120,175,.35), inset 0 0 0 1px rgba(255,255,255,.04);
+  }
+  .btn.glow{animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 rgba(127,208,255,0)}50%{box-shadow:0 0 28px rgba(127,208,255,.55)}100%{box-shadow:0 0 0 rgba(127,208,255,0)}}
 
-  .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden}
-  .switch button{border:0;background:transparent;padding:8px 12px;cursor:pointer}
-  .switch button.active{background:#e8fbff;font-weight:700}
-  .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#f7feff}
+  .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden;background:#0f1b2a}
+  .switch button{border:0;background:transparent;color:var(--ink);padding:8px 12px;cursor:pointer}
+  .switch button.active{background:#142235;font-weight:700}
+  .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#0f1b2a;color:var(--ink)}
   .pill .row{display:inline-flex;gap:8px;align-items:center}
 
   /* Featured */
   .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring)}
+  .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring);background:#000}
   .fp-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
-  .fp-title{font-weight:700}
+  .fp-title{font-weight:800}
   .fp-caption{font-size:13px;color:var(--muted)}
   .fp-controls{display:flex;gap:8px;flex-wrap:wrap}
 
-  /* Red↔Blue overlay for the featured iframe (color wash only) */
+  /* R↔B overlay for featured + burst tint */
   .fp-duo{position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity .2s ease}
-  body.mode-redblue .fp-duo{opacity:.6; mix-blend-mode:color; background:linear-gradient(135deg,var(--duoA),var(--duoB))}
-  /* We cannot hue-rotate inside cross-origin iframes; opposite mode applies to thumbnails only */
+  body.mode-redblue .fp-duo{opacity:.35; mix-blend-mode:color; background:linear-gradient(135deg,var(--duoA),var(--duoB))}
+  body.mode-opposite .fp-duo{opacity:.25; mix-blend-mode:hue; background:linear-gradient(135deg,#00ffe1,#ff00cc)}
+  body.burst-on .fp-duo{opacity:.55} /* stronger during burst */
 
   /* Grid / thumbnails */
   .grid{display:grid;gap:10px;margin-top:12px; grid-template-columns:repeat(2,minmax(0,1fr))}
   @media(min-width:860px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
   .slot{background:var(--card);border:1px solid var(--ring);border-radius:12px;box-shadow:var(--shadow);padding:8px}
-  .thumb{position:relative;aspect-ratio:16/9;border:1px solid var(--ring);border-radius:8px;overflow:hidden;background:#eef7ff}
-  .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:none;transition:filter .25s ease, opacity .25s ease}
+  .thumb{position:relative;aspect-ratio:16/9;border:1px solid var(--ring);border-radius:8px;overflow:hidden;background:#0a0a0a}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.9) contrast(1.1);transition:filter .25s ease, opacity .25s ease}
   .thumb .duo{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s ease}
-  body.mode-redblue .thumb img{filter:grayscale(1) contrast(1.15) brightness(1.05)}
-  body.mode-redblue .thumb .duo{opacity:.72; mix-blend-mode:color; background:linear-gradient(135deg,var(--duoA),var(--duoB))}
+  body.mode-redblue .thumb img{filter:grayscale(.85) contrast(1.2) brightness(.95)}
+  body.mode-redblue .thumb .duo{opacity:.5; mix-blend-mode:color; background:linear-gradient(135deg,var(--duoA),var(--duoB))}
   body.mode-opposite .thumb img{filter:hue-rotate(180deg) saturate(1.2) contrast(1.02)}
   .slot .title{font-size:12px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .slot .snip{font-size:11px;color:var(--muted); margin-top:2px}
 
-  .notice{margin-top:14px;font-size:13px;color:#0d3a47;background:#ebffff;border:1px dashed #b9e7f7;border-radius:12px;padding:10px 12px}
+  .notice{margin-top:14px;font-size:13px;color:#b7c6dc;background:#0f1b2a;border:1px dashed #223047;border-radius:12px;padding:10px 12px}
   footer{margin:28px 0 0;color:var(--muted);font-size:13px}
   details{background:var(--card); border:1px solid var(--ring); border-radius:14px; box-shadow:var(--shadow); padding:10px 12px; margin-top:18px}
-  summary{cursor:pointer; font-weight:700}
+  summary{cursor:pointer; font-weight:800}
 
-  /* Primer overlay */
+  /* Primer overlay — dark */
   #primer{
     position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:radial-gradient(120% 120% at 50% 20%, rgba(185,255,230,.35), rgba(109,225,255,.25) 40%, rgba(255,255,255,.92) 70%);
+    background: radial-gradient(120% 120% at 50% 20%, rgba(24,39,61,.65), rgba(9,16,28,.85) 60%);
     backdrop-filter: blur(4px);
     z-index:999;
   }
   #primerBtn{
     font-size:18px; padding:16px 22px; border-radius:16px;
-    border:2px solid #bfefff; box-shadow:0 10px 30px rgba(86,205,255,.35), inset 0 0 0 1px #ffffff;
+    border:1px solid #203247; color:var(--ink);
+    background:
+      linear-gradient(180deg,#122033,#0f1b2a) padding-box,
+      conic-gradient(from 0deg, #3bb5ff, #b9ffe6, #7fd0ff, #3bb5ff) border-box;
+    box-shadow:0 10px 30px rgba(18,142,206,.35), inset 0 0 0 1px rgba(255,255,255,.04);
     animation:pop 1.8s ease-in-out infinite, floaty 4s ease-in-out infinite;
   }
-  #primerBtn .hint{display:block; font-size:12px; color:#0b4a5b; opacity:.8; margin-top:4px}
-  @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.04)} 100%{transform:scale(1)}}
+  #primerBtn .hint{display:block; font-size:12px; color:#b7c6dc; opacity:.8; margin-top:4px}
+  @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)}}
   @keyframes floaty{0%{transform:translateY(0)} 50%{transform:translateY(-4px)} 100%{transform:translateY(0)}}
 
-  /* Hidden bin for off-screen prewarmed iframes */
+  /* Hidden bin for prewarmed iframes */
   #prewarmBin{position:absolute; left:-9999px; top:auto; width:0; height:0; overflow:hidden}
 </style>
 </head>
-<body class="shimmer mode-natural">
-<canvas id="snow" aria-hidden="true"></canvas>
+<body class="mode-natural">
+<!-- Global color wash veil -->
+<div id="wash" aria-hidden="true"></div>
 
-<!-- One-tap primer: enables audio + starts video -->
+<!-- Stars -->
+<canvas id="stars" aria-hidden="true"></canvas>
+
+<!-- One-tap primer -->
 <div id="primer" role="dialog" aria-modal="true" aria-label="Start session">
   <button id="primerBtn" class="btn primary glow">
-    ▶ Start Session
-    <span class="hint">Enables tones · preloads and starts first video</span>
+    ▶ Activate Bluefire
+    <span class="hint">Enables tones · preloads & starts first video · fires Clarity Burst</span>
   </button>
 </div>
 
@@ -145,10 +177,10 @@
       <div class="jelly" aria-hidden="true"></div>
       <div>
         <h1>Clarity Field · <span class="small">Sigrid ↔ You</span></h1>
-        <div class="small">Root in the Air — 128 Hz + 256 Hz · Featured player • Auto-advance</div>
+        <div class="small">Root in the Air — 128 Hz + 256 Hz · Interviews first • Auto-advance</div>
       </div>
     </a>
-    <span class="tag">jellyfish · bright</span>
+    <span class="tag">jellyfish · bluefire · dark</span>
   </header>
 
   <!-- CONTROL BAR -->
@@ -161,8 +193,8 @@
 
     <!-- Set toggle -->
     <div class="switch" role="tablist" aria-label="Playlist set" style="margin-left:6px">
-      <button id="setTracks" class="active" aria-selected="true">Tracks</button>
-      <button id="setInterviews" aria-selected="false">Interviews / Live</button>
+      <button id="setTracks" aria-selected="false">Tracks</button>
+      <button id="setInterviews" class="active" aria-selected="true">Interviews / Live</button>
     </div>
 
     <!-- Color mode -->
@@ -174,7 +206,7 @@
 
     <!-- Snippets -->
     <div class="switch" role="tablist" aria-label="Snippets" style="margin-left:6px">
-      <button id="snipOn" class="active" aria-selected="true">Lyric Snippets</button>
+      <button id="snipOn" class="active" aria-selected="true">Snippets</button>
       <button id="snipOff" aria-selected="false">Hide</button>
     </div>
 
@@ -203,7 +235,9 @@
       </span>
     </span>
 
-    <span class="pill">Status: <span id="statusTone" class="pill" style="background:#fff8e1;border-color:#ffecb5;color:#664d03">waiting</span></span>
+    <button id="burstNow" class="btn" style="padding:6px 10px">Clarity Burst</button>
+
+    <span class="pill">Status: <span id="statusTone" class="pill" style="background:#0f1b2a;border-color:#223047;color:#b7c6dc">waiting</span></span>
 
     <div class="small" style="width:100%;margin-top:6px">
       One tap. Then breathe with 128 (root), blend 256 (air). Headphones welcome; speakers okay.
@@ -211,8 +245,8 @@
   </section>
 
   <section class="notice">
-    <strong>Tip:</strong> Tap a slot to load it into the **Featured Player**. With **Auto‑Advance**, the next slot plays at end.
-    **CC** requests YouTube captions (when available). The app preloads thumbnails and cues videos so starts are snappy.
+    <strong>Tip:</strong> Tap a slot to load it into the Featured Player. With Auto-Advance, the next slot plays at end.
+    CC requests YouTube captions (when available). Prewarmed players reduce start latency.
   </section>
 
   <!-- FEATURED PLAYER -->
@@ -241,28 +275,31 @@
 
   <!-- BONUS -->
   <details id="bonus">
-    <summary>✨ Bonus Live Cuts (quick access)</summary>
+    <summary>✨ Bonus Live Cuts</summary>
     <div id="bonusGrid" class="grid" style="margin-top:10px"></div>
   </details>
 
   <footer>
     <div class="notice">
-      <div><strong>Language bridge:</strong> you don’t need perfect Norwegian — clarity is a language. <em>“Jeg ser deg.”</em> (I see you.)</div>
+      <div><strong>Language bridge:</strong> clarity is a language. <em>“Jeg ser deg.”</em> (I see you.)</div>
       <div class="small">Ålesund ≈ “Eel Strait” — light over moving water.</div>
     </div>
     <p>Made with care for Sigrid — and for you. <span class="small">“Clarity is mutual seeing.”</span></p>
-    <p class="small">Privacy: playlists are saved locally (localStorage). No tracking.</p>
+    <p class="small">Privacy: saved locally (localStorage). No tracking.</p>
   </footer>
 </div>
 
 <!-- Off-screen bin for prewarmed iframes -->
 <div id="prewarmBin" aria-hidden="true"></div>
 
+<!-- YouTube API -->
+<script id="yt-iframe-api" src="https://www.youtube.com/iframe_api"></script>
+
 <script>
 /* ---------- Core state ---------- */
-const STATE_KEY = 'clarity.playlists.v6';
+const STATE_KEY = 'clarity.playlists.v8.dark.wash';
 const state = {
-  tab:'sigrid', set:'tracks', showSnippets:true, autoAdvance:true,
+  tab:'sigrid', set:'interviews', showSnippets:true, autoAdvance:true,
   ccOn:true, ccLang:'en',
   sigrid:[], you:[],
   players:{}, bonusPlayers:{}, warmPlayers:{},
@@ -334,7 +371,7 @@ function load(){
   try{
     const raw = localStorage.getItem(STATE_KEY);
     if(raw){ const s=JSON.parse(raw);
-      state.tab=s.tab||'sigrid'; state.set=s.set||'tracks';
+      state.tab=s.tab||'sigrid'; state.set=s.set||'interviews';
       state.showSnippets = typeof s.showSnippets==='boolean'? s.showSnippets : true;
       state.autoAdvance = typeof s.autoAdvance==='boolean'? s.autoAdvance : true;
       state.ccOn = typeof s.ccOn==='boolean'? s.ccOn : true;
@@ -352,15 +389,10 @@ const bonusGrid = document.getElementById('bonusGrid');
 const fpTitle = document.getElementById('fpTitle');
 const fpCaption = document.getElementById('fpCaption');
 const prewarmBin = document.getElementById('prewarmBin');
+const wash = document.getElementById('wash');
 
 /* ---------- YouTube API ---------- */
 let YT_READY=false;
-function injectYT(){
-  if(document.getElementById('yt-iframe-api')) return;
-  const tag=document.createElement('script');
-  tag.id='yt-iframe-api'; tag.src='https://www.youtube.com/iframe_api';
-  document.body.appendChild(tag);
-}
 window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); prewarmAll(); };
 
 /* ---------- Helpers ---------- */
@@ -402,7 +434,7 @@ function buildFeatured(){
   });
 }
 
-/* Slots with real <img> thumbnails (lazy, async) + color overlays */
+/* Slots */
 function buildSlots(){
   grid.innerHTML='';
   const list=currentList(); preloadThumbs(list);
@@ -456,7 +488,7 @@ function pauseAllBonus(){
   for(const k of Object.keys(state.bonusPlayers)){ try{ state.bonusPlayers[k].pauseVideo(); }catch{} }
 }
 
-/* Prewarm: off-screen players cue metadata to reduce start latency */
+/* Prewarm off-screen players */
 function prewarmAll(){
   if(!YT_READY) return;
   const list=currentList();
@@ -502,7 +534,7 @@ const colorOpp = document.getElementById('colorOpp');
 function setColorMode(mode){
   document.body.classList.remove('mode-natural','mode-redblue','mode-opposite');
   document.body.classList.add(`mode-${mode}`);
-  [colorNatural,colorRB,colorOpp].forEach(b=>b.classList.remove('active')); 
+  [colorNatural,colorRB,colorOpp].forEach(b=>b.classList.remove('active'));
   ({natural:colorNatural,redblue:colorRB,opposite:colorOpp}[mode]).classList.add('active');
   colorNatural.setAttribute('aria-selected', mode==='natural');
   colorRB.setAttribute('aria-selected', mode==='redblue');
@@ -547,7 +579,7 @@ autoOff.onclick = ()=>{ state.autoAdvance=false; save(); reflectButtons(); };
 ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; save(); buildFeatured(); reflectButtons(); };
 ccLang.onchange = ()=>{ state.ccLang=ccLang.value; save(); buildFeatured(); };
 
-/* ---------- Primer & TONAL ENGINE (full-body + airy) ---------- */
+/* ---------- Primer & TONAL ENGINE (128 / 256 + airy halo) ---------- */
 const primer = document.getElementById('primer');
 const primerBtn = document.getElementById('primerBtn');
 const statusTone = document.getElementById('statusTone');
@@ -558,12 +590,12 @@ const toneLevel = document.getElementById('toneLevel');
 
 function setToneBadge(txt, mode){
   statusTone.textContent = txt;
-  const maps = { on:['#e7fff0','#c8f5da','#0b5130'], off:['#fff8e1','#ffecb5','#664d03'], wait:['#eef6ff','#d8eafe','#0b3b61'] };
+  const maps = { on:['#102a21','#174a3a','#b9ffe6'], off:['#2a210f','#4a3a17','#ffd596'], wait:['#0f1b2a','#223047','#b7c6dc'] };
   const [bg,bd,fg]=maps[mode]||maps.on; statusTone.style.background=bg; statusTone.style.borderColor=bd; statusTone.style.color=fg;
 }
 setToneBadge('waiting','wait');
 
-/* Device tuning (simple, silent) */
+/* Device tuning */
 (function detectDevice(){
   const ua = navigator.userAgent||'';
   const mobile = /iPhone|Android/.test(ua) || (navigator.maxTouchPoints>1 && screen.width<820);
@@ -584,7 +616,7 @@ function initTones(){
   mono.gain.value = (state.deviceProfile==='iphone'||state.deviceProfile==='mobile') ? 0.25 : 0.12;
   merger.connect(wide).connect(main); mono.connect(main); main.connect(ctx.destination);
 
-  /* Gentle dynamics to keep it smooth on tiny speakers */
+  /* Gentle dynamics */
   const comp = ctx.createDynamicsCompressor();
   comp.threshold.value=-24; comp.knee.value=12; comp.ratio.value=2; comp.attack.value=0.02; comp.release.value=0.25;
   main.connect(comp).connect(ctx.destination);
@@ -593,11 +625,8 @@ function initTones(){
   const delta = (state.deviceProfile==='iphone'||state.deviceProfile==='mobile') ? 0.7 : 1.2; // Hz
 
   function tonePair(freq, baseGain){
-    // Left / Right oscillators for a soft binaural field
     const oscL = ctx.createOscillator(); oscL.type='sine'; oscL.frequency.value=freq - delta/2;
     const oscR = ctx.createOscillator(); oscR.type='sine'; oscR.frequency.value=freq + delta/2;
-
-    // Slow breath (AM) for body feel (128) and airy shimmer (256)
     const lfo = ctx.createOscillator(); lfo.type='sine';
     lfo.frequency.value = (freq===128) ? 0.08 : 0.12;
     const lfoGainL = ctx.createGain(); lfoGainL.gain.value= (freq===128) ? 0.12 : 0.08;
@@ -613,7 +642,7 @@ function initTones(){
     oscL.connect(gL); oscR.connect(gR);
     gL.connect(merger,0,0); gR.connect(merger,0,1);
 
-    // Mono sum (for tiny or fused speakers)
+    // Mono sum for small speakers
     const mL = ctx.createGain(); const mR = ctx.createGain();
     mL.gain.value = baseGain*0.5; mR.gain.value = baseGain*0.5;
     oscL.connect(mL).connect(mono); oscR.connect(mR).connect(mono);
@@ -622,21 +651,21 @@ function initTones(){
     return {oscL,oscR,gL,gR,lfo,lfoGainL,lfoGainR,mL,mR};
   }
 
-  // Build tones (fire: root body; air: head space)
+  // Build tones
   const t128 = tonePair(128, 0.16);
   const t256 = tonePair(256, 0.12);
 
-  // A whisper of filtered air (very low)
+  // Air halo
   const noiseBuf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
   const data = noiseBuf.getChannelData(0); for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1)*0.02; }
   const noise = ctx.createBufferSource(); noise.buffer=noiseBuf; noise.loop=true;
   const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1500;
-  const airGain = ctx.createGain(); airGain.gain.value = 0.02; // airy halo
+  const airGain = ctx.createGain(); airGain.gain.value = 0.02;
   noise.connect(hp).connect(airGain).connect(main); noise.start();
 
   state.ctx = ctx;
   state.audio = {main,comp,merger,mono,wide, t128, t256, airGain};
-  updateToneRouting(); // respect UI
+  updateToneRouting();
 }
 
 function updateToneRouting(){
@@ -660,13 +689,106 @@ tone128.onchange = updateToneRouting;
 tone256.onchange = updateToneRouting;
 toneLevel.oninput = updateToneRouting;
 
+/* ---------- Clarity Burst (with synchronized color wash) ---------- */
+const burstBtn = document.getElementById('burstNow');
+function clarityBurst(opts){
+  if(!state.ctx) return;
+  const ctx = state.ctx;
+  const level = Number(toneLevel.value)/100 || 0.68;
+
+  const p = Object.assign({
+    dur: 9.0, throbHz: 0.9, bodyMin: 40, bodyMax: 400,
+    base: 0.18, depth: 0.22, tone64:true, tone128:true, tone256:true
+  }, opts||{});
+
+  /* Audio nodes */
+  const bus = ctx.createGain(); bus.gain.value = 0.0;
+  const throbLFO = ctx.createOscillator(); throbLFO.type='sine'; throbLFO.frequency.value=p.throbHz;
+  const throbAmt = ctx.createGain(); throbAmt.gain.value = p.depth * level;
+  const out = ctx.createGain(); out.gain.value = p.base * level;
+
+  /* Body noise bed */
+  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
+  const nd = noiseBuf.getChannelData(0); for(let i=0;i<nd.length;i++){ nd[i] = (Math.random()*2-1)*0.08; }
+  const noise = ctx.createBufferSource(); noise.buffer = noiseBuf; noise.loop = true;
+  const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = p.bodyMin;
+  const lp = ctx.createBiquadFilter(); lp.type='lowpass';  lp.frequency.value = p.bodyMax;
+  const nGain = ctx.createGain(); nGain.gain.value = 0.16 * level;
+
+  function makeTone(freq, g=0.14){
+    const delta = (state.deviceProfile==='iphone'||state.deviceProfile==='mobile') ? 0.6 : 1.1;
+    const oL = ctx.createOscillator(); oL.type='sine'; oL.frequency.value = freq - delta/2;
+    const oR = ctx.createOscillator(); oR.type='sine'; oR.frequency.value = freq + delta/2;
+    const gL = ctx.createGain(); gL.gain.value = g * level;
+    const gR = ctx.createGain(); gR.gain.value = g * level;
+    oL.connect(gL).connect(bus); oR.connect(gR).connect(bus);
+    oL.start(); oR.start();
+    return ()=>{ try{oL.stop();oR.stop();}catch{}; };
+  }
+
+  const stops = [];
+  if(p.tone64)  stops.push(makeTone(64,  0.12));
+  if(p.tone128) stops.push(makeTone(128, 0.15));
+  if(p.tone256) stops.push(makeTone(256, 0.12));
+
+  noise.connect(hp).connect(lp).connect(nGain).connect(bus); noise.start();
+  throbLFO.connect(throbAmt); throbAmt.connect(bus.gain); throbLFO.start();
+  bus.connect(out).connect(state.audio ? state.audio.main : ctx.destination);
+
+  /* Envelope */
+  const t0 = ctx.currentTime + 0.02;
+  bus.gain.cancelScheduledValues(0);
+  bus.gain.setValueAtTime(0.0, t0);
+  bus.gain.linearRampToValueAtTime(p.base * level, t0 + 0.28);
+  const tEnd = t0 + p.dur - 0.8;
+  bus.gain.setTargetAtTime(0.0, tEnd, 0.35);
+
+  /* Visuals: synchronized color wash + featured tint */
+  document.body.classList.add('burst-on','wash-strong');
+  const washAnim = wash.animate(
+    [
+      { transform: 'translate3d(0,0,0) rotate(0deg)',    opacity: .10 },
+      { transform: 'translate3d(2vmax,-1vmax,0) rotate(90deg)', opacity: .33 },
+      { transform: 'translate3d(-1vmax,1vmax,0) rotate(180deg)', opacity: .18 },
+      { transform: 'translate3d(0,0,0) rotate(360deg)', opacity: .10 }
+    ],
+    { duration: p.dur*1000, easing:'ease-in-out' }
+  );
+  /* Sub-pulses on body to feel the heartbeat */
+  const pulseAnim = document.body.animate(
+    [
+      { boxShadow:'inset 0 0 0 0 rgba(127,208,255,0)' },
+      { boxShadow:'inset 0 0 0 22px rgba(127,208,255,0.10)' },
+      { boxShadow:'inset 0 0 0 0 rgba(127,208,255,0)' }
+    ],
+    { duration: 1000/p.throbHz, iterations: Math.max(1, Math.round(p.dur*p.throbHz)), easing:'ease-in-out' }
+  );
+
+  /* Cleanup visuals at end */
+  setTimeout(()=>{
+    document.body.classList.remove('burst-on');
+    document.body.classList.remove('wash-strong');
+    document.body.classList.add('wash-soft');
+    setTimeout(()=> document.body.classList.remove('wash-soft'), 1200);
+  }, p.dur*1000 + 200);
+
+  /* Hard cleanup */
+  setTimeout(()=>{
+    try{ throbLFO.stop(); noise.stop(); }catch{}
+    out.disconnect(); bus.disconnect(); throbAmt.disconnect();
+  }, p.dur*1000 + 400);
+}
+
+burstBtn.onclick = ()=> clarityBurst();
+
+/* Primer: init tones, start first video, fire Burst */
 primerBtn.onclick = async ()=>{
   initTones(); try{ await state.ctx.resume(); }catch{}
   setToneBadge('tones on','on');
-
   if(!state.fp) buildFeatured();
   requestPlayReady();
   primer.style.display='none';
+  setTimeout(()=> clarityBurst(), 140);
 };
 
 /* Media Session */
@@ -697,17 +819,17 @@ window.addEventListener('keydown',(e)=>{
   if(e.code==='ArrowLeft') prevTrack();
 });
 
-/* Parallax snow */
-(function snow(){
-  const c=document.getElementById('snow'); const dpr=Math.max(1,window.devicePixelRatio||1);
+/* Stars (parallax) */
+(function stars(){
+  const c=document.getElementById('stars'); const dpr=Math.max(1,window.devicePixelRatio||1);
   const x=c.getContext('2d'); let flakes=[], mouseY=0, scrollY=0;
   function size(){ c.width=innerWidth*dpr; c.height=innerHeight*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
-  function seed(N=120){ flakes=new Array(N).fill(0).map(()=>({x:Math.random()*innerWidth,y:-10-Math.random()*innerHeight,r:1+Math.random()*2.5,s:.4+Math.random()*1.2,o:.4+Math.random()*.6,l:.2+Math.random()*.8})); }
+  function seed(N=120){ flakes=new Array(N).fill(0).map(()=>({x:Math.random()*innerWidth,y:-10-Math.random()*innerHeight,r:0.6+Math.random()*1.8,s:.35+Math.random()*1,o:.35+Math.random()*.45,l:.2+Math.random()*.8})); }
   function draw(){
     x.clearRect(0,0,innerWidth,innerHeight);
-    const par=(scrollY*0.15+(mouseY-innerHeight/2)*0.02);
-    for(const f of flakes){ f.y+=f.s+par*0.002; f.x+=Math.sin((f.y+par)*.01)*f.l; if(f.y>innerHeight+10){ f.y=-10; f.x=Math.random()*innerWidth; }
-      x.globalAlpha=f.o; x.beginPath(); x.arc(f.x,f.y,f.r,0,Math.PI*2); x.fillStyle="#ffffff"; x.fill(); }
+    const par=(scrollY*0.12+(mouseY-innerHeight/2)*0.02);
+    for(const f of flakes){ f.y+=f.s+par*0.0015; f.x+=Math.sin((f.y+par)*.01)*f.l; if(f.y>innerHeight+10){ f.y=-10; f.x=Math.random()*innerWidth; }
+      x.globalAlpha=f.o; x.beginPath(); x.arc(f.x,f.y,f.r,0,Math.PI*2); x.fillStyle="rgba(127,208,255,.55)"; x.fill(); }
     requestAnimationFrame(draw);
   }
   window.addEventListener('resize', ()=>{ size(); seed(flakes.length); });
@@ -717,10 +839,13 @@ window.addEventListener('keydown',(e)=>{
 })();
 
 /* Boot */
-injectYT();
+(function injectYT(){
+  if(document.getElementById('yt-iframe-api')) return;
+  const tag=document.createElement('script'); tag.id='yt-iframe-api'; tag.src='https://www.youtube.com/iframe_api';
+  document.body.appendChild(tag);
+})();
 buildSlots(); buildBonus(); preloadThumbs();
 setColorMode('natural'); // default
-
 </script>
 </body>
 </html>
