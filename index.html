@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Clarity · Shared Edge Sync — Mutual Seed Bursts</title>
-<meta name="description" content="Mutual Seed Bursts with shared edge sync (:00/:30). Bursts loop on Sigrid tracks in Red↔Blue mode; Calm phase to settle."/>
+<meta name="description" content="Mutual Seed Bursts with shared edge sync (:00/:30). Bursts loop on Sigrid tracks in Red↔Blue mode; Calm phase to settle. Advanced controls under More."/>
 <meta name="theme-color" content="#0b0d11">
 <meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -53,13 +53,14 @@
     padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer; box-shadow:var(--shadow); transition:transform .08s ease, box-shadow .2s}
   .btn:active{transform:translateY(1px)}
   .btn.primary{background:linear-gradient(180deg,#13263c,#0f1e30) padding-box, conic-gradient(from 0deg,#3bb5ff,#b9ffe6,#7fd0ff,#3bb5ff) border-box; border:1px solid transparent}
-
   .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden;background:#0f1b2a}
   .switch button{border:0;background:transparent;color:var(--ink);padding:8px 12px;cursor:pointer}
   .switch button.active{background:#142235;font-weight:700}
   .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#0f1b2a;color:var(--ink)}
   .pill .row{display:inline-flex;gap:8px;align-items:center}
   .badge{border:1px solid var(--ring); border-radius:999px; padding:2px 8px; font-size:12px; color:#c9d6ea}
+  #moreToggle.active { outline:2px solid var(--accent); }
+  #morePanel .badge { background:#0e1a2a; border-color:#1d2b3f; color:#bcd1ef; }
 
   .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
   .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring);background:#000}
@@ -96,7 +97,7 @@
 <body class="mode-redblue"><!-- default Red↔Blue ON -->
 <canvas id="stars" aria-hidden="true"></canvas>
 
-<!-- One-tap activate for iPhone audio -->
+<!-- One-tap activate -->
 <div id="primer" role="dialog" aria-modal="true" aria-label="Start session">
   <button id="primerBtn" class="btn primary">
     ▶ Activate Bluefire
@@ -116,7 +117,7 @@
     <span class="tag">consent • clarity • kindness</span>
   </header>
 
-  <!-- MODES / GATES -->
+  <!-- GATES -->
   <section class="bar" aria-label="Gates">
     <div class="switch" role="tablist" aria-label="Color Mode">
       <button id="modeNatural" aria-selected="false">Natural</button>
@@ -137,9 +138,9 @@
     <span class="pill"><strong>Cadence</strong>
       <select id="cadence">
         <option value="sync">Auto (burst length + rest)</option>
-        <option value="short">Fast (rest ~4s)</option>
-        <option value="medium" selected>Steady (rest ~8s)</option>
-        <option value="long">Spacious (rest ~14s)</option>
+        <option value="short">Fast (~4s)</option>
+        <option value="medium" selected>Steady (~8s)</option>
+        <option value="long">Spacious (~14s)</option>
       </select>
     </span>
 
@@ -151,6 +152,8 @@
     </span>
 
     <span class="pill">Status: <span id="status" class="badge">waiting</span></span>
+    <!-- More (advanced) -->
+    <button id="moreToggle" class="btn" style="padding:10px 12px">More ▸</button>
   </section>
 
   <!-- SYNC / BURSTS -->
@@ -163,9 +166,42 @@
     <span class="pill">Loop: <span id="loopState" class="badge">idle</span></span>
   </section>
 
+  <!-- More panel (advanced) -->
+  <section id="morePanel" class="bar" aria-label="Advanced controls" style="display:none">
+    <span class="pill"><strong>Intensity</strong>
+      <input id="intensity_adv" type="range" min="1" max="5" value="4" style="vertical-align:middle">
+      <span id="intensityLbl_adv" class="badge">4 · deep</span>
+    </span>
+
+    <span class="pill"><strong>Shaping</strong>
+      <label style="margin-left:8px">Up-ramp ms <input id="seedUp" type="number" value="350" min="120" max="1200" step="10" style="width:80px"></label>
+      <label>Release ms <input id="seedRel" type="number" value="350" min="120" max="1200" step="10" style="width:80px"></label>
+      <label>Alias Hz <input id="aliasHz" type="number" value="102" min="85" max="140" step="1" style="width:70px"></label>
+    </span>
+
+    <span class="pill"><strong>Width</strong>
+      <label style="margin-left:8px">Cap (0.25–0.70) <input id="widthCap" type="number" value="0.55" min="0.25" max="0.70" step="0.01" style="width:85px"></label>
+    </span>
+
+    <span class="pill">
+      <strong>Cadence</strong>
+      <select id="cadence_adv">
+        <option value="short">Fast (~4s rest)</option>
+        <option value="medium" selected>Steady (~8s rest)</option>
+        <option value="long">Spacious (~14s rest)</option>
+        <option value="sync">Auto (burst length + rest)</option>
+      </select>
+    </span>
+
+    <span class="pill" title="Ethics & intent">
+      <strong>Intent</strong>
+      <span class="badge">Not sex — a care tool</span>
+    </span>
+  </section>
+
   <section class="notice">
-    **How it works:** **Activate** → pick **Red↔Blue** + **Tracks** → **Sync at :00/:30**.  
-    After sync starts, bursts loop (burst → rest) until **Calm Now**. Interviews never burst.
+    **How it works:** **Activate** → pick **Red↔Blue** + **Sigrid — Tracks** → optional **Sync at :00/:30**.  
+    Bursts loop (burst → rest) until **Calm Now**. Interviews never burst. Anyone can run it — for Sigrid, for Marina, or for themselves.
   </section>
 
   <!-- PLAYER -->
@@ -215,7 +251,7 @@ const state = {
   cadence:'medium', burstNode:null, widthNode:null, pendingSync:null
 };
 
-/* ===== Data ===== */
+/* ===== Tracks / Interviews (Sigrid) ===== */
 const TRACKS = [
   {id:'cIriwVhRPVA', title:'Strangers'},
   {id:'w5x93pXSmRM', title:'Don’t Feel Like Crying'},
@@ -268,6 +304,7 @@ const primer = document.getElementById('primer');
 const primerBtn = document.getElementById('primerBtn');
 const grid = document.getElementById('grid');
 const fpTitle = document.getElementById('fpTitle');
+const fpCaption = document.getElementById('fpCaption');
 
 /* ===== Helpers ===== */
 function tag(txt, mode){
@@ -277,16 +314,10 @@ function tag(txt, mode){
 }
 function toastShow(msg){ toastMsg.textContent = msg; toast.classList.remove('hide'); }
 toastClose.onclick = ()=> toast.classList.add('hide');
-
 function gateOK(){ return state.color==='redblue' && state.set==='tracks'; }
 function updateButtons(){
   const ok = gateOK();
   startLoop.disabled = !ok; burstOnce.disabled = !ok; syncEdge.disabled = !ok; shareSync.disabled = !ok;
-  const t = ok ? '' : 'Requires Red↔Blue + Tracks';
-  startLoop.title = t || 'Loop bursts until Calm';
-  burstOnce.title = t || 'One Seed Burst';
-  syncEdge.title = t || 'Arm for next :00/:30';
-  shareSync.title = t || 'Copy a shared-edge link';
 }
 
 /* ===== YouTube ===== */
@@ -294,7 +325,6 @@ let YT_READY=false;
 window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); prewarmAll(); };
 
 function listBySet(){ return state.set==='tracks'?TRACKS:INTERVIEWS; }
-
 function buildUI(){ buildFeatured(); buildSlots(); updateButtons(); }
 function buildFeatured(){
   if(!YT_READY) return;
@@ -341,14 +371,12 @@ function initTones(){
   wide.gain.value=1; mono.gain.value=(state.device==='iphone'||state.device==='mobile')?0.25:0.12;
   merger.connect(wide).connect(main); mono.connect(main);
   comp.threshold.value=-24; comp.knee.value=12; comp.ratio.value=2; comp.attack.value=.02; comp.release.value=.25;
-  main.connect(comp).connect(ctx.destination);
-
-  // gentle true-peak guard
+  // true-peak soft guard
   const shaper = ctx.createWaveShaper(); const curve = new Float32Array(44100);
   for (let i=0;i<curve.length;i++){ const x = (i/22050)-1; curve[i] = Math.tanh(1.2*x); }
   shaper.curve = curve; shaper.oversample = '4x';
   const post = ctx.createGain(); post.gain.value = 0.98;
-  main.disconnect(); main.connect(shaper).connect(post).connect(comp);
+  main.connect(shaper).connect(post).connect(comp).connect(ctx.destination);
 
   const delta=(state.device==='iphone'||state.device==='mobile')?0.7:1.2;
   function pair(freq, base){
@@ -387,72 +415,107 @@ function routeTones(){
   tag(on?'tones on':'silent', on?'ok':'wait');
 }
 
-/* ===== Seed Burst (hidden Red/Blue) ===== */
-function burstDur(){ return ({1:18,2:24,3:32,4:38,5:45})[state.intensity]||32; }
-function burstDepth(){ return ({1:.18,2:.22,3:.26,4:.30,5:.34})[state.intensity]||.26; }
-function tremDepth(){ return ({1:.08,2:.10,3:.12,4:.14,5:.16})[state.intensity]||.12; }
-function widthMax(){ return ({1:.25,2:.35,3:.45,4:.55,5:.65})[state.intensity]||.45; }
+/* ===== Exposed constants for advanced panel ===== */
+let SEED_UP_MS = 350;   // opening ramp (ms)
+let SEED_REL_MS = 350;  // release ramp (ms)
+let ALIAS_HZ    = 102;  // tiny-speaker alias (Hz)
+let WIDTH_CAP   = 0.55; // width cap on tiny devices (0.25–0.70)
 
+/* ===== Seed Burst — Stable v10.1 (music-only, RB-only) ===== */
 function claritySeedBurst(){
-  if(!gateOK() || !state.ctx) return 0;
-  const ctx = state.ctx; const lvl=Number(toneLevel.value)/100||.68;
+  if(!(state && state.color==='redblue' && state.set==='tracks')) return 0;
+  if(!state.ctx || !state.audio || !state.audio.main) return 0;
+  const ctx = state.ctx;
+  if (ctx.state !== 'running') { try{ ctx.resume(); }catch{} }
 
-  if(state.burstNode && state.burstNode.stop){ try{ state.burstNode.stop(); }catch{} }
+  if(state.burstNode && state.burstNode.stop){ try{ state.burstNode.stop(); }catch{} state.burstNode=null; }
 
-  const mainBus  = ctx.createGain(); mainBus.gain.value = 0.0;
-  const redBus   = ctx.createGain(); redBus.gain.value  = 0.0;
-  const blueBus  = ctx.createGain(); blueBus.gain.value = 0.0;
-  const stereo   = ctx.createChannelMerger(2);
-  redBus.connect(stereo,0,0); blueBus.connect(stereo,0,1);
+  const lvl = Number(toneLevel?.value || 68)/100;
+  const intensity = Number(state.intensity || 4);
+
+  const durMap   = {1:18,2:24,3:32,4:38,5:45};
+  const depthMap = {1:.18,2:.22,3:.26,4:.30,5:.34};
+  const tremMap  = {1:.08,2:.10,3:.12,4:.14,5:.16};
+  const widthMap = {1:.25,2:.35,3:.45,4:.55,5:.65};
+
+  const D  = durMap[intensity]   ?? 32;
+  const DP = depthMap[intensity] ?? .26;
+  const TM = tremMap[intensity]  ?? .12;
+  const W  = widthMap[intensity] ?? .45;
+
+  const bus   = ctx.createGain(); bus.gain.value = 0.0;
+  const red   = ctx.createGain(); red.gain.value = 0.0;
+  const blue  = ctx.createGain(); blue.gain.value = 0.0;
+  const merge = ctx.createChannelMerger(2);
+  red.connect(merge,0,0); blue.connect(merge,0,1);
 
   const width = ctx.createGain(); width.gain.value = 1.0; state.widthNode = width;
-  stereo.connect(width).connect(mainBus);
 
   const limiter = ctx.createDynamicsCompressor();
   limiter.threshold.value=-10; limiter.knee.value=12; limiter.ratio.value=6; limiter.attack.value=0.005; limiter.release.value=0.2;
   const out = ctx.createGain(); out.gain.value = 0.19 * lvl;
-  mainBus.connect(limiter).connect(out).connect(state.audio.main);
 
-  const throb = ctx.createOscillator(); throb.type='sine'; throb.frequency.value=0.9;
-  const thR=ctx.createGain(), thB=ctx.createGain(); thR.gain.value=burstDepth()*lvl; thB.gain.value=burstDepth()*lvl;
-  throb.connect(thR).connect(redBus.gain); throb.connect(thB).connect(blueBus.gain); throb.start();
+  merge.connect(width).connect(bus).connect(limiter).connect(out).connect(state.audio.main);
 
-  const tremor = ctx.createOscillator(); tremor.type='sine'; tremor.frequency.value=5.5;
-  const trR=ctx.createGain(), trB=ctx.createGain(); trR.gain.value=tremDepth()*lvl*.6; trB.gain.value=tremDepth()*lvl*.6;
-  tremor.connect(trR).connect(redBus.gain); tremor.connect(trB).connect(blueBus.gain); tremor.start();
+  const throb = ctx.createOscillator(); throb.type='sine'; throb.frequency.value = 0.9;
+  const thR=ctx.createGain(), thB=ctx.createGain();
+  thR.gain.value = DP * lvl; thB.gain.value = DP * lvl;
+  throb.connect(thR).connect(red.gain);
+  throb.connect(thB).connect(blue.gain);
+  throb.start();
 
-  function tone(f, gl, gr){
-    const l=ctx.createOscillator(), r=ctx.createOscillator(); l.type=r.type='sine'; l.frequency.value=f; r.frequency.value=f;
-    const g1=ctx.createGain(), g2=ctx.createGain(); const t0=ctx.currentTime+.002;
-    g1.gain.setValueAtTime(0,t0); g2.gain.setValueAtTime(0,t0);
-    g1.gain.linearRampToValueAtTime(gl, t0+.01); g2.gain.linearRampToValueAtTime(gr, t0+.01);
-    l.connect(g1).connect(redBus); r.connect(g2).connect(blueBus); l.start(); r.start();
+  const trem = ctx.createOscillator(); trem.type='sine'; trem.frequency.value = 5.5;
+  const trR=ctx.createGain(), trB=ctx.createGain();
+  trR.gain.value = TM * lvl * 0.6; trB.gain.value = TM * lvl * 0.6;
+  trem.connect(trR).connect(red.gain);
+  trem.connect(trB).connect(blue.gain);
+  trem.start();
+
+  function tone(f, gL, gR){
+    const oL = ctx.createOscillator(); oL.type='sine'; oL.frequency.value=f;
+    const oR = ctx.createOscillator(); oR.type='sine'; oR.frequency.value=f;
+    const g1 = ctx.createGain(), g2 = ctx.createGain();
+    const t0 = ctx.currentTime + 0.002;
+    g1.gain.setValueAtTime(0, t0); g2.gain.setValueAtTime(0, t0);
+    g1.gain.linearRampToValueAtTime(gL, t0 + SEED_UP_MS/1000);
+    g2.gain.linearRampToValueAtTime(gR, t0 + SEED_UP_MS/1000);
+    oL.connect(g1).connect(red); oR.connect(g2).connect(blue);
+    oL.start(); oR.start();
     return ()=>{ try{
-      const t1=ctx.currentTime; g1.gain.setTargetAtTime(0,t1,.01); g2.gain.setTargetAtTime(0,t1,.01);
-      setTimeout(()=>{ try{l.stop(); r.stop();}catch{} }, 30);
+      const t1 = ctx.currentTime;
+      g1.gain.setTargetAtTime(0, t1, SEED_REL_MS/1000);
+      g2.gain.setTargetAtTime(0, t1, SEED_REL_MS/1000);
+      setTimeout(()=>{ try{oL.stop();oR.stop();}catch{} }, 30);
     }catch{} };
   }
 
-  const stops=[];
-  stops.push(tone(64, 0.12*lvl, 0.08*lvl));
-  stops.push(tone(128,0.13*lvl, 0.13*lvl));
-  stops.push(tone(256,0.09*lvl, 0.10*lvl));
-  if(state.device==='iphone'||state.device==='mobile'){ stops.push(tone(96,0.06*lvl,0.06*lvl)); }
+  const stops = [];
+  stops.push(tone(64,  0.12*lvl, 0.08*lvl));
+  stops.push(tone(128, 0.13*lvl, 0.13*lvl));
+  stops.push(tone(256, 0.09*lvl, 0.10*lvl));
+  const tiny = (state.device==='iphone' || state.device==='mobile');
+  if(tiny) stops.push(tone(ALIAS_HZ, 0.06*lvl, 0.06*lvl));
 
-  const dur = burstDur();
-  const t0=ctx.currentTime+.02;
-  mainBus.gain.setValueAtTime(0,t0); mainBus.gain.linearRampToValueAtTime(1.0, t0+.35);
-  const hold=t0+dur-.9; mainBus.gain.setTargetAtTime(0, hold, .35);
+  const t0 = ctx.currentTime + 0.02;
+  bus.gain.setValueAtTime(0.0, t0);
+  bus.gain.linearRampToValueAtTime(1.0, t0 + SEED_UP_MS/1000);
+  const tHold = t0 + D - (SEED_REL_MS/1000 + 0.45);
+  bus.gain.setTargetAtTime(0.0, tHold, SEED_REL_MS/1000);
 
-  const W=widthMax(); width.gain.setValueAtTime(1.0,t0);
-  width.gain.linearRampToValueAtTime(1.0+W, t0+.8);
-  width.gain.setTargetAtTime(1.05, hold,.35);
+  const Wcap = tiny ? Math.min(1.0 + WIDTH_CAP, 1.7) : 1.0 + W;
+  width.gain.setValueAtTime(1.0, t0);
+  width.gain.linearRampToValueAtTime(Wcap, t0 + 0.8);
+  width.gain.setTargetAtTime(1.05, tHold, SEED_REL_MS/1000);
 
-  const stopAll=()=>{ try{ throb.stop(); tremor.stop(); }catch{} stops.forEach(fn=>{ try{fn();}catch{} }); 
-    [stereo,width,limiter,out,mainBus,redBus,blueBus].forEach(n=>{ try{ n.disconnect(); }catch{} }); state.burstNode=null; };
-  setTimeout(stopAll, dur*1000+500);
-  state.burstNode = { stop: stopAll, dur };
-  return dur;
+  const stopAll = ()=>{
+    try{ throb.stop(); trem.stop(); }catch{}
+    stops.forEach(fn=>{ try{ fn(); }catch{} });
+    [merge,width,bus,limiter,out,red,blue].forEach(n=>{ try{ n.disconnect(); }catch{} });
+    state.burstNode = null;
+  };
+  setTimeout(stopAll, D*1000 + 500);
+  state.burstNode = { stop: stopAll, dur: D };
+  return D;
 }
 
 /* ===== Loop Manager ===== */
@@ -461,10 +524,11 @@ function cadenceRest(d){
   if(m==='short') return 4;
   if(m==='medium') return 8;
   if(m==='long') return 14;
-  return Math.max(6, 8); // auto
+  return Math.max(6, 8);
 }
 function loopTick(){
   if(!state.loop.active) return;
+  if(state.burstNode){ try{ state.burstNode.stop(); }catch{} state.burstNode=null; }
   const dur = claritySeedBurst();
   if(!dur){ stopSeedLoop(); return; }
   loopState.textContent = 'bursting';
@@ -473,7 +537,7 @@ function loopTick(){
     if(!state.loop.active) return;
     loopState.textContent = 'resting';
     state.loop.timer = setTimeout(()=>{ if(state.loop.active) loopTick(); }, rest*1000);
-  }, (dur*1000)+200);
+  }, dur*1000 + 250);
 }
 function startSeedLoop(){
   if(!gateOK()){ toastShow('Enable Red↔Blue and choose Tracks.'); return; }
@@ -600,18 +664,67 @@ primerBtn.onclick = async ()=>{
   tag('tones on','ok'); primer.style.display='none';
   if(!state.fp) buildFeatured();
   try{ state.fp.playVideo(); }catch{}
-  // auto-arm from URL after Activate
   if(state.pendingSync==='edge'){ scheduleEdge(); }
 };
 
-/* ===== Boot ===== */
-function updateButtons(){ /* defined earlier; re-declare to ensure scope */ 
-  const ok = gateOK();
-  startLoop.disabled = !ok; burstOnce.disabled = !ok; syncEdge.disabled = !ok; shareSync.disabled = !ok;
+/* ===== More Panel (advanced) ===== */
+const moreToggle  = document.getElementById('moreToggle');
+const morePanel   = document.getElementById('morePanel');
+const intensityAdv= document.getElementById('intensity_adv');
+const intensityLblAdv = document.getElementById('intensityLbl_adv');
+const seedUp  = document.getElementById('seedUp');
+const seedRel = document.getElementById('seedRel');
+const aliasHz = document.getElementById('aliasHz');
+const widthCap= document.getElementById('widthCap');
+const cadenceAdv = document.getElementById('cadence_adv');
+
+if(moreToggle){
+  moreToggle.addEventListener('click', ()=>{
+    const open = morePanel.style.display !== 'none';
+    morePanel.style.display = open ? 'none' : 'flex';
+    moreToggle.classList.toggle('active', !open);
+    moreToggle.textContent = open ? 'More ▸' : 'More ▾';
+  });
 }
+
+(function syncIntensity(){
+  const main = document.getElementById('intensity');
+  const updateLbl = (val)=>{
+    const tag = (val<=2?' · gentle': val==3?' · steady': val==4?' · deep':' · unbelievable');
+    intensityLblAdv.textContent = val + tag;
+    intensityLbl.textContent = val + tag;
+  };
+  if(main && intensityAdv){
+    intensityAdv.value = main.value;
+    updateLbl(Number(intensityAdv.value));
+    main.addEventListener('input', ()=>{ intensityAdv.value = main.value; updateLbl(Number(main.value)); applyIntensity(); });
+    intensityAdv.addEventListener('input', ()=>{
+      main.value = intensityAdv.value; updateLbl(Number(intensityAdv.value)); applyIntensity();
+    });
+  }
+})();
+
+function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
+seedUp?.addEventListener('change', ()=>{ SEED_UP_MS  = clamp(Number(seedUp.value||350), 120, 1200); });
+seedRel?.addEventListener('change',()=>{ SEED_REL_MS = clamp(Number(seedRel.value||350),120, 1200); });
+aliasHz?.addEventListener('change',()=>{ ALIAS_HZ    = clamp(Number(aliasHz.value||102),85, 140); });
+widthCap?.addEventListener('change',()=>{ WIDTH_CAP  = clamp(Number(widthCap.value||0.55),0.25,0.70); });
+
+cadenceAdv?.addEventListener('change', ()=>{
+  cadenceEl.value = cadenceAdv.value;
+  state.cadence = cadenceAdv.value;
+});
+
+/* ===== Re-arm AudioContext when returning to tab (iOS) ===== */
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState==='visible' && state?.ctx?.state!=='running'){
+    try{ state.ctx.resume(); }catch{}
+  }
+});
+
+/* ===== Boot ===== */
+function updateButtons(){ const ok = gateOK(); startLoop.disabled=!ok; burstOnce.disabled=!ok; syncEdge.disabled=!ok; shareSync.disabled=!ok; }
 (function init(){
-  // default RB + tracks already set by body class and set button
-  // build UI as soon as possible; YT player comes when API ready
   buildUI();
   // parse ?sync=edge&mode=rb&set=tracks&int=4
   parseSyncFromURL();
