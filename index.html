@@ -1,661 +1,394 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Clarity · Sigrid Field — clarity.plnt.earth</title>
-<meta name="description" content="Clarity Field — featured player with auto-advance, captions, 128/256 Hz tones, lyric snippets, and interviews.">
-<meta name="theme-color" content="#f1fbff" media="(prefers-color-scheme: light)">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
-<!-- Performance: warm up YouTube origins -->
-<link rel="dns-prefetch" href="https://www.youtube.com">
-<link rel="dns-prefetch" href="https://i.ytimg.com">
-<link rel="dns-prefetch" href="https://www.google.com">
-<link rel="preconnect" href="https://www.youtube.com" crossorigin>
-<link rel="preconnect" href="https://i.ytimg.com" crossorigin>
-<link rel="preconnect" href="https://www.google.com" crossorigin>
-
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Clarity · Sigrid — Bluefire (Iridescent)</title>
+<meta name="description" content="Sigrid · Bluefire: bioluminescent player with 128/160 Hz tones, R↔B spectral inversion, captions, and auto-advance."/>
+<meta name="theme-color" content="#0d1520">
 <style>
+  /* ===== Illumina · Bluefire Iridescent (dark-but-not-night) ===== */
   :root{
-    --bg:#f6fbff; --ink:#10222e; --muted:#5d6a75; --card:#ffffff; --ring:#dceaf3;
-    --accent:#6de1ff; --accent-2:#b9ffe6; --jelly:#9ad7ff; --shadow:0 10px 30px rgba(6,37,58,.12);
+    --bg:#0d1520; --panel:#111a26; --ink:#eaf2ff; --muted:#9bb3cc; --ring:#24364a;
+    --glow:#9ae6ff; --accent:#b9f; --red:#ff4766; --blue:#3bb5ff;
+    --film-a:rgba(255,180,255,.12); --film-b:rgba(120,210,255,.10); --film-c:rgba(180,255,220,.08);
+    --font: ui-sans-serif, -apple-system, Segoe UI, Inter, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    --radius:14px; --shadow:0 10px 30px rgba(12,22,35,.6)
   }
-  *{box-sizing:border-box} html,body{height:100%}
+  .bluefire{ --red:#3bb5ff; --blue:#ff4766; }
+  .iridescent{ --bg:#0b1220; --panel:#0f1725; --ring:#203249; --glow:#bdf1ff; }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
   body{
-    margin:0; font:16px/1.5 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;
-    color:var(--ink); background:linear-gradient(180deg,#fbffff 0%,#eff9ff 50%,#e7f6ff 100%);
-    -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
+    margin:0; font-family:var(--font); color:var(--ink); background:var(--bg);
+    background-image:
+      radial-gradient(1200px 600px at 20% -10%, var(--film-a), transparent 60%),
+      radial-gradient(900px 600px at 110% 10%, var(--film-b), transparent 60%),
+      radial-gradient(600px 500px at 50% 120%, var(--film-c), transparent 60%),
+      linear-gradient(180deg, rgba(9,16,28,.8), rgba(9,16,28,.9));
+    background-attachment:fixed;
   }
-  #snow{position:fixed; inset:0; z-index:-1; filter:drop-shadow(0 0 2px rgba(255,255,255,.6))}
 
-  /* Animated ambient glow */
-  .shimmer::before{
-    content:""; position:fixed; inset:-20vmax; pointer-events:none; z-index:-2;
-    background:radial-gradient(120% 120% at 20% 10%, rgba(109,225,255,.12), transparent 50%),
-               radial-gradient(100% 100% at 80% 0%, rgba(185,255,230,.10), transparent 60%);
-    animation:glow 10s ease-in-out infinite alternate;
-  }
-  @keyframes glow{from{opacity:.6; transform:translateY(-1%)} to{opacity:.9; transform:translateY(1%)}}
+  header{position:sticky; top:0; z-index:5; backdrop-filter:saturate(140%) blur(8px);
+    background:linear-gradient(180deg, rgba(14,22,35,.8), rgba(14,22,35,.5));
+    border-bottom:1px solid var(--ring)}
+  .wrap{max-width:980px; margin:0 auto; padding:14px 16px}
+  h1{font-size:1.1rem; letter-spacing:.02em; margin:0; font-weight:650}
 
-  .wrap{max-width:1080px;margin:0 auto;padding:20px 14px 80px}
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 16px}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
-  .jelly{
-    width:42px;height:42px;border-radius:14px;
-    background: radial-gradient(120% 120% at 20% 10%, var(--accent) 0%, #e0ffff 40%, #ffffff 70%) padding-box,
-                conic-gradient(from 0deg at 50% 60%, #e0ffff, var(--jelly), #e6fff9, #e0ffff) border-box;
-    border:2px solid transparent; box-shadow:var(--shadow),0 0 40px rgba(109,225,255,.65) inset; position:relative; overflow:hidden;
+  .controls{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+  .chip{
+    border:1px solid var(--ring); padding:8px 12px; border-radius:999px;
+    background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+    font-weight:600; cursor:pointer; user-select:none; color:var(--ink)
   }
-  .jelly:after{content:"";position:absolute;left:50%;top:55%;width:70%;height:70%;transform:translate(-50%,-50%);
-    filter:blur(12px); background:radial-gradient(50% 60% at 50% 40%, rgba(109,225,255,.4), transparent 70%)}
-  h1{font-size:20px;margin:0}
-  .small{font-size:12px;color:var(--muted)}
-  .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#e9fbff;border:1px solid var(--ring);color:#0e3948}
+  .chip[aria-pressed="true"]{
+    border-color:color-mix(in lab, var(--blue) 60%, var(--ring));
+    box-shadow:0 0 0 2px color-mix(in lab, var(--blue) 30%, transparent)
+  }
 
-  /* Controls */
-  .tonebar{
-    display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--ring);
-    border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)
-  }
   .btn{
-    appearance:none;border:1px solid var(--ring);background:linear-gradient(#ffffff,#f7fdff); color:var(--ink);
-    padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer; box-shadow:var(--shadow);
-    transition:transform .08s ease, box-shadow .2s ease, border-color .2s
+    appearance:none; border:1px solid var(--ring); color:var(--ink);
+    background:
+      linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.02)) padding-box,
+      conic-gradient(from 0deg, var(--blue), var(--accent), var(--red), var(--blue)) border-box;
+    border-radius:16px; padding:14px 18px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);
+    position:relative; isolation:isolate; overflow:hidden
   }
-  .btn:active{transform:translateY(1px)}
-  .btn.primary{background:linear-gradient(180deg,#e9fdff,#d8f7ff); border-color:#bfefff; box-shadow:0 10px 24px rgba(86,205,255,.25), inset 0 0 0 1px #ffffff}
-  .btn.glow{animation:pulse 1.4s ease-in-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 rgba(109,225,255,0)}50%{box-shadow:0 0 24px rgba(109,225,255,.7)}100%{box-shadow:0 0 0 rgba(109,225,255,0)}}
-
-  .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden}
-  .switch button{border:0;background:transparent;padding:8px 12px;cursor:pointer}
-  .switch button.active{background:#e8fbff;font-weight:700}
-  .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#f7feff}
-  .pill .row{display:inline-flex;gap:8px;align-items:center}
-
-  /* Featured player */
-  .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring)}
-  .fp-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
-  .fp-title{font-weight:700}
-  .fp-caption{font-size:13px;color:var(--muted)}
-  .fp-controls{display:flex;gap:8px;flex-wrap:wrap}
-
-  /* Slots grid */
-  .grid{display:grid;gap:10px;margin-top:12px; grid-template-columns:repeat(2,minmax(0,1fr))}
-  @media(min-width:860px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
-  .slot{background:var(--card);border:1px solid var(--ring);border-radius:12px;box-shadow:var(--shadow);padding:8px}
-  .thumb{position:relative;aspect-ratio:16/9;border:1px solid var(--ring);border-radius:8px;overflow:hidden}
-  .slot .title{font-size:12px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .slot .snip{font-size:11px;color:var(--muted); margin-top:2px}
-
-  .notice{margin-top:14px;font-size:13px;color:#0d3a47;background:#ebffff;border:1px dashed #b9e7f7;border-radius:12px;padding:10px 12px}
-  footer{margin:28px 0 0;color:var(--muted);font-size:13px}
-  details{background:var(--card); border:1px solid var(--ring); border-radius:14px; box-shadow:var(--shadow); padding:10px 12px; margin-top:18px}
-  summary{cursor:pointer; font-weight:700}
-
-  /* Full-screen primer overlay */
-  #primer{
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-    background:radial-gradient(120% 120% at 50% 20%, rgba(185,255,230,.35), rgba(109,225,255,.25) 40%, rgba(255,255,255,.92) 70%);
-    backdrop-filter: blur(4px);
-    z-index:999;
+  .btn:after{
+    content:""; position:absolute; inset:-60% -20%; transform:translateX(-60%);
+    background:conic-gradient(from 0deg, transparent 20%, rgba(255,255,255,.15) 35%, transparent 55%);
+    filter:blur(12px); pointer-events:none; animation:sheen 3.2s linear infinite
   }
-  #primerBtn{
-    font-size:18px; padding:16px 22px; border-radius:16px;
-    border:2px solid #bfefff; box-shadow:0 10px 30px rgba(86,205,255,.35), inset 0 0 0 1px #ffffff;
-    animation:pop 1.8s ease-in-out infinite, floaty 4s ease-in-out infinite;
-  }
-  #primerBtn .hint{display:block; font-size:12px; color:#0b4a5b; opacity:.8; margin-top:4px}
-  @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.04)} 100%{transform:scale(1)}}
-  @keyframes floaty{0%{transform:translateY(0)} 50%{transform:translateY(-4px)} 100%{transform:translateY(0)}}
+  @keyframes sheen{to{transform:translateX(120%)}}
 
-  /* Hidden bin for prewarmed iframes */
-  #prewarmBin{position:absolute; left:-9999px; top:auto; width:0; height:0; overflow:hidden}
+  main{padding:24px 16px 80px}
+  .hero{
+    border:1px solid var(--ring); border-radius:var(--radius);
+    background:
+      radial-gradient(120% 100% at 10% 0%, rgba(255,255,255,.06), transparent 60%),
+      linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+    padding:18px; box-shadow:var(--shadow); position:relative; overflow:hidden
+  }
+  /* Bioluminescent jelly veil */
+  .hero:before{
+    content:""; position:absolute; inset:-20% -10%;
+    background:
+      radial-gradient(60% 40% at 30% 0%, rgba(155,255,240,.12), transparent 70%),
+      radial-gradient(40% 30% at 90% 30%, rgba(210,170,255,.10), transparent 70%),
+      radial-gradient(30% 20% at 60% 110%, rgba(255,210,230,.08), transparent 70%);
+    mix-blend-mode:screen; pointer-events:none; animation:floaty 16s ease-in-out infinite alternate
+  }
+  @keyframes floaty{0%{transform:translateY(-4px)}100%{transform:translateY(6px)}}
+
+  .row{display:grid; grid-template-columns:1.2fr .8fr; gap:16px}
+  @media (max-width:900px){ .row{grid-template-columns:1fr; gap:12px} }
+
+  .player{
+    border:1px solid var(--ring); border-radius:12px; overflow:hidden; background:var(--panel); position:relative
+  }
+  .ytbox{position:relative; width:100%; aspect-ratio:16/9; background:#000}
+  .meta{padding:12px 12px 14px}
+  .title{font-weight:700}
+  .caption{color:var(--muted); margin-top:6px; font-size:.95rem; line-height:1.5}
+
+  .pane{
+    border:1px solid var(--ring); border-radius:12px; padding:12px; background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02))
+  }
+  .list{display:grid; gap:8px; max-height:360px; overflow:auto; padding-right:4px}
+  .item{
+    display:flex; gap:10px; align-items:center; padding:8px; border-radius:10px; cursor:pointer;
+    border:1px solid transparent; background:rgba(255,255,255,.02)
+  }
+  .item.active{ border-color:color-mix(in lab, var(--blue) 45%, transparent);
+    box-shadow:0 0 0 2px color-mix(in lab, var(--blue) 25%, transparent)}
+  .thumb{width:56px; height:34px; background:#0b0b0b; border-radius:6px; flex:none}
+
+  .meters{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-top:10px}
+  .meter{flex:1; height:10px; border:1px solid var(--ring); border-radius:999px; background:rgba(255,255,255,.04); position:relative; overflow:hidden}
+  .meter>span{position:absolute; inset:0; transform:scaleX(0); transform-origin:left; background:linear-gradient(90deg, var(--blue), var(--red)); transition:transform .3s ease}
+
+  .tag{display:inline-flex; align-items:center; gap:8px; font-size:.9rem; color:var(--muted); margin-top:8px}
+  .swatch{width:10px; height:10px; border-radius:50%; border:1px solid var(--ring)}
+  .swatch.red{background:var(--red)} .swatch.blue{background:var(--blue)}
+
+  .footer{margin-top:18px; color:var(--muted); font-size:.92rem}
+  .score{font-size:1.1rem}
+
+  .sr-only{position:absolute!important; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
 </style>
 </head>
-<body class="shimmer">
-<canvas id="snow" aria-hidden="true"></canvas>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Sigrid · Bluefire (Iridescent)</h1>
+    <div class="controls" role="group" aria-label="Theme & audio controls">
+      <button id="activate" class="btn" title="Tap to enable audio/video">🔵 Activate Bluefire</button>
+      <button id="toggleBluefire" class="chip" aria-pressed="false" title="Swap red/blue spectral channels">Bluefire R↔B</button>
+      <button id="toggleIridescent" class="chip" aria-pressed="true" title="Iridescent On">Iridescent</button>
+      <button id="modeTracks" class="chip" aria-pressed="false" title="Show Tracks list">Tracks</button>
+      <button id="modeInterviews" class="chip" aria-pressed="true" title="Show Interviews list">Interviews</button>
+      <button id="toggle128" class="chip" aria-pressed="true" title="128 Hz warmth">128 Hz</button>
+      <button id="toggle160" class="chip" aria-pressed="false" title="160 Hz lift">160 Hz</button>
+    </div>
+  </div>
+</header>
 
-<!-- Primer overlay (one clear action to enable media) -->
-<div id="primer" role="dialog" aria-modal="true" aria-label="Start session">
-  <button id="primerBtn" class="btn primary glow">
-    ▶ Start Session
-    <span class="hint">Enables audio + preloads and starts the first video</span>
-  </button>
-</div>
-
-<div class="wrap">
-  <header>
-    <a class="brand" href="#" aria-label="Clarity Field">
-      <div class="jelly" aria-hidden="true"></div>
-      <div>
-        <h1>Clarity Field · <span class="small">Sigrid ↔ You</span></h1>
-        <div class="small">Root in the Air — 128 Hz + 256 Hz · Featured player • Auto-advance</div>
+<main class="wrap">
+  <section class="hero">
+    <div class="row">
+      <div class="player">
+        <div class="ytbox" id="ytbox"></div>
+        <div class="meta">
+          <div class="title" id="title">—</div>
+          <div class="caption" id="caption">Tap “Activate Bluefire” to unlock audio on iPhone. One interview plays at a time; auto-advance is enabled.</div>
+          <div class="meters">
+            <div class="meter" title="128 Hz"><span id="m128"></span></div>
+            <div class="meter" title="160 Hz"><span id="m160"></span></div>
+            <div class="tag">
+              <span class="swatch red" aria-hidden="true"></span><span class="swatch blue" aria-hidden="true"></span>
+              <span id="mapLbl">mapping ready</span>
+            </div>
+          </div>
+        </div>
       </div>
-    </a>
-    <span class="tag">jellyfish · bright</span>
-  </header>
 
-  <!-- TOP BAR -->
-  <section class="tonebar" aria-label="Controls">
-    <!-- View tabs -->
-    <div class="switch" role="tablist" aria-label="Perspective">
-      <button id="tabSigrid" class="active" aria-selected="true">Sigrid</button>
-      <button id="tabYou" aria-selected="false">You</button>
-    </div>
-
-    <!-- Set toggle (Tracks vs Interviews) -->
-    <div class="switch" role="tablist" aria-label="Playlist set" style="margin-left:6px">
-      <button id="setTracks" class="active" aria-selected="true">Tracks</button>
-      <button id="setInterviews" aria-selected="false">Interviews / Live</button>
-    </div>
-
-    <!-- Snippets toggle -->
-    <div class="switch" role="tablist" aria-label="Snippets" style="margin-left:6px">
-      <button id="snipOn" class="active" aria-selected="true">Lyric Snippets</button>
-      <button id="snipOff" aria-selected="false">Hide Snippets</button>
-    </div>
-
-    <!-- Auto-advance & CC -->
-    <div class="switch" role="tablist" aria-label="Playback" style="margin-left:6px">
-      <button id="autoOn" class="active" aria-selected="true">Auto-Advance</button>
-      <button id="autoOff" aria-selected="false">Manual</button>
-    </div>
-
-    <span class="pill">Captions:
-      <select id="ccLang" aria-label="Caption language">
-        <option value="en">English</option>
-        <option value="no">Norwegian</option>
-      </select>
-      <button id="ccToggle" class="btn" style="padding:6px 10px">CC On</button>
-    </span>
-
-    <!-- Tones -->
-    <span class="pill">
-      <span class="row">
-        <strong>Tones</strong>
-        <label><input type="checkbox" id="tone128" checked> 128 Hz</label>
-        <label><input type="checkbox" id="tone256" checked> 256 Hz</label>
-        <label>Level <input id="toneLevel" type="range" min="0" max="100" value="65" style="vertical-align:middle"></label>
-        <button id="toneToggle" class="btn" style="padding:6px 10px">On</button>
-      </span>
-    </span>
-
-    <span class="pill">Status: <span id="statusTone" class="pill" style="background:#fff8e1;border-color:#ffecb5;color:#664d03">waiting</span></span>
-
-    <div class="small" style="width:100%;margin-top:6px">
-      Tip: click “Start Session” once. Then breathe 4–6 cycles with 128 Hz (root), blend 256 Hz (air). PiP may help; OS rules apply.
+      <aside class="pane">
+        <div class="list" id="list"></div>
+        <div class="footer">
+          <div class="score" id="score">✨ glow: —</div>
+          <div>Hint: inhale <strong>blue warmth</strong> (128), exhale <strong>rose sky</strong> (160). Bluefire is a red-through-blue lens, not a bug.</div>
+        </div>
+      </aside>
     </div>
   </section>
+</main>
 
-  <section class="notice">
-    <strong>How it works:</strong> Tap a slot to load it into the **Featured Player**. With **Auto‑Advance**, the next slot plays when one ends.
-    **CC** requests YouTube captions (when available). Quality is requested at 1080p. The app preloads thumbnails and cues videos for snappy starts.
-  </section>
-
-  <!-- FEATURED PLAYER -->
-  <section class="featured" aria-live="polite">
-    <div class="fp-box">
-      <div id="fp"></div>
-    </div>
-    <div class="fp-meta">
-      <div>
-        <div id="fpTitle" class="fp-title">—</div>
-        <div id="fpCaption" class="fp-caption">Select a video from the slots below.</div>
-      </div>
-      <div class="fp-controls">
-        <button class="btn" id="fpPlay">Play</button>
-        <button class="btn" id="fpPause">Pause</button>
-        <button class="btn" id="fpPrev">⟵ Prev</button>
-        <button class="btn" id="fpNext">Next ⟶</button>
-        <button class="btn" id="fpPiP">PiP</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- SLOTS -->
-  <section id="grid" class="grid" aria-label="Playlist slots"></section>
-
-  <!-- BONUS -->
-  <details id="bonus">
-    <summary>✨ Bonus Live Cuts (quick access)</summary>
-    <div id="bonusGrid" class="grid" style="margin-top:10px"></div>
-  </details>
-
-  <footer>
-    <div class="notice">
-      <div><strong>Language bridge:</strong> you don’t need perfect Norwegian — clarity is a language. A line to carry: <em>“Jeg ser deg.”</em> (I see you.)</div>
-      <div class="small">Ålesund ≈ “Eel Strait” (Old Norse: <span class="mono">Álasund</span>) — light over moving water.</div>
-    </div>
-    <p>Made with care for Sigrid — and for you. <span class="small">“Clarity is mutual seeing.”</span></p>
-    <p class="small">Privacy: playlists are saved only on your device (localStorage). No tracking.</p>
-  </footer>
-</div>
-
-<!-- Off-screen bin for prewarmed iframes -->
-<div id="prewarmBin" aria-hidden="true"></div>
-
+<!-- YouTube Iframe API -->
+<script src="https://www.youtube.com/iframe_api"></script>
 <script>
-/* ---------- Core state ---------- */
-const STATE_KEY = 'clarity.playlists.v5';
-const state = {
-  tab:'sigrid', set:'tracks', showSnippets:true, autoAdvance:true,
-  ccOn:true, ccLang:'en',
-  sigrid:[], you:[],
-  players:{}, bonusPlayers:{}, warmPlayers:{},
-  fp:null, fpIndex:0, ctx:null, nodes:{}, tonesOn:true
-};
+/* ===== Interviews (10) — Bluefire picks =====
+   (All are interview/conversation clips. Auto-advance is wired.) */
+const playlistInterviews = [
+  {title:"Latitude 2025 — In Conversation with Sigrid (The Independent x Klarna)",
+   youtubeId:"qbOMmaH5NMI",
+   caption:"Long-form 2025 conversation about craft & career."},
+  {title:"Apple Music — Up Next Interview (with Julie Adenuga)",
+   youtubeId:"JZ4iuIUu3Hw",
+   caption:"Early story / origin energy."},
+  {title:"NME — Reading Festival 2018 chat",
+   youtubeId:"NR4-NpkK6I8",
+   caption:"Debut album talk & festival lens."},
+  {title:"BBC Radio 1 — ‘High Five’ interview (Annie Mac, 2018)",
+   youtubeId:"T07CzV5HDB8",
+   caption:"Single drop context & process."},
+  {title:"Glastonbury 2022 — ‘How to Let Go’ inspiration",
+   youtubeId:"P4IufPlewWM",
+   caption:"Album, stage energy, writing with Glasto in mind."},
+  {title:"Lorraine (ITV) — How to Let Go interview",
+   youtubeId:"b-bsVECPKVc",
+   caption:"Mainstream morning sit-down; album themes."},
+  {title:"DIFFUS — Upbringing, new music & awareness",
+   youtubeId:"0-2jQSOLYII",
+   caption:"Portrait-style interview."},
+  {title:"Osheaga 2019 — Pre-show chat",
+   youtubeId:"196ZLUZNBqo",
+   caption:"Childhood memories, favorite words, live buzz."},
+  {title:"Mad Cool 2022 — Festival interview",
+   youtubeId:"OLvc7Qtl6p4",
+   caption:"Touring + ‘Burning Bridges’ era."},
+  {title:"Øya 2017 — Talks session",
+   youtubeId:"vZr8foGuHUo",
+   caption:"Early-era creative process at Øya Festival."}
+];
 
-/* ---------- Presets ---------- */
-const PREFILL_TRACKS = [
-  {id:'cIriwVhRPVA', title:'Strangers (Official)'},
-  {id:'w5x93pXSmRM', title:'Don’t Feel Like Crying (Official)'},
-  {id:'1uHt2LrCSWg', title:'Sucker Punch (Official)'},
-  {id:'E7lr7pU9fYA', title:'Mirror (Official)'},
-  {id:'xzonQoON9eo', title:'Don’t Kill My Vibe (Official)'},
-  {id:'z6A2LHGx8_A', title:'High Five (Official)'},
-  {id:'udRAIF6MOm8', title:'Burning Bridges (Official)'},
-  {id:'4j7LGMc9ZGU', title:'It Gets Dark (Official)'},
-  {id:'hKvbaZTAQN0', title:'Dynamite (Acoustic — Official)'},
-  {id:'bNuCNZK-r5A', title:'Plot Twist (Official)'}
-];
-const PREFILL_INTERVIEWS = [
-  {id:'oEC6zOhHydI', title:'Strangers — Glasto 2019 (Live)'},
-  {id:'wk1NDhE_A1o', title:'Dynamite — Øya 2023 (Live)'},
-  {id:'cn7kW-6ZNYQ', title:'Sucker Punch — Øya 2019 (Live)'},
-  {id:'M4Sbee9Mj2o', title:'Strangers — BBC Live Lounge'},
-  {id:'zgB5unpoEaY', title:'Strangers — Nobel 2017 (Live)'},
-  {id:'9rLgag0tCAU', title:'BBC Sound of 2018 — Profile'},
-  {id:'O-ozpz4JD8o', title:'Abbie McCarthy — Interview'},
-  {id:'XkAyr6u2Mp0', title:'How To Let Go — Interview'},
-  {id:'shDlDZQoAaY', title:'Making “It Gets Dark” — BTS'},
-  {id:'CeZklpxa51A', title:'Pop Around — Full Interview'}
-];
-const BONUS_LIVE = [
-  {id:'oEC6zOhHydI', title:'Strangers — Glasto 2019'},
-  {id:'wk1NDhE_A1o', title:'Dynamite — Øya 2023'},
-  {id:'M4Sbee9Mj2o', title:'Live Lounge — Strangers'},
-  {id:'zgB5unpoEaY', title:'Nobel — Strangers'},
-  {id:'cn7kW-6ZNYQ', title:'Øya — Sucker Punch'},
-  {id:'XkAyr6u2Mp0', title:'Album talk — HTLG'}
-];
-const SNIPPETS = {
-  'cIriwVhRPVA':'Two hearts out of sync; dancing with honesty.',
-  'w5x93pXSmRM':'Choosing lightness; tears can wait for later.',
-  '1uHt2LrCSWg':'Headlong rush; punchy hope, no apologies.',
-  'E7lr7pU9fYA':'Holding a mirror and telling the truth kindly.',
-  'xzonQoON9eo':'Boundaries as love; saying no to doubt.',
-  'z6A2LHGx8_A':'Playful sparks; friendship charged to ten.',
-  'udRAIF6MOm8':'Cutting the rope to cross the fire.',
-  '4j7LGMc9ZGU':'Space-dark sky; courage turns the lights on.',
-  'hKvbaZTAQN0':'Soft confessional glow; piano as lighthouse.',
-  'bNuCNZK-r5A':'Plot thickens; heart chooses the bolder path.',
-  'oEC6zOhHydI':'Festival roar meets clear, steady voice.',
-  'wk1NDhE_A1o':'City lights, fjord wind; sparkle and grit.',
-  'cn7kW-6ZNYQ':'Summer stage bounce; punch lands smiling.',
-  'M4Sbee9Mj2o':'Stripped back truth; radio room intimacy.',
-  'zgB5unpoEaY':'Quiet ceremony, brave tenderness.',
-  '9rLgag0tCAU':'Origin story; early compass points.',
-  'O-ozpz4JD8o':'Craft talk; process, practice, patience.',
-  'XkAyr6u2Mp0':'Letting go to let in more light.',
-  'shDlDZQoAaY':'Studio galaxies; how the chorus breathes.',
-  'CeZklpxa51A':'Full-frame conversation; wit and warmth.'
-};
+/* Optional: you can add music videos later */
+const playlistTracks = []; // keep UI; empty for now
+/* ============================================ */
 
-/* ---------- Load/Save ---------- */
-function save(){ localStorage.setItem(STATE_KEY, JSON.stringify({
-  tab:state.tab,set:state.set,showSnippets:state.showSnippets,autoAdvance:state.autoAdvance,
-  ccOn:state.ccOn,ccLang:state.ccLang,sigrid:state.sigrid,you:state.you,fpIndex:state.fpIndex, tonesOn:state.tonesOn
-})); }
-function load(){
-  try{
-    const raw = localStorage.getItem(STATE_KEY);
-    if(!raw){
-      state.sigrid = PREFILL_TRACKS.slice();
-      state.you = PREFILL_TRACKS.slice();
+(function(){
+  const root = document.documentElement;
+  root.classList.add('iridescent'); // default theme
+
+  const $ = (id)=>document.getElementById(id);
+  const list = $('list'), title = $('title'), caption = $('caption');
+  const m128 = $('m128'), m160 = $('m160'), score = $('score'), mapLbl = $('mapLbl');
+
+  const btnActivate = $('activate');
+  const btnBluefire = $('toggleBluefire');
+  const btnIridescent = $('toggleIridescent');
+  const btnTracks = $('modeTracks');
+  const btnInterviews = $('modeInterviews');
+  const btn128 = $('toggle128');
+  const btn160 = $('toggle160');
+
+  // Local state
+  let mode = 'interviews';
+  let items = playlistInterviews.slice();
+  let index = 0;
+  let glow = Number(localStorage.getItem('bluefire_glow')||0);
+
+  // WebAudio (created on tap)
+  let ctx, gMain, osc128, osc160, g128, g160;
+
+  // YouTube Player
+  let ytPlayer, ytReady = false, pendingLoad = null;
+
+  // Helpers
+  const fmtGlow = (n)=> '✨ glow: ' + '💙'.repeat(Math.min(10, Math.floor(n/3))) + (n>30?' +':'');
+  const updateGlow = (delta)=>{ glow = Math.max(0, glow + delta); localStorage.setItem('bluefire_glow', glow); score.textContent = fmtGlow(glow); };
+  const setMeters = (a,b)=>{ m128.style.transform = `scaleX(${a})`; m160.style.transform = `scaleX(${b})`; };
+  score.textContent = fmtGlow(glow);
+
+  // Build list UI
+  function buildList(){
+    list.innerHTML = '';
+    items = (mode==='tracks' ? playlistTracks : playlistInterviews).slice();
+    if(items.length===0){
+      const note = document.createElement('div');
+      note.className = 'caption';
+      note.textContent = mode==='tracks'
+        ? 'Add music videos later (playlistTracks).'
+        : 'No interviews found.';
+      list.appendChild(note);
       return;
     }
-    const s = JSON.parse(raw);
-    Object.assign(state, {
-      tab: s.tab || 'sigrid',
-      set: s.set || 'tracks',
-      showSnippets: typeof s.showSnippets==='boolean'? s.showSnippets : true,
-      autoAdvance: typeof s.autoAdvance==='boolean'? s.autoAdvance : true,
-      ccOn: typeof s.ccOn==='boolean'? s.ccOn : true,
-      ccLang: s.ccLang || 'en',
-      tonesOn: typeof s.tonesOn==='boolean'? s.tonesOn : true,
-      sigrid: Array.isArray(s.sigrid)? s.sigrid : PREFILL_TRACKS.slice(),
-      you: Array.isArray(s.you)? s.you : PREFILL_TRACKS.slice(),
-      fpIndex: Number.isInteger(s.fpIndex)? s.fpIndex : 0
+    items.forEach((it, i)=>{
+      const el = document.createElement('button');
+      el.className = 'item'; el.type='button';
+      el.innerHTML = `<div class="thumb"></div><div><div style="font-weight:700">${it.title||'Untitled'}</div><div class="caption" style="margin:2px 0 0">${it.caption||''}</div></div>`;
+      el.addEventListener('click', ()=>load(i,true));
+      list.appendChild(el);
     });
-  }catch{
-    state.sigrid = PREFILL_TRACKS.slice(); state.you = PREFILL_TRACKS.slice();
+    highlight();
   }
-}
-load();
 
-/* ---------- DOM ---------- */
-const grid = document.getElementById('grid');
-const bonusGrid = document.getElementById('bonusGrid');
-const fpTitle = document.getElementById('fpTitle');
-const fpCaption = document.getElementById('fpCaption');
-const prewarmBin = document.getElementById('prewarmBin');
+  function highlight(){
+    [...list.children].forEach((c, i)=>c.classList.toggle('active', i===index));
+  }
 
-/* ---------- YouTube API ---------- */
-let YT_READY=false;
-function injectYT(){
-  if(document.getElementById('yt-iframe-api')) return;
-  const tag=document.createElement('script');
-  tag.id='yt-iframe-api'; tag.src='https://www.youtube.com/iframe_api';
-  document.body.appendChild(tag);
-}
-window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); prewarmAll(); };
+  function load(i, user=false){
+    if(!items.length || !ytReady) { pendingLoad = {i, user}; return; }
+    index = (i+items.length)%items.length;
+    const it = items[index];
+    title.textContent = it.title || '—';
+    caption.textContent = it.caption || '';
+    ytPlayer.loadVideoById(it.youtubeId);
+    highlight();
+    if(user){ updateGlow(1); }
+  }
 
-/* ---------- Helpers ---------- */
-function currentList(){ return state.set==='tracks' ? PREFILL_TRACKS : PREFILL_INTERVIEWS; }
-function setListToState(){ // mirror list into per-tab storage (kept for forward-compat)
-  const list=currentList();
-  if(state.tab==='sigrid') state.sigrid=list.slice();
-  else state.you=list.slice();
-}
-function preloadThumbs(list){
-  // Preload thumbnails for snappier grid
-  (list||currentList()).forEach(v=>{
-    const link=document.createElement('link');
-    link.rel='preload'; link.as='image';
-    link.href=`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;
-    document.head.appendChild(link);
-  });
-}
+  function next(){ load(index+1, true); }
 
-/* ---------- Build UI ---------- */
-function buildUI(){
-  buildFeatured(); buildSlots(); buildBonus(); reflectButtons();
-}
+  // ---- Activation: create AudioContext + tones, then init YT and play ----
+  btnActivate.addEventListener('click', ()=>{
+    if(!ctx){
+      try{
+        const AC = window.AudioContext || window.webkitAudioContext;
+        ctx = new AC();
+        gMain = ctx.createGain(); gMain.gain.value = 0.5;
 
-/* Featured Player */
-function buildFeatured(){
-  if(!YT_READY) return;
-  const list=currentList();
-  const item=list[state.fpIndex] || list[0];
-  fpTitle.textContent = item? (item.title||'') : '—';
-  fpCaption.textContent = (item && SNIPPETS[item.id])? SNIPPETS[item.id] : '—';
+        // 128 Hz (warmth)
+        osc128 = ctx.createOscillator(); osc128.type = 'sine'; osc128.frequency.value = 128;
+        g128 = ctx.createGain(); g128.gain.value = btn128.getAttribute('aria-pressed')==='true' ? 0.22 : 0.0;
+        osc128.connect(g128).connect(gMain);
 
-  if(state.fp){ try{ state.fp.destroy(); }catch{} }
-  state.fp = new YT.Player('fp', {
-    height:'100%', width:'100%', videoId: item? item.id : '',
-    playerVars:{
-      autoplay:0, controls:1, modestbranding:1, rel:0, playsinline:1, iv_load_policy:3, loop:0,
-      cc_load_policy: state.ccOn?1:0, cc_lang_pref: state.ccLang, hl: state.ccLang
-    },
-    events:{
-      onReady: (e)=>{ try{ e.target.setPlaybackQuality('hd1080'); }catch{} setMediaSession(item); },
-      onStateChange: (e)=>{
-        if(e.data === YT.PlayerState.PLAYING){
-          pauseAllBonus();
-          try{ e.target.setPlaybackQuality('hd1080'); }catch{}
-        }
-        if(e.data === YT.PlayerState.ENDED && state.autoAdvance){ nextTrack(); }
-      }
+        // 160 Hz (lift)
+        osc160 = ctx.createOscillator(); osc160.type = 'sine'; osc160.frequency.value = 160;
+        g160 = ctx.createGain(); g160.gain.value = btn160.getAttribute('aria-pressed')==='true' ? 0.16 : 0.0;
+        osc160.connect(g160).connect(gMain);
+
+        gMain.connect(ctx.destination);
+        osc128.start(); osc160.start();
+
+        setMeters(g128.gain.value>0?1:0, g160.gain.value>0?1:0);
+      }catch(e){}
     }
+
+    // Init YouTube player after gesture
+    ensureYT();
+    btnActivate.textContent = '🟦 Bluefire Active';
+    btnActivate.disabled = true;
+    updateGlow(3);
   });
-}
 
-/* Slots */
-function buildSlots(){
-  grid.innerHTML='';
-  const list=currentList();
-  preloadThumbs(list);
-  for(let i=0;i<Math.max(10,list.length);i++){
-    const it = list[i];
-    const slot = document.createElement('article'); slot.className='slot';
-    const thumb = document.createElement('div'); thumb.className='thumb';
-    thumb.style.background = it ? `#eef7ff url(https://i.ytimg.com/vi/${it.id}/hqdefault.jpg) center/cover no-repeat` : '#f7feff';
-    thumb.setAttribute('role','button'); thumb.setAttribute('aria-label','Load in featured player');
-    thumb.onclick = ()=> { state.fpIndex = i; save(); buildFeatured(); requestPlayReady(); };
-    const title = document.createElement('div'); title.className='title'; title.textContent = it? (it.title||'Slot '+(i+1)) : 'empty';
-    const snip = document.createElement('div'); snip.className='snip'; snip.textContent = (it && state.showSnippets && SNIPPETS[it.id])? SNIPPETS[it.id] : (state.showSnippets? '—' : '');
-    slot.append(thumb, title, snip);
-    grid.appendChild(slot);
-  }
-}
-
-/* Bonus */
-function buildBonus(){
-  bonusGrid.innerHTML='';
-  for(let i=0;i<BONUS_LIVE.length;i++){
-    const it = BONUS_LIVE[i];
-    const slot = document.createElement('article'); slot.className='slot';
-    const box = document.createElement('div'); box.className='thumb';
-    const inner = document.createElement('div'); inner.id = `bonus_${i}`;
-    box.appendChild(inner);
-    const title = document.createElement('div'); title.className='title'; title.textContent = it.title;
-    const snip = document.createElement('div'); snip.className='snip'; snip.textContent = state.showSnippets && SNIPPETS[it.id]? SNIPPETS[it.id] : '';
-    slot.append(box, title, snip);
-    bonusGrid.appendChild(slot);
-    if(YT_READY){
-      if(state.bonusPlayers[`bonus_${i}`]) try{ state.bonusPlayers[`bonus_${i}`].destroy(); }catch{}
-      state.bonusPlayers[`bonus_${i}`]=new YT.Player(`bonus_${i}`,{
-        height:'100%',width:'100%',videoId:it.id,
-        playerVars:{autoplay:0,controls:1,modestbranding:1,rel:0,playsinline:1,iv_load_policy:3,loop:0}
-      });
-    }
-  }
-}
-function pauseAllBonus(){
-  for(const k of Object.keys(state.bonusPlayers)){
-    try{ state.bonusPlayers[k].pauseVideo(); }catch{}
-  }
-}
-
-/* Prewarm all videos: create off-screen players and cue them so metadata is ready */
-function prewarmAll(){
-  if(!YT_READY) return;
-  const list=currentList();
-  // Clear previous
-  prewarmBin.innerHTML='';
-  state.warmPlayers={};
-  list.forEach((item, idx)=>{
-    const div = document.createElement('div');
-    const id = `warm_${idx}`;
-    div.id = id;
-    prewarmBin.appendChild(div);
-    state.warmPlayers[id] = new YT.Player(id, {
-      height:'0', width:'0', videoId:item.id,
-      playerVars:{autoplay:0,controls:0,rel:0,playsinline:1,iv_load_policy:3, mute:1},
-      events:{
-        onReady:(e)=>{ try{ e.target.cueVideoById(item.id); }catch{} },
-        onError:()=>{}
-      }
-    });
+  // ---- UI Toggles ----
+  btnBluefire.addEventListener('click', function(){
+    const on = root.classList.toggle('bluefire');
+    this.setAttribute('aria-pressed', on?'true':'false');
+    mapLbl.textContent = on ? 'Bluefire mapping ON (R↔B)' : 'mapping ready';
+    document.body.style.outline = on ? '2px solid var(--blue)' : 'none';
+    setTimeout(()=>{ document.body.style.outline='none'; }, 220);
+    updateGlow(1);
   });
-}
 
-/* Playback helpers */
-function nextTrack(){
-  const list=currentList();
-  let idx = state.fpIndex + 1;
-  if(idx >= Math.max(10,list.length)) idx = 0;
-  state.fpIndex = idx; save(); buildFeatured();
-  setTimeout(()=> requestPlayReady(), 120);
-}
-function prevTrack(){
-  const list=currentList();
-  let idx = state.fpIndex - 1;
-  if(idx < 0) idx = Math.max(10,list.length) - 1;
-  state.fpIndex = idx; save(); buildFeatured();
-  setTimeout(()=> requestPlayReady(), 120);
-}
-function requestPlayReady(){ try{ state.fp.playVideo(); }catch{} }
+  btnIridescent.addEventListener('click', function(){
+    const on = !root.classList.contains('iridescent');
+    root.classList.toggle('iridescent');
+    this.setAttribute('aria-pressed', on?'true':'false');
+  });
 
-/* Buttons */
-document.getElementById('fpPlay').onclick = ()=> requestPlayReady();
-document.getElementById('fpPause').onclick = ()=>{ try{ state.fp.pauseVideo(); }catch{} };
-document.getElementById('fpNext').onclick = ()=> nextTrack();
-document.getElementById('fpPrev').onclick = ()=> prevTrack();
-document.getElementById('fpPiP').onclick = async ()=>{
-  const el = document.querySelector('video'); if(el && el.requestPictureInPicture){ try{ await el.requestPictureInPicture(); }catch{} }
-};
+  btnTracks.addEventListener('click', function(){
+    mode='tracks'; this.setAttribute('aria-pressed','true'); btnInterviews.setAttribute('aria-pressed','false');
+    buildList(); if(items.length) load(0,false);
+  });
 
-/* Set/Tab/Snippets/Auto/CC buttons */
-const tabS = document.getElementById('tabSigrid');
-const tabY = document.getElementById('tabYou');
-const setTracksBtn = document.getElementById('setTracks');
-const setInterBtn = document.getElementById('setInterviews');
-const snOn = document.getElementById('snipOn');
-const snOff = document.getElementById('snipOff');
-const autoOn = document.getElementById('autoOn');
-const autoOff = document.getElementById('autoOff');
-const ccToggle = document.getElementById('ccToggle');
-const ccLang = document.getElementById('ccLang');
+  btnInterviews.addEventListener('click', function(){
+    mode='interviews'; this.setAttribute('aria-pressed','true'); btnTracks.setAttribute('aria-pressed','false');
+    buildList(); if(items.length) load(0,false);
+  });
 
-function reflectButtons(){
-  tabS.classList.toggle('active', state.tab==='sigrid'); tabS.setAttribute('aria-selected', state.tab==='sigrid');
-  tabY.classList.toggle('active', state.tab==='you'); tabY.setAttribute('aria-selected', state.tab==='you');
-  setTracksBtn.classList.toggle('active', state.set==='tracks'); setTracksBtn.setAttribute('aria-selected', state.set==='tracks');
-  setInterBtn.classList.toggle('active', state.set==='interviews'); setInterBtn.setAttribute('aria-selected', state.set==='interviews');
-  snOn.classList.toggle('active', state.showSnippets); snOn.setAttribute('aria-selected', state.showSnippets);
-  snOff.classList.toggle('active', !state.showSnippets); snOff.setAttribute('aria-selected', !state.showSnippets);
-  autoOn.classList.toggle('active', state.autoAdvance); autoOn.setAttribute('aria-selected', state.autoAdvance);
-  autoOff.classList.toggle('active', !state.autoAdvance); autoOff.setAttribute('aria-selected', !state.autoAdvance);
-  ccLang.value = state.ccLang;
-  ccToggle.textContent = state.ccOn ? 'CC On' : 'CC Off';
-}
-tabS.onclick = ()=>{ state.tab='sigrid'; setListToState(); save(); buildUI(); prewarmAll(); };
-tabY.onclick = ()=>{ state.tab='you'; setListToState(); save(); buildUI(); prewarmAll(); };
-setTracksBtn.onclick = ()=>{ state.set='tracks'; state.fpIndex=0; save(); buildUI(); prewarmAll(); };
-setInterBtn.onclick = ()=>{ state.set='interviews'; state.fpIndex=0; save(); buildUI(); prewarmAll(); };
-snOn.onclick = ()=>{ state.showSnippets=true; save(); buildSlots(); };
-snOff.onclick = ()=>{ state.showSnippets=false; save(); buildSlots(); };
-autoOn.onclick = ()=>{ state.autoAdvance=true; save(); reflectButtons(); };
-autoOff.onclick = ()=>{ state.autoAdvance=false; save(); reflectButtons(); };
-ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; save(); buildFeatured(); reflectButtons(); };
-ccLang.onchange = ()=>{ state.ccLang=ccLang.value; save(); buildFeatured(); };
+  btn128.addEventListener('click', function(){
+    const on = this.getAttribute('aria-pressed')!=='true';
+    this.setAttribute('aria-pressed', on?'true':'false');
+    if(g128 && ctx){ g128.gain.setTargetAtTime(on?0.22:0.0, ctx.currentTime, 0.05); }
+    setMeters(on?1:0, g160 && g160.gain && g160.gain.value>0 ? 1:0);
+  });
 
-/* ---------- Primer & tones ---------- */
-const primer = document.getElementById('primer');
-const primerBtn = document.getElementById('primerBtn');
-const statusTone = document.getElementById('statusTone');
-const toneToggle = document.getElementById('toneToggle');
-const tone128 = document.getElementById('tone128');
-const tone256 = document.getElementById('tone256');
-const toneLevel = document.getElementById('toneLevel');
+  btn160.addEventListener('click', function(){
+    const on = this.getAttribute('aria-pressed')!=='true';
+    this.setAttribute('aria-pressed', on?'true':'false');
+    if(g160 && ctx){ g160.gain.setTargetAtTime(on?0.16:0.0, ctx.currentTime, 0.05); }
+    setMeters(g128 && g128.gain && g128.gain.value>0 ? 1:0, on?1:0);
+  });
 
-function setToneBadge(txt, mode){
-  statusTone.textContent = txt;
-  const maps = {
-    on:  ['#e7fff0','#c8f5da','#0b5130'],
-    off: ['#fff8e1','#ffecb5','#664d03'],
-    wait:['#eef6ff','#d8eafe','#0b3b61']
+  // Keyboard next/prev
+  document.addEventListener('keydown', (e)=>{
+    if(e.key==='ArrowRight') next();
+    if(e.key==='ArrowLeft') load(index-1,true);
+  });
+
+  // Build initial list (Interviews default)
+  buildList();
+
+  // YouTube API boot
+  window.onYouTubeIframeAPIReady = function(){
+    // (global hook; will be called even before Activate; we create the player after gesture)
   };
-  const [bg, bd, fg] = maps[mode] || maps.on;
-  statusTone.style.background = bg; statusTone.style.borderColor = bd; statusTone.style.color = fg;
-}
-setToneBadge('waiting','wait');
 
-function initTonesIfNeeded(){
-  if(state.ctx) return;
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const main=ctx.createGain(); main.gain.value=Number(toneLevel.value)/100; main.connect(ctx.destination);
-
-  const osc128=ctx.createOscillator(); osc128.type='sine'; osc128.frequency.value=128;
-  const g128=ctx.createGain(); g128.gain.value = tone128.checked ? 0.18 : 0; osc128.connect(g128).connect(main); osc128.start();
-
-  const osc256=ctx.createOscillator(); osc256.type='sine'; osc256.frequency.value=256;
-  const g256=ctx.createGain(); g256.gain.value = tone256.checked ? 0.12 : 0; osc256.connect(g256).connect(main); osc256.start();
-
-  const lfo=ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.12;
-  const lfoGain=ctx.createGain(); lfoGain.gain.value=0.6; lfo.connect(lfoGain); lfoGain.connect(osc256.detune); lfo.start();
-
-  state.ctx=ctx; state.nodes={main,osc128,g128,osc256,g256,lfo,lfoGain};
-}
-function updateToneRouting(){
-  if(!state.ctx) return;
-  state.nodes.g128.gain.value = (state.tonesOn && tone128.checked) ? 0.18 : 0;
-  state.nodes.g256.gain.value = (state.tonesOn && tone256.checked) ? 0.12 : 0;
-  state.nodes.main.gain.value = (state.tonesOn ? Number(toneLevel.value)/100 : 0);
-  setToneBadge(state.tonesOn ? 'tones on' : 'silent', state.tonesOn ? 'on' : 'off');
-}
-toneToggle.onclick = async ()=>{
-  if(!state.ctx){ initTonesIfNeeded(); try{ await state.ctx.resume(); }catch{} }
-  state.tonesOn = !state.tonesOn; save(); updateToneRouting();
-  toneToggle.textContent = state.tonesOn ? 'On' : 'Off';
-};
-tone128.onchange = updateToneRouting;
-tone256.onchange = updateToneRouting;
-toneLevel.oninput = updateToneRouting;
-
-primerBtn.onclick = async ()=>{
-  // One user gesture to: resume audio, start first video, and prewarm iframes
-  initTonesIfNeeded();
-  try{ await state.ctx.resume(); }catch{}
-  setToneBadge('tones on','on');
-
-  // Ensure featured is built, then play
-  if(!state.fp) buildFeatured();
-  requestPlayReady();
-
-  // Hide the overlay
-  primer.style.display='none';
-};
-
-/* Media Session: better lock-screen controls (when supported) */
-function setMediaSession(item){
-  if(!('mediaSession' in navigator) || !item) return;
-  try{
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: item.title||'Clarity',
-      artist: 'Sigrid ↔ You',
-      album: state.set==='tracks'?'Tracks':'Interviews',
-      artwork: [{src:`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`,sizes:'480x360',type:'image/jpeg'}]
+  function ensureYT(){
+    if(ytPlayer) return;
+    ytPlayer = new YT.Player('ytbox', {
+      width: '100%', height: '100%',
+      playerVars: {
+        autoplay: 1, playsinline: 1, controls: 1, rel: 0, modestbranding: 1, origin: location.origin
+      },
+      events: {
+        'onReady': (e)=>{
+          ytReady = true;
+          // load the first item
+          if(pendingLoad){ load(pendingLoad.i, pendingLoad.user); pendingLoad=null; }
+          else if(items.length){ load(0,false); }
+        },
+        'onStateChange': (e)=>{
+          // 0 = ended, 1 = playing, 2 = paused
+          if(e.data === YT.PlayerState.ENDED){ next(); }
+          if(e.data === YT.PlayerState.PLAYING){ updateGlow(1); }
+        }
+      }
     });
-    navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
-    navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
-    navigator.mediaSession.setActionHandler('play', ()=> requestPlayReady());
-    navigator.mediaSession.setActionHandler('pause', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
-  }catch{}
-}
-
-/* Keyboard shortcuts */
-window.addEventListener('keydown',(e)=>{
-  if(e.target && (/input|textarea|select/i).test(e.target.tagName)) return;
-  if(e.code==='Space'){ e.preventDefault(); try{
-    const s = state.fp.getPlayerState();
-    if(s===YT.PlayerState.PLAYING) state.fp.pauseVideo(); else state.fp.playVideo();
-  }catch{} }
-  if(e.code==='ArrowRight') nextTrack();
-  if(e.code==='ArrowLeft') prevTrack();
-});
-
-/* Parallax snow */
-(function snow(){
-  const c=document.getElementById('snow'); const dpr=Math.max(1,window.devicePixelRatio||1);
-  const x=c.getContext('2d'); let flakes=[], mouseY=0, scrollY=0;
-  function size(){ c.width=innerWidth*dpr; c.height=innerHeight*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
-  function seed(N=120){ flakes=new Array(N).fill(0).map(()=>({x:Math.random()*innerWidth,y:-10-Math.random()*innerHeight,r:1+Math.random()*2.5,s:.4+Math.random()*1.2,o:.4+Math.random()*.6,l:.2+Math.random()*.8})); }
-  function draw(){
-    x.clearRect(0,0,innerWidth,innerHeight);
-    const par=(scrollY*0.15+(mouseY-innerHeight/2)*0.02);
-    for(const f of flakes){ f.y+=f.s+par*0.002; f.x+=Math.sin((f.y+par)*.01)*f.l; if(f.y>innerHeight+10){ f.y=-10; f.x=Math.random()*innerWidth; }
-      x.globalAlpha=f.o; x.beginPath(); x.arc(f.x,f.y,f.r,0,Math.PI*2); x.fillStyle="#ffffff"; x.fill(); }
-    requestAnimationFrame(draw);
   }
-  window.addEventListener('resize', ()=>{ size(); seed(flakes.length); });
-  window.addEventListener('mousemove', e=>{ mouseY=e.clientY; });
-  window.addEventListener('scroll', ()=>{ scrollY=window.scrollY||0; });
-  size(); seed(); draw();
 })();
-
-/* Boot */
-setListToState();
-injectYT();
-buildSlots(); // draw UI skeleton even before YT is ready
-buildBonus();
-preloadThumbs();
-
 </script>
 </body>
 </html>
