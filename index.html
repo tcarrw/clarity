@@ -21,10 +21,10 @@ body{
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
-.header{padding:2rem 1.25rem 1rem; text-align:center}
+.header{padding:3.25rem 1.25rem 1rem; text-align:center}
 h1{margin:0 0 .25rem; font-weight:700; letter-spacing:.02em}
 .tag{color:var(--muted); font-size:.95rem}
-.wrap{max-width:880px; margin:0 auto; padding:0 1rem 5rem}
+.wrap{max-width:880px; margin:0 auto; padding:0 1rem 6rem}
 .card{
   background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
   border:1px solid var(--ring); border-radius:16px; padding:1.25rem; margin:1rem 0;
@@ -33,7 +33,8 @@ h1{margin:0 0 .25rem; font-weight:700; letter-spacing:.02em}
 .controls{display:flex; gap:.75rem; flex-wrap:wrap; align-items:center}
 button,.chip{
   border:0; border-radius:14px; padding:.9rem 1.2rem; font-weight:650; cursor:pointer;
-  background:var(--accent); color:#071018; transition:transform .06s ease, opacity .2s ease, box-shadow .2s ease;
+  background:var(--accent); color:#071018;
+  transition:transform .06s ease, opacity .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 button:active{transform:translateY(1px)}
 button.ghost{background:transparent; color:var(--ink); border:1px solid var(--ring)}
@@ -72,6 +73,20 @@ hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a,
 }
 @keyframes fall{to{transform:translate3d(var(--x,0px), 110vh, 0) rotate(360deg)}}
 .layer{position:relative; z-index:1}
+
+/* top back ribbon */
+.ribbon{
+  position:fixed; top:.65rem; left:50%; transform:translateX(-50%);
+  display:flex; gap:.5rem; z-index:3; align-items:center;
+  background:rgba(9,14,22,.88); border:1px solid var(--ring); padding:.35rem .5rem;
+  border-radius:999px; backdrop-filter:blur(10px);
+}
+.ribbon a{
+  display:inline-block; padding:.45rem .75rem; border-radius:999px;
+  background:#0d1522; border:1px solid var(--ring); color:var(--accent); text-decoration:none;
+  font-weight:650; font-size:.92rem;
+}
+.ribbon a:active{opacity:.85}
 
 /* animated Start button */
 #start{
@@ -123,9 +138,18 @@ hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a,
 .ritual small{color:var(--muted)}
 .ritual .steps{margin:.2rem 0 0; padding-left:1.15rem}
 .print-note{color:var(--muted); font-size:.92rem}
+
+/* share row */
+.share{
+  display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:.6rem
+}
+.share button{background:#1a2840; color:var(--accent); border:1px solid var(--ring)}
+.share button:hover{filter:brightness(1.08)}
+@media (max-width:480px){ .ribbon{scale:.96} }
+
 @media print{
   body{background:#fff; color:#000}
-  .header,.footer,.install,.snow{display:none !important}
+  .header,.footer,.install,.snow,.ribbon{display:none !important}
   .card{border:1px solid #bcd; break-inside:avoid}
   .ritual{border-color:#9cc}
   .list a{color:#0366d6; background:#fff; border-color:#cde}
@@ -134,6 +158,12 @@ hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a,
 </head>
 <body>
 <div class="snow" id="snow"></div>
+
+<!-- Back ribbon -->
+<nav class="ribbon">
+  <a href="https://jar.plnt.earth" target="_self" rel="noopener">↩ Jar</a>
+  <a href="https://tunes.plnt.earth" target="_self" rel="noopener">🎵 Tunes</a>
+</nav>
 
 <header class="header layer">
   <h1>❄️ Sigrid — The Northlight</h1>
@@ -171,6 +201,11 @@ hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a,
         <div class="bar" id="b5" style="height:8px"></div>
       </div>
       <p class="note">Cycle: <strong>Inhale 4</strong> · <strong>Hold 2</strong> · <strong>Exhale 6</strong> (repeats for 3:00).</p>
+    </div>
+
+    <div class="share">
+      <button id="shareX" class="ghost">Share to X · “Northlight hit”</button>
+      <button id="copyLink" class="ghost">Copy Page Link</button>
     </div>
   </section>
 
@@ -360,16 +395,12 @@ hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a,
     if(running) return;
     running=true;
 
-    // iOS resume
     if(ctx && ctx.state==='suspended'){ ctx.resume(); }
-
     startAudio();
 
-    // visual: pulse remains; add spark burst at click/tap
     startBtn.classList.add('pulsing');
     if(ev && ev.clientX) { sparkBurst(ev.clientX, ev.clientY); }
 
-    // countdown 3:00
     var dur=180, until=Date.now()+dur*1000;
     endAt=performance.now()+dur*1000+30;
 
@@ -417,7 +448,26 @@ hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a,
       shimOsc=null; sGain=null;
     }
   }, {passive:true});
+})();
 
+/* ------- Share to X + Copy ------- */
+(function(){
+  var btn=document.getElementById('shareX');
+  var copy=document.getElementById('copyLink');
+  function pageURL(){ try{return window.location.href;}catch(e){return 'https://clarity.plnt.earth';} }
+  btn.addEventListener('click', function(){
+    var text = 'Northlight hit: breathing with Sigrid on clarity.plnt.earth — 160/162 Hz + 512 Hz shimmer. “Breathe the truth in. Exhale what isn’t yours.” #Illumina #Northlight';
+    var url  = pageURL();
+    var intent='https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url);
+    window.open(intent, '_blank');
+  }, {passive:true});
+  copy.addEventListener('click', function(){
+    var url = pageURL();
+    navigator.clipboard && navigator.clipboard.writeText(url).then(function(){
+      copy.textContent='Copied ✓';
+      setTimeout(function(){ copy.textContent='Copy Page Link'; }, 1200);
+    });
+  }, {passive:true});
 })();
 </script>
 </body>
