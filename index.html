@@ -3,472 +3,329 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Clarity · Sigrid — The Northlight ❄️</title>
+<title>Clarity · Sigrid — One-Video Focus + Tone ❄️</title>
 <meta name="theme-color" content="#0b0d11">
-<meta name="description" content="Clarity node for Sigrid — 3-minute Air ritual (160/162 Hz), shimmer link to Honey, and an official YouTube playlist. Headphones recommended.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="description" content="Start to play 160/162 Hz binaural + optional 512 Hz shimmer, and exactly one Sigrid video inline on loop. Switch tracks without audio bugs.">
 <style>
 :root{
   --bg:#0b0d11; --ink:#eaf9ff; --muted:#9fb4c2; --card:#0f1621; --ring:#182232;
-  --accent:#9ed0ff; --glow:#eaf9ff; --ok:#89f7d6; --dim:#6b7b86; --halo:#bee4ff;
+  --accent:#9ed0ff; --ok:#89f7d6; --halo:#bee4ff; --gradA:#142032; --gradB:#0b0d11;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0; color:var(--ink);
-  background:radial-gradient(1200px 800px at 50% -10%, #142032 0%, #0b0d11 55%);
+  background:radial-gradient(1200px 800px at 50% -10%, var(--gradA) 0%, var(--gradB) 55%);
   font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
 }
-.header{padding:3.25rem 1.25rem 1rem; text-align:center}
+.header{padding:3rem 1rem 1rem; text-align:center}
 h1{margin:0 0 .25rem; font-weight:700; letter-spacing:.02em}
 .tag{color:var(--muted); font-size:.95rem}
-.wrap{max-width:880px; margin:0 auto; padding:0 1rem 6rem}
+.wrap{max-width:980px; margin:0 auto; padding:0 1rem 4rem}
 .card{
   background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
-  border:1px solid var(--ring); border-radius:16px; padding:1.25rem; margin:1rem 0;
-  backdrop-filter: blur(6px);
+  border:1px solid var(--ring); border-radius:16px; padding:1rem; margin:1rem 0; backdrop-filter:blur(6px);
 }
-.controls{display:flex; gap:.75rem; flex-wrap:wrap; align-items:center}
-button,.chip{
+.row{display:flex; flex-wrap:wrap; gap:.65rem; align-items:center}
+button{
   border:0; border-radius:14px; padding:.9rem 1.2rem; font-weight:650; cursor:pointer;
-  background:var(--accent); color:#071018;
-  transition:transform .06s ease, opacity .2s ease, box-shadow .2s ease, filter .2s ease;
+  background:var(--accent); color:#071018; transition:transform .06s ease, opacity .2s ease, box-shadow .2s ease;
 }
 button:active{transform:translateY(1px)}
 button.ghost{background:transparent; color:var(--ink); border:1px solid var(--ring)}
-.toggle{display:inline-flex; align-items:center; gap:.5rem}
-input[type="checkbox"]{width:1.1rem;height:1.1rem}
-.note{color:var(--muted); font-size:.95rem}
+label.toggle{display:inline-flex; align-items:center; gap:.5rem}
+input[type="checkbox"]{width:1.1rem; height:1.1rem}
+.small{font-size:.92rem; color:var(--muted)}
 .timer{
-  font-variant-numeric: tabular-nums; font-weight:750; letter-spacing:.02em;
-  background:#0d1522; border:1px solid var(--ring); padding:.55rem .8rem; border-radius:10px;
+  font-variant-numeric:tabular-nums; font-weight:750; letter-spacing:.02em;
+  background:#0d1522; border:1px solid var(--ring); padding:.5rem .7rem; border-radius:10px;
 }
-.breath{display:grid; justify-items:center; gap:.75rem; padding-top:.25rem}
-.circle{
-  width:150px; height:150px; border-radius:50%;
-  border:2px solid #1f2a3e; box-shadow:0 0 0 1px #1a2436 inset, 0 0 30px rgba(158,208,255,0.08);
-  background:radial-gradient(40% 40% at 50% 50%, rgba(158,208,255,.25), rgba(158,208,255,.02) 70%, transparent 71%);
-  transition:transform 2s ease;
-}
-.phase{font-weight:650}
-.bars{display:flex; gap:.25rem; align-items:flex-end; height:24px}
-.bar{width:6px; background:#1e2a3a; border-radius:3px}
-.bar.on{background:var(--ok); box-shadow:0 0 8px var(--ok)}
-.list a{
-  display:block; padding:.65rem .85rem; border-radius:12px; text-decoration:none;
-  color:var(--accent); background:#0d1522; border:1px solid var(--ring); margin:.45rem 0;
-}
-.list a:active{opacity:.85}
-.footer{color:var(--muted); text-align:center; padding:1.5rem 1rem}
-hr{border:0; height:1px; background:linear-gradient(90deg, transparent, #21304a, transparent); margin:1.25rem 0}
+.slider{appearance:none; width:160px; height:6px; border-radius:999px; background:#1a2740; outline:none}
+.slider::-webkit-slider-thumb{appearance:none; width:18px; height:18px; border-radius:50%; background:var(--accent); border:1px solid #0c1628}
+.sep{height:1px; background:linear-gradient(90deg,transparent,#21304a,transparent); border:0; margin:1rem 0}
 
-/* snowfall shimmer */
-.snow{pointer-events:none; position:fixed; inset:0; overflow:hidden; z-index:0}
-.flake{
-  position:absolute; top:-10px; width:2px; height:2px; border-radius:50%;
-  background:rgba(234,249,255,.8); filter:drop-shadow(0 0 6px rgba(158,208,255,.6));
-  animation:fall linear infinite; opacity:.9;
+/* focus video */
+.player{
+  position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--ring);
+  aspect-ratio:16/9; background:#0d1522; margin-top:.75rem;
 }
-@keyframes fall{to{transform:translate3d(var(--x,0px), 110vh, 0) rotate(360deg)}}
-.layer{position:relative; z-index:1}
+.player iframe{position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:14px}
 
-/* top back ribbon */
+/* tracklist */
+.list{display:grid; grid-template-columns:1fr; gap:.4rem; margin-top:.75rem}
+.track{
+  display:flex; gap:.6rem; align-items:center; justify-content:space-between;
+  padding:.6rem .8rem; border:1px solid var(--ring); border-radius:10px; background:#0d1522; color:var(--ink);
+}
+.track button{padding:.45rem .7rem; border-radius:10px; font-size:.9rem; background:#1a2740; color:var(--accent)}
+.track .t{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70%}
+.active{outline:2px solid var(--accent); box-shadow:0 0 0 2px rgba(158,208,255,.25) inset}
+.footer{color:var(--muted); text-align:center; padding:1.25rem}
 .ribbon{
-  position:fixed; top:.65rem; left:50%; transform:translateX(-50%);
-  display:flex; gap:.5rem; z-index:3; align-items:center;
-  background:rgba(9,14,22,.88); border:1px solid var(--ring); padding:.35rem .5rem;
-  border-radius:999px; backdrop-filter:blur(10px);
+  position:fixed; top:.65rem; left:50%; transform:translateX(-50%); z-index:3;
+  display:flex; gap:.5rem; background:rgba(9,14,22,.88); border:1px solid var(--ring);
+  padding:.35rem .5rem; border-radius:999px; backdrop-filter:blur(10px)
 }
-.ribbon a{
-  display:inline-block; padding:.45rem .75rem; border-radius:999px;
-  background:#0d1522; border:1px solid var(--ring); color:var(--accent); text-decoration:none;
-  font-weight:650; font-size:.92rem;
-}
-.ribbon a:active{opacity:.85}
+.ribbon a{display:inline-block; padding:.45rem .75rem; border-radius:999px; background:#0d1522; border:1px solid var(--ring); color:var(--accent); text-decoration:none; font-weight:650; font-size:.92rem}
 
 /* animated Start button */
 #start{
   position:relative; isolation:isolate;
   box-shadow:0 0 0 0 rgba(158,208,255,.6), inset 0 0 12px rgba(255,255,255,.15);
 }
-#start::before, #start::after{
+#start::before,#start::after{
   content:""; position:absolute; inset:-8px; border-radius:18px; z-index:-1;
   background:conic-gradient(from 0deg, transparent 0 30%, rgba(158,208,255,.25) 40% 60%, transparent 70% 100%);
   filter:blur(12px); animation:spin 6s linear infinite;
 }
 #start::after{inset:-14px; opacity:.6; animation-duration:9s; filter:blur(20px)}
 @keyframes spin{to{transform:rotate(360deg)}}
-/* pulse ring */
-@keyframes pulse{
-  0% { box-shadow:0 0 0 0 rgba(158,208,255,.45) }
-  70%{ box-shadow:0 0 0 18px rgba(158,208,255,0) }
-  100%{ box-shadow:0 0 0 0 rgba(158,208,255,0) }
-}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(158,208,255,.45)}70%{box-shadow:0 0 0 18px rgba(158,208,255,0)}100%{box-shadow:0 0 0 0 rgba(158,208,255,0)}}
 #start.pulsing{animation:pulse 2.4s ease-out infinite}
-
-/* spark burst on tap */
-.spark{
-  position:absolute; pointer-events:none; width:8px; height:8px; border-radius:50%;
-  background:var(--glow); filter:drop-shadow(0 0 12px var(--halo)); opacity:.95;
-  animation:spark .6s ease-out forwards;
-}
-@keyframes spark{
-  to{transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0}
-}
-
-/* install banner */
-.install{
-  position:sticky; bottom:0; inset-inline:0; z-index:2;
-  display:flex; gap:.75rem; align-items:center; justify-content:center;
-  background:rgba(9,14,22,.9); border-top:1px solid var(--ring);
-  padding:.65rem .9rem; backdrop-filter:blur(8px);
-}
-.install button{padding:.5rem .8rem; border-radius:10px}
-.install .muted{color:var(--muted); font-size:.92rem}
-
-/* Ritual card (printable) */
-.ritual{
-  display:grid; gap:.6rem; grid-template-columns:1fr; padding:1rem; border-radius:14px;
-  background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-  border:1px dashed #28415f;
-}
-.ritual h3{margin:.1rem 0; letter-spacing:.02em}
-.ritual small{color:var(--muted)}
-.ritual .steps{margin:.2rem 0 0; padding-left:1.15rem}
-.print-note{color:var(--muted); font-size:.92rem}
-
-/* share row */
-.share{
-  display:flex; gap:.6rem; align-items:center; flex-wrap:wrap; margin-top:.6rem
-}
-.share button{background:#1a2840; color:var(--accent); border:1px solid var(--ring)}
-.share button:hover{filter:brightness(1.08)}
-@media (max-width:480px){ .ribbon{scale:.96} }
-
-@media print{
-  body{background:#fff; color:#000}
-  .header,.footer,.install,.snow,.ribbon{display:none !important}
-  .card{border:1px solid #bcd; break-inside:avoid}
-  .ritual{border-color:#9cc}
-  .list a{color:#0366d6; background:#fff; border-color:#cde}
-}
+.spark{position:absolute; pointer-events:none; width:8px; height:8px; border-radius:50%; background:#eaf9ff; filter:drop-shadow(0 0 12px var(--halo)); opacity:.95; animation:spark .6s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0}}
 </style>
 </head>
 <body>
-<div class="snow" id="snow"></div>
-
-<!-- Back ribbon -->
 <nav class="ribbon">
   <a href="https://jar.plnt.earth" target="_self" rel="noopener">↩ Jar</a>
   <a href="https://tunes.plnt.earth" target="_self" rel="noopener">🎵 Tunes</a>
 </nav>
 
-<header class="header layer">
-  <h1>❄️ Sigrid — The Northlight</h1>
-  <div class="tag">Ålesund, Norway · “Breathe the truth in. Exhale what isn’t yours.”</div>
+<header class="header">
+  <h1>❄️ Sigrid — Clarity Focus</h1>
+  <div class="tag">Binaural Air (160/162 Hz) + one inline video on loop — starts on tap.</div>
 </header>
 
-<main class="wrap layer">
-  <!-- Home-screen / background audio tip -->
-  <div class="install" id="install">
-    <span class="muted">Tip: Add to Home Screen for steadier background audio (Share ▸ <strong>Add to Home Screen</strong>), then open from the icon.</span>
-    <button class="ghost" id="dismiss">Got it</button>
-  </div>
-
-  <!-- Clarity Breath -->
-  <section class="card" aria-label="Clarity Breath">
-    <h2 style="margin:.25rem 0 0">Clarity Breath · 3:00</h2>
-    <p class="note">Headphones recommended. Left 160 Hz · Right 162 Hz (gentle 2 Hz). Toggle 512 Hz shimmer to link back to Honey base.</p>
-
-    <div class="controls" style="margin:.5rem 0 0; position:relative">
-      <button id="start" class="pulsing">▶ Start Clarity Breath</button>
+<main class="wrap">
+  <section class="card">
+    <div class="row">
+      <button id="start" class="pulsing">▶ Start Session</button>
       <button id="stop" class="ghost" disabled>⏸ Stop</button>
-      <span class="timer" id="clock" aria-live="polite">03:00</span>
+      <span class="timer" id="clock">03:00</span>
       <label class="toggle"><input type="checkbox" id="shimmer"> <span>512 Hz shimmer</span></label>
       <label class="toggle"><input type="checkbox" id="softfade" checked> <span>Soft fade</span></label>
+      <label class="toggle"><input type="checkbox" id="mute" checked> <span>Muted</span></label>
+      <span class="small">Volume</span><input id="vol" type="range" min="0" max="100" value="40" class="slider" />
+      <button id="prev" class="ghost">⟵ Prev</button>
+      <button id="next" class="ghost">Next ⟶</button>
+      <button id="resync" class="ghost">⟲ Resync</button>
     </div>
 
-    <div class="breath" style="margin-top:.75rem">
-      <div class="circle" id="circle" aria-hidden="true"></div>
-      <div class="phase" id="phase">Ready</div>
-      <div class="bars" aria-hidden="true">
-        <div class="bar" id="b1" style="height:8px"></div>
-        <div class="bar" id="b2" style="height:14px"></div>
-        <div class="bar" id="b3" style="height:20px"></div>
-        <div class="bar" id="b4" style="height:14px"></div>
-        <div class="bar" id="b5" style="height:8px"></div>
-      </div>
-      <p class="note">Cycle: <strong>Inhale 4</strong> · <strong>Hold 2</strong> · <strong>Exhale 6</strong> (repeats for 3:00).</p>
+    <div class="player" style="margin-top:.75rem">
+      <iframe id="yt" title="Sigrid — player" allow="autoplay; encrypted-media" allowfullscreen playsinline></iframe>
     </div>
 
-    <div class="share">
-      <button id="shareX" class="ghost">Share to X · “Northlight hit”</button>
-      <button id="copyLink" class="ghost">Copy Page Link</button>
-    </div>
-  </section>
+    <hr class="sep">
 
-  <!-- Playlist -->
-  <section class="card" aria-label="Playlist">
-    <h2 style="margin:.25rem 0 0">Sigrid · Clarity Playlist</h2>
-    <p class="note">Official videos when possible — tap to open in YouTube.</p>
-    <div class="list">
-      <a href="https://www.youtube.com/watch?v=tEddixS-UoU" target="_blank" rel="noopener">Strangers</a>
-      <a href="https://www.youtube.com/watch?v=jJo0MT3wDBs" target="_blank" rel="noopener">Don’t Kill My Vibe</a>
-      <a href="https://www.youtube.com/watch?v=ff6KPrgZx8k" target="_blank" rel="noopener">Sight of You</a>
-      <a href="https://www.youtube.com/watch?v=KscadEpooPo" target="_blank" rel="noopener">Sucker Punch</a>
-      <a href="https://www.youtube.com/watch?v=UxxajLWwzqY" target="_blank" rel="noopener">High Five</a>
-      <a href="https://www.youtube.com/watch?v=kfwf3H0IflU" target="_blank" rel="noopener">Mirror</a>
-      <a href="https://www.youtube.com/watch?v=HkWlV6j5H5w" target="_blank" rel="noopener">Burning Bridges</a>
-      <a href="https://www.youtube.com/watch?v=2LhJYv8pY-E" target="_blank" rel="noopener">It Gets Dark</a>
-      <a href="https://www.youtube.com/watch?v=rX8FHkXoFfE" target="_blank" rel="noopener">Home To You (Like A Bullet)</a>
-      <a href="https://www.youtube.com/watch?v=5jJzy6TIT3w" target="_blank" rel="noopener">Head On Fire (with Griff)</a>
-      <a href="https://www.youtube.com/watch?v=lYPzRy2b08E" target="_blank" rel="noopener">Plot Twist</a>
-      <a href="https://www.youtube.com/watch?v=JtTQ_7U3V6E" target="_blank" rel="noopener">Dynamite (acoustic)</a>
-    </div>
-  </section>
-
-  <!-- Northlight Ritual Card -->
-  <section class="card" aria-label="Northlight Ritual Card">
-    <h2 style="margin:.25rem 0 .5rem">Northlight Ritual Card — ❄️ Clarity</h2>
-    <div class="ritual">
-      <h3>Mantra</h3>
-      <small>“Breathe the truth in. Exhale what isn’t yours.”</small>
-
-      <h3>Setup</h3>
-      <ul class="steps">
-        <li>Headphones on. Sit tall or lie down.</li>
-        <li>Optional: dim lights; set intention: <em>clarity without chill</em>.</li>
-        <li>When ready, press <strong>Start</strong> and follow the breath.</li>
-      </ul>
-
-      <h3>Cycle · 3 minutes</h3>
-      <ul class="steps">
-        <li><strong>Inhale 4</strong> — let the chest lift into the halo.</li>
-        <li><strong>Hold 2</strong> — notice the clean edge of feeling.</li>
-        <li><strong>Exhale 6</strong> — release what isn’t yours to carry.</li>
-      </ul>
-
-      <h3>Close</h3>
-      <ul class="steps">
-        <li>Note one sentence of truth you discovered.</li>
-        <li>If needed, replay with <strong>512 Hz shimmer</strong> for warmth linkage.</li>
-      </ul>
-
-      <p class="print-note">Tip: Print and tuck into your Illumina notebook. Works as a pocket reset anywhere.</p>
-    </div>
+    <div class="list" id="tracklist"></div>
   </section>
 </main>
 
-<footer class="footer layer">
-  clarity.plnt.earth — Illumina Northlight Node · Frequency band 160–256 Hz
-</footer>
+<footer class="footer">clarity.plnt.earth — One-Video Focus + Binaural · Headphones recommended</footer>
 
 <script>
-/* ------- Snow shimmer ------- */
-(function(){
-  var c=document.getElementById('snow'), n=70, w=window.innerWidth;
-  for(var i=0;i<n;i++){
-    var d=document.createElement('div');
-    d.className='flake';
-    var size=Math.random()*2.2+0.8;
-    d.style.width=size+'px'; d.style.height=size+'px';
-    var x=(Math.random()*w - w*0.5)+'px';
-    d.style.left=(Math.random()*100)+'%';
-    d.style.setProperty('--x', x);
-    d.style.animationDuration=(8+Math.random()*10)+'s';
-    d.style.animationDelay=(-Math.random()*10)+'s';
-    c.appendChild(d);
+/* ---------------- Playlist ---------------- */
+var TRACKS = [
+  {t:'Strangers', id:'tEddixS-UoU'},
+  {t:"Don’t Kill My Vibe", id:'jJo0MT3wDBs'},
+  {t:'Sight of You', id:'ff6KPrgZx8k'},
+  {t:'Sucker Punch', id:'KscadEpooPo'},
+  {t:'High Five', id:'UxxajLWwzqY'},
+  {t:'Mirror', id:'kfwf3H0IflU'},
+  {t:'Burning Bridges', id:'HkWlV6j5H5w'},
+  {t:'It Gets Dark', id:'2LhJYv8pY-E'},
+  {t:'Home To You (Like A Bullet)', id:'rX8FHkXoFfE'},
+  {t:'Head On Fire (with Griff)', id:'5jJzy6TIT3w'},
+  {t:'Plot Twist', id:'lYPzRy2b08E'},
+  {t:'Dynamite (acoustic)', id:'JtTQ_7U3V6E'}
+];
+
+/* ---------------- YouTube embed (no external API) ---------------- */
+var player = document.getElementById('yt');
+var current = 0;
+function buildSrc(id, muted) {
+  var base = 'https://www.youtube.com/embed/'+id;
+  var q = [
+    'autoplay=1',
+    'mute='+(muted?1:0),
+    'loop=1',              // need playlist=id for loop
+    'playlist='+id,
+    'controls=0',
+    'playsinline=1',
+    'modestbranding=1',
+    'rel=0',
+    'enablejsapi=1',
+    'origin='+encodeURIComponent(location.origin||'https://clarity.plnt.earth')
+  ].join('&');
+  return base+'?'+q;
+}
+function loadIndex(i, keepMute){
+  current = (i+TRACKS.length)%TRACKS.length;
+  var id = TRACKS[current].id;
+  player.src = buildSrc(id, keepMute);
+  highlight();
+  setTimeout(function(){ send('playVideo'); if(!keepMute && !MUTE.checked){ send('unMute'); setVol(); }}, 350);
+}
+function send(func, args){
+  try{ player.contentWindow.postMessage(JSON.stringify({event:'command', func:func, args:args||[]}), '*'); }catch(e){}
+}
+function setVol(){
+  var v = parseInt(VOL.value,10)||40;
+  send('setVolume', [v]);
+}
+
+/* ---------------- Tone engine ---------------- */
+var ctx,leftOsc,rightOsc,shimOsc,lGain,rGain,sGain,merger;
+function ramp(p,to,t){ try{p.linearRampToValueAtTime(to,t);}catch(e){} }
+function startTone(){
+  if(!ctx){ ctx = new (window.AudioContext||window.webkitAudioContext)(); }
+  var now = ctx.currentTime;
+  leftOsc = ctx.createOscillator(); rightOsc = ctx.createOscillator();
+  lGain = ctx.createGain(); rGain = ctx.createGain();
+  leftOsc.type='sine'; rightOsc.type='sine';
+  leftOsc.frequency.setValueAtTime(160, now);
+  rightOsc.frequency.setValueAtTime(162, now);
+  lGain.gain.setValueAtTime(0.0001, now);
+  rGain.gain.setValueAtTime(0.0001, now);
+
+  merger = ctx.createChannelMerger(2);
+  leftOsc.connect(lGain).connect(merger,0,0);
+  rightOsc.connect(rGain).connect(merger,0,1);
+
+  var out = ctx.createGain();
+  merger.connect(out).connect(ctx.destination);
+
+  var fade = SOFT.checked ? 2.0 : 0.05;
+  ramp(lGain.gain, 0.08, now + fade);
+  ramp(rGain.gain, 0.08, now + fade);
+  leftOsc.start(); rightOsc.start();
+
+  if(SHIM.checked){
+    shimOsc = ctx.createOscillator(); sGain = ctx.createGain();
+    shimOsc.type='sine'; shimOsc.frequency.setValueAtTime(512, now);
+    sGain.gain.setValueAtTime(0.0001, now);
+    ramp(sGain.gain, 0.03, now + fade);
+    shimOsc.connect(sGain).connect(ctx.destination); shimOsc.start();
   }
-})();
+}
+function stopTone(){
+  if(!ctx) return;
+  var now = ctx.currentTime, fade = SOFT.checked ? 1.2 : 0.05;
+  try{
+    ramp(lGain.gain, 0.0001, now+fade);
+    ramp(rGain.gain, 0.0001, now+fade);
+    if(sGain) ramp(sGain.gain, 0.0001, now+fade);
+    setTimeout(function(){
+      try{ leftOsc.stop(); rightOsc.stop(); if(shimOsc) shimOsc.stop(); }catch(e){}
+      leftOsc=rightOsc=shimOsc=null; lGain=rGain=sGain=null;
+    }, Math.ceil(fade*1000)+80);
+  }catch(e){}
+}
 
-/* ------- Install banner ------- */
-(function(){
-  var banner=document.getElementById('install');
-  var dismiss=document.getElementById('dismiss');
-  if(localStorage.getItem('clarity_install_dismissed')==='1'){ banner.style.display='none'; }
-  dismiss.addEventListener('click', function(){
-    banner.style.display='none';
-    localStorage.setItem('clarity_install_dismissed','1');
-  }, {passive:true});
-})();
+/* ---------------- UI wiring ---------------- */
+var START = document.getElementById('start');
+var STOP  = document.getElementById('stop');
+var SHIM  = document.getElementById('shimmer');
+var SOFT  = document.getElementById('softfade');
+var MUTE  = document.getElementById('mute');
+var VOL   = document.getElementById('vol');
+var PREV  = document.getElementById('prev');
+var NEXT  = document.getElementById('next');
+var RESYNC= document.getElementById('resync');
+var CLOCK = document.getElementById('clock');
+var LIST  = document.getElementById('tracklist');
+var running=false, timerId=null;
 
-/* ------- Audio + Breath routine (3:00) ------- */
-(function(){
-  var startBtn=document.getElementById('start');
-  var stopBtn=document.getElementById('stop');
-  var clock=document.getElementById('clock');
-  var shimmer=document.getElementById('shimmer');
-  var softfade=document.getElementById('softfade');
-  var circle=document.getElementById('circle');
-  var phaseTxt=document.getElementById('phase');
-  var bars=['b1','b2','b3','b4','b5'].map(function(id){return document.getElementById(id);});
-
-  var ctx,leftOsc,rightOsc,shimOsc,lGain,rGain,sGain,merger,running=false,tId=null,breathId=null,endAt=0;
-
-  function fmt(sec){var m=Math.floor(sec/60), s=Math.max(0,Math.floor(sec%60));return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
-  function setBars(on){ for(var i=0;i<bars.length;i++){ if(on && (i===1||i===2||i===3)){bars[i].classList.add('on');} else {bars[i].classList.remove('on');} } }
-  function ramp(param,to,t){ try{param.linearRampToValueAtTime(to,t);}catch(e){} }
-
-  function sparkBurst(x,y){
-    var host=startBtn.parentElement;
-    for(var i=0;i<10;i++){
-      var s=document.createElement('div'); s.className='spark';
-      var ang=Math.random()*Math.PI*2; var dist=30+Math.random()*40;
-      s.style.left=(x - host.getBoundingClientRect().left - 4)+'px';
-      s.style.top=(y - host.getBoundingClientRect().top - 4)+'px';
-      s.style.setProperty('--dx', Math.cos(ang)*dist+'px');
-      s.style.setProperty('--dy', Math.sin(ang)*dist+'px');
-      host.appendChild(s);
-      (function(el){ setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 620); })(s);
-    }
+function spark(x,y){
+  var host=START.parentElement;
+  for(var i=0;i<10;i++){
+    var s=document.createElement('div'); s.className='spark';
+    var ang=Math.random()*Math.PI*2; var dist=30+Math.random()*40;
+    s.style.left=(x - host.getBoundingClientRect().left - 4)+'px';
+    s.style.top=(y - host.getBoundingClientRect().top - 4)+'px';
+    s.style.setProperty('--dx', Math.cos(ang)*dist+'px');
+    s.style.setProperty('--dy', Math.sin(ang)*dist+'px');
+    host.appendChild(s);
+    (function(el){ setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 620); })(s);
   }
+}
 
-  function startAudio(){
-    if(!ctx){ ctx=new (window.AudioContext||window.webkitAudioContext)(); }
-    var now=ctx.currentTime;
-
-    leftOsc=ctx.createOscillator(); rightOsc=ctx.createOscillator();
-    lGain=ctx.createGain(); rGain=ctx.createGain();
-
-    leftOsc.type='sine'; rightOsc.type='sine';
-    leftOsc.frequency.setValueAtTime(160, now);
-    rightOsc.frequency.setValueAtTime(162, now);
-
-    lGain.gain.setValueAtTime(0.0001, now);
-    rGain.gain.setValueAtTime(0.0001, now);
-
-    merger=ctx.createChannelMerger(2);
-    leftOsc.connect(lGain).connect(merger,0,0);
-    rightOsc.connect(rGain).connect(merger,0,1);
-
-    var outGain=ctx.createGain();
-    merger.connect(outGain).connect(ctx.destination);
-
-    var target=0.08, fade=softfade.checked?2.0:0.05;
-    ramp(lGain.gain, target, now + fade);
-    ramp(rGain.gain, target, now + fade);
-
-    leftOsc.start(); rightOsc.start();
-
-    if(shimmer.checked){
-      shimOsc=ctx.createOscillator(); sGain=ctx.createGain();
-      shimOsc.type='sine'; shimOsc.frequency.setValueAtTime(512, now);
-      sGain.gain.setValueAtTime(0.0001, now);
-      ramp(sGain.gain, 0.03, now + (softfade.checked?2.0:0.05));
-      shimOsc.connect(sGain).connect(ctx.destination);
-      shimOsc.start();
-    }
+function buildList(){
+  LIST.innerHTML='';
+  for(var i=0;i<TRACKS.length;i++){
+    (function(idx){
+      var row=document.createElement('div'); row.className='track'; row.dataset.i=idx;
+      var label=document.createElement('div'); label.className='t'; label.textContent=TRACKS[idx].t;
+      var play=document.createElement('button'); play.textContent='Play';
+      play.addEventListener('click', function(){ loadIndex(idx, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(); }, 400); } }, {passive:true});
+      row.appendChild(label); row.appendChild(play); LIST.appendChild(row);
+    })(i);
   }
+}
+function highlight(){
+  var rows=LIST.querySelectorAll('.track');
+  for(var i=0;i<rows.length;i++){ rows[i].classList.remove('active'); }
+  var r=LIST.querySelector('.track[data-i="'+current+'"]'); if(r) r.classList.add('active');
+}
 
-  function stopAudio(){
-    if(!ctx) return;
-    var now=ctx.currentTime, fade=softfade.checked?1.2:0.05;
-    try{
-      ramp(lGain.gain, 0.0001, now+fade);
-      ramp(rGain.gain, 0.0001, now+fade);
-      if(sGain) ramp(sGain.gain, 0.0001, now+fade);
-      setTimeout(function(){
-        try{ leftOsc.stop(); rightOsc.stop(); if(shimOsc) shimOsc.stop(); }catch(e){}
-        leftOsc=rightOsc=shimOsc=null; lGain=rGain=sGain=null;
-      }, Math.ceil(fade*1000)+60);
-    }catch(e){}
-  }
+function start(ev){
+  if(running) return;
+  running=true;
+  if(ctx && ctx.state==='suspended'){ ctx.resume(); }
+  startTone();
+  loadIndex(current, true); // start muted to satisfy autoplay
+  setTimeout(function(){
+    if(!MUTE.checked){ send('unMute'); setVol(); }
+  }, 800);
 
-  function breatheLoop(){
-    var inMs=4000, holdMs=2000, outMs=6000, total=inMs+holdMs+outMs; // 4-2-6
-    var start=performance.now();
-    function step(){
-      var now=performance.now(), d=now-start, phase=d%total;
-      if(phase < inMs){ phaseTxt.textContent='Inhale · 4'; circle.style.transform='scale(1.14)'; setBars(true); }
-      else if(phase < inMs+holdMs){ phaseTxt.textContent='Hold · 2'; }
-      else { phaseTxt.textContent='Exhale · 6'; circle.style.transform='scale(0.92)'; setBars(false); }
+  // 3:00 timer
+  var until=Date.now()+180000;
+  CLOCK.textContent='03:00';
+  if(timerId) clearInterval(timerId);
+  timerId = setInterval(function(){
+    var remain=Math.max(0, Math.round((until - Date.now())/1000));
+    var m=Math.floor(remain/60), s=remain%60;
+    CLOCK.textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+    if(remain<=0){ clearInterval(timerId); timerId=null; stop(); }
+  }, 200);
 
-      if(performance.now() < endAt){ breathId=requestAnimationFrame(step); }
-      else { phaseTxt.textContent='Complete'; circle.style.transform='scale(1.0)'; }
-    }
-    breathId=requestAnimationFrame(step);
-  }
+  START.disabled=true; STOP.disabled=false; START.classList.add('pulsing');
+  if(ev && ev.clientX) spark(ev.clientX, ev.clientY);
+}
 
-  function start(ev){
-    if(running) return;
-    running=true;
+function stop(){
+  if(!running) return;
+  running=false;
+  stopTone();
+  // Pause and mute player
+  send('mute'); send('pauseVideo');
+  if(timerId){ clearInterval(timerId); timerId=null; }
+  CLOCK.textContent='03:00';
+  START.disabled=false; STOP.disabled=true;
+}
 
-    if(ctx && ctx.state==='suspended'){ ctx.resume(); }
-    startAudio();
+START.addEventListener('click', start, {passive:true});
+STOP.addEventListener('click', stop, {passive:true});
 
-    startBtn.classList.add('pulsing');
-    if(ev && ev.clientX) { sparkBurst(ev.clientX, ev.clientY); }
+MUTE.addEventListener('change', function(){
+  if(this.checked){ send('mute'); }
+  else { send('unMute'); setVol(); }
+}, {passive:true});
 
-    var dur=180, until=Date.now()+dur*1000;
-    endAt=performance.now()+dur*1000+30;
+VOL.addEventListener('input', function(){
+  if(!MUTE.checked){ setVol(); }
+}, {passive:true});
 
-    clock.textContent=fmt(dur);
-    if(tId) clearInterval(tId);
-    tId=setInterval(function(){
-      var remain=Math.max(0, Math.round((until - Date.now())/1000));
-      clock.textContent=fmt(remain);
-      if(remain<=0){ clearInterval(tId); tId=null; stop(); }
-    }, 200);
+PREV.addEventListener('click', function(){ loadIndex(current-1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(); }, 300);} }, {passive:true});
+NEXT.addEventListener('click', function(){ loadIndex(current+1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(); }, 300);} }, {passive:true});
+RESYNC.addEventListener('click', function(){ send('playVideo'); if(!MUTE.checked){ send('unMute'); setVol(); } }, {passive:true});
 
-    breatheLoop();
-
-    startBtn.disabled=true; stopBtn.disabled=false;
-    phaseTxt.textContent='Inhale · 4';
-  }
-
-  function stop(){
-    if(!running) return;
-    running=false;
-    stopAudio();
-    if(tId){ clearInterval(tId); tId=null; }
-    if(breathId){ cancelAnimationFrame(breathId); breathId=null; }
-    clock.textContent='03:00';
-    phaseTxt.textContent='Ready';
-    circle.style.transform='scale(1.0)';
-    startBtn.disabled=false; stopBtn.disabled=true;
-  }
-
-  startBtn.addEventListener('click', start, {passive:true});
-  stopBtn.addEventListener('click', stop, {passive:true});
-  shimmer.addEventListener('change', function(){
-    if(!ctx) return;
-    if(this.checked && running && !shimOsc){
-      var now=ctx.currentTime;
-      shimOsc=ctx.createOscillator(); sGain=ctx.createGain();
-      shimOsc.type='sine'; shimOsc.frequency.setValueAtTime(512, now);
-      sGain.gain.setValueAtTime(0.0001, now);
-      ramp(sGain.gain, 0.03, now + (softfade.checked?0.8:0.05));
-      shimOsc.connect(sGain).connect(ctx.destination); shimOsc.start();
-    }else if(!this.checked && shimOsc){
-      var now=ctx.currentTime;
-      ramp(sGain.gain, 0.0001, now + (softfade.checked?0.6:0.05));
-      var oscRef=shimOsc; setTimeout(function(){ try{oscRef.stop();}catch(e){} }, softfade.checked?700:80);
-      shimOsc=null; sGain=null;
-    }
-  }, {passive:true});
-})();
-
-/* ------- Share to X + Copy ------- */
-(function(){
-  var btn=document.getElementById('shareX');
-  var copy=document.getElementById('copyLink');
-  function pageURL(){ try{return window.location.href;}catch(e){return 'https://clarity.plnt.earth';} }
-  btn.addEventListener('click', function(){
-    var text = 'Northlight hit: breathing with Sigrid on clarity.plnt.earth — 160/162 Hz + 512 Hz shimmer. “Breathe the truth in. Exhale what isn’t yours.” #Illumina #Northlight';
-    var url  = pageURL();
-    var intent='https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url);
-    window.open(intent, '_blank');
-  }, {passive:true});
-  copy.addEventListener('click', function(){
-    var url = pageURL();
-    navigator.clipboard && navigator.clipboard.writeText(url).then(function(){
-      copy.textContent='Copied ✓';
-      setTimeout(function(){ copy.textContent='Copy Page Link'; }, 1200);
-    });
-  }, {passive:true});
-})();
+/* init */
+buildList(); highlight();
 </script>
 </body>
 </html>
