@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Clarity · Sigrid Field — clarity.plnt.earth</title>
-<meta name="description" content="Bioluminescent player with auto-advance, captions, 128/256 Hz tones, a ‘Clarity Burst’ full-body throb, and Red↔Blue color wash." />
+<meta name="description" content="Ritual Mode with intensity control, hidden Red/Blue music burst, 128/256 Hz tones, and Norwegian Whisper micro-lessons." />
 <meta name="theme-color" content="#0b0d11">
+<meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-<!-- Warm up YouTube -->
 <link rel="dns-prefetch" href="https://www.youtube.com">
 <link rel="dns-prefetch" href="https://i.ytimg.com">
 <link rel="dns-prefetch" href="https://www.google.com">
@@ -19,15 +19,9 @@
 
 <style>
   :root{
-    /* —— Bluefire Dark —— */
     --bg:#0b0d11; --ink:#e9ecf4; --muted:#9aa6b6; --card:#101425; --ring:#1b2433;
-    --accent:#7fd0ff; --accent-2:#b9ffe6; --jelly:#7abaff; --shadow:0 14px 40px rgba(3,8,14,.55);
-    /* Duo (R↔B wash) */
-    --duoA:#ff4766; --duoB:#3bb5ff;
-    /* Wash film colors */
-    --washA:#ff3d6b; --washB:#47baff; --washC:#b9ffe6; --washD:#9d7bff;
+    --accent:#7fd0ff; --accent-2:#b9ffe6; --shadow:0 14px 40px rgba(3,8,14,.55);
   }
-
   *{box-sizing:border-box} html,body{height:100%}
   body{
     margin:0; font:16px/1.55 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial;
@@ -38,69 +32,35 @@
       linear-gradient(180deg,#0b0d11 0%, #0b1018 60%, #0b0d11 100%);
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
   }
-
-  /* Global color wash veil (animated during Burst) */
-  #wash{
-    position:fixed; inset:-10vmax; pointer-events:none; z-index:0; opacity:.06;
-    background:
-      conic-gradient(from 0deg at 30% 40%, var(--washB), transparent 55%),
-      radial-gradient(60% 45% at 70% 20%, color-mix(in lab, var(--washA) 30%, transparent), transparent 70%),
-      radial-gradient(40% 35% at 10% 80%, color-mix(in lab, var(--washC) 30%, transparent), transparent 70%);
-    mix-blend-mode:screen;
-    filter:saturate(1.1) contrast(1.05);
-  }
-  body.wash-strong #wash{ opacity:.33 }   /* raised during burst */
-  body.wash-mid    #wash{ opacity:.18 }
-  body.wash-soft   #wash{ opacity:.10 }
-
-  /* Night shimmer/stars */
   #stars{position:fixed; inset:0; z-index:-1; filter:drop-shadow(0 0 2px rgba(127,208,255,.25))}
   .wrap{max-width:1080px;margin:0 auto;padding:20px 14px 80px; position:relative; z-index:1}
 
   header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 16px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
-  .jelly{
-    width:42px;height:42px;border-radius:14px;
-    background:
-      radial-gradient(120% 120% at 20% 10%, #11304a 0%, #0e2133 50%, #0c1624 80%) padding-box,
-      conic-gradient(from 0deg at 50% 60%, #0f2236, #173a59, #123047, #0f2236) border-box;
-    border:2px solid transparent; box-shadow:var(--shadow),0 0 40px rgba(127,208,255,.25) inset; position:relative; overflow:hidden;
-  }
+  .jelly{width:42px;height:42px;border-radius:14px;
+    background:radial-gradient(120% 120% at 20% 10%, #11304a 0%, #0e2133 50%, #0c1624 80%) padding-box,
+               conic-gradient(from 0deg at 50% 60%, #0f2236, #173a59, #123047, #0f2236) border-box;
+    border:2px solid transparent; box-shadow:var(--shadow),0 0 40px rgba(127,208,255,.25) inset; position:relative; overflow:hidden}
   .jelly:after{content:"";position:absolute;left:50%;top:55%;width:70%;height:70%;transform:translate(-50%,-50%);
     filter:blur(12px); background:radial-gradient(50% 60% at 50% 40%, rgba(127,208,255,.18), transparent 70%)}
   h1{font-size:20px;margin:0}
   .small{font-size:12px;color:var(--muted)}
   .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#0f1827;border:1px solid var(--ring);color:#b7c6dc}
 
-  /* Controls */
   .tonebar{
     display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--ring);
     border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)
   }
-  .btn{
-    appearance:none;border:1px solid var(--ring);
-    background:linear-gradient(180deg,#122034,#0f1b2b); color:var(--ink);
-    padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer; box-shadow:var(--shadow);
-    transition:transform .08s ease, box-shadow .2s ease, border-color .2s
-  }
+  .btn{appearance:none;border:1px solid var(--ring);background:linear-gradient(180deg,#122034,#0f1b2b);color:var(--ink);
+    padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer; box-shadow:var(--shadow); transition:transform .08s ease, box-shadow .2s, border-color .2s}
   .btn:active{transform:translateY(1px)}
-  .btn.primary{
-    background:
-      linear-gradient(180deg,#13263c,#0f1e30) padding-box,
-      conic-gradient(from 0deg, #3bb5ff, #b9ffe6, #7fd0ff, #3bb5ff) border-box;
-    border:1px solid transparent;
-    box-shadow:0 10px 24px rgba(29,120,175,.35), inset 0 0 0 1px rgba(255,255,255,.04);
-  }
-  .btn.glow{animation:pulse 1.6s ease-in-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 rgba(127,208,255,0)}50%{box-shadow:0 0 28px rgba(127,208,255,.55)}100%{box-shadow:0 0 0 rgba(127,208,255,0)}}
-
+  .btn.primary{background:linear-gradient(180deg,#13263c,#0f1e30) padding-box, conic-gradient(from 0deg,#3bb5ff,#b9ffe6,#7fd0ff,#3bb5ff) border-box; border:1px solid transparent}
   .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden;background:#0f1b2a}
   .switch button{border:0;background:transparent;color:var(--ink);padding:8px 12px;cursor:pointer}
   .switch button.active{background:#142235;font-weight:700}
   .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#0f1b2a;color:var(--ink)}
   .pill .row{display:inline-flex;gap:8px;align-items:center}
 
-  /* Featured */
   .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
   .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring);background:#000}
   .fp-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
@@ -108,22 +68,11 @@
   .fp-caption{font-size:13px;color:var(--muted)}
   .fp-controls{display:flex;gap:8px;flex-wrap:wrap}
 
-  /* R↔B overlay for featured + burst tint */
-  .fp-duo{position:absolute; inset:0; pointer-events:none; opacity:0; transition:opacity .2s ease}
-  body.mode-redblue .fp-duo{opacity:.35; mix-blend-mode:color; background:linear-gradient(135deg,var(--duoA),var(--duoB))}
-  body.mode-opposite .fp-duo{opacity:.25; mix-blend-mode:hue; background:linear-gradient(135deg,#00ffe1,#ff00cc)}
-  body.burst-on .fp-duo{opacity:.55} /* stronger during burst */
-
-  /* Grid / thumbnails */
   .grid{display:grid;gap:10px;margin-top:12px; grid-template-columns:repeat(2,minmax(0,1fr))}
   @media(min-width:860px){.grid{grid-template-columns:repeat(5,minmax(0,1fr))}}
   .slot{background:var(--card);border:1px solid var(--ring);border-radius:12px;box-shadow:var(--shadow);padding:8px}
   .thumb{position:relative;aspect-ratio:16/9;border:1px solid var(--ring);border-radius:8px;overflow:hidden;background:#0a0a0a}
-  .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.9) contrast(1.1);transition:filter .25s ease, opacity .25s ease}
-  .thumb .duo{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s ease}
-  body.mode-redblue .thumb img{filter:grayscale(.85) contrast(1.2) brightness(.95)}
-  body.mode-redblue .thumb .duo{opacity:.5; mix-blend-mode:color; background:linear-gradient(135deg,var(--duoA),var(--duoB))}
-  body.mode-opposite .thumb img{filter:hue-rotate(180deg) saturate(1.2) contrast(1.02)}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.9) contrast(1.1)}
   .slot .title{font-size:12px;margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .slot .snip{font-size:11px;color:var(--muted); margin-top:2px}
 
@@ -132,42 +81,26 @@
   details{background:var(--card); border:1px solid var(--ring); border-radius:14px; box-shadow:var(--shadow); padding:10px 12px; margin-top:18px}
   summary{cursor:pointer; font-weight:800}
 
-  /* Primer overlay — dark */
-  #primer{
-    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  #primer{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
     background: radial-gradient(120% 120% at 50% 20%, rgba(24,39,61,.65), rgba(9,16,28,.85) 60%);
-    backdrop-filter: blur(4px);
-    z-index:999;
-  }
-  #primerBtn{
-    font-size:18px; padding:16px 22px; border-radius:16px;
-    border:1px solid #203247; color:var(--ink);
-    background:
-      linear-gradient(180deg,#122033,#0f1b2a) padding-box,
-      conic-gradient(from 0deg, #3bb5ff, #b9ffe6, #7fd0ff, #3bb5ff) border-box;
-    box-shadow:0 10px 30px rgba(18,142,206,.35), inset 0 0 0 1px rgba(255,255,255,.04);
-    animation:pop 1.8s ease-in-out infinite, floaty 4s ease-in-out infinite;
-  }
-  #primerBtn .hint{display:block; font-size:12px; color:#b7c6dc; opacity:.8; margin-top:4px}
-  @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.03)} 100%{transform:scale(1)}}
-  @keyframes floaty{0%{transform:translateY(0)} 50%{transform:translateY(-4px)} 100%{transform:translateY(0)}}
+    backdrop-filter: blur(4px); z-index:999}
+  #primerBtn{font-size:18px; padding:16px 22px; border-radius:16px; border:1px solid #203247; color:var(--ink);
+    background: linear-gradient(180deg,#122033,#0f1b2a) padding-box, conic-gradient(from 0deg,#3bb5ff,#b9ffe6,#7fd0ff,#3bb5ff) border-box}
 
-  /* Hidden bin for prewarmed iframes */
-  #prewarmBin{position:absolute; left:-9999px; top:auto; width:0; height:0; overflow:hidden}
+  /* Norwegian Whisper card */
+  .whisper{display:grid; gap:8px; margin-top:12px; background:var(--card); border:1px solid var(--ring); border-radius:12px; padding:12px}
+  .whisper h3{margin:0; font-size:14px}
+  .row2{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .badge{border:1px solid var(--ring); border-radius:999px; padding:2px 8px; font-size:12px; color:#c9d6ea}
 </style>
 </head>
 <body class="mode-natural">
-<!-- Global color wash veil -->
-<div id="wash" aria-hidden="true"></div>
-
-<!-- Stars -->
 <canvas id="stars" aria-hidden="true"></canvas>
 
-<!-- One-tap primer -->
 <div id="primer" role="dialog" aria-modal="true" aria-label="Start session">
-  <button id="primerBtn" class="btn primary glow">
+  <button id="primerBtn" class="btn primary">
     ▶ Activate Bluefire
-    <span class="hint">Enables tones · preloads & starts first video · fires Clarity Burst</span>
+    <span class="small" style="display:block;opacity:.8;margin-top:4px">Dark iPhone bars • Enables tones • Preloads first video</span>
   </button>
 </div>
 
@@ -177,46 +110,34 @@
       <div class="jelly" aria-hidden="true"></div>
       <div>
         <h1>Clarity Field · <span class="small">Sigrid ↔ You</span></h1>
-        <div class="small">Root in the Air — 128 Hz + 256 Hz · Interviews first • Auto-advance</div>
+        <div class="small">Ritual Mode • Intensity dial • 128/256 tones • Hidden R/B Burst (music only)</div>
       </div>
     </a>
-    <span class="tag">jellyfish · bluefire · dark</span>
+    <span class="tag">consent • clarity • kindness</span>
   </header>
 
   <!-- CONTROL BAR -->
   <section class="tonebar" aria-label="Controls">
-    <!-- View tabs -->
-    <div class="switch" role="tablist" aria-label="Perspective">
-      <button id="tabSigrid" class="active" aria-selected="true">Sigrid</button>
-      <button id="tabYou" aria-selected="false">You</button>
+    <!-- Ritual toggle -->
+    <div class="switch" role="tablist" aria-label="Mode">
+      <button id="modeNormal" class="active" aria-selected="true">Normal</button>
+      <button id="modeRitual" aria-selected="false">Ritual</button>
     </div>
+
+    <!-- Intensity dial (1–5) -->
+    <span class="pill"><strong>Intensity</strong>
+      <input id="intensity" type="range" min="1" max="5" value="3" style="vertical-align:middle">
+      <span id="intensityLbl" class="badge">3 · steady</span>
+    </span>
 
     <!-- Set toggle -->
     <div class="switch" role="tablist" aria-label="Playlist set" style="margin-left:6px">
       <button id="setTracks" aria-selected="false">Tracks</button>
-      <button id="setInterviews" class="active" aria-selected="true">Interviews / Live</button>
+      <button id="setInterviews" class="active" aria-selected="true">Interviews</button>
     </div>
 
-    <!-- Color mode -->
-    <div class="switch" role="tablist" aria-label="Color Mode" style="margin-left:6px">
-      <button id="colorNatural" class="active" aria-selected="true">Natural</button>
-      <button id="colorRB" aria-selected="false">Red↔Blue</button>
-      <button id="colorOpp" aria-selected="false">Opposite</button>
-    </div>
-
-    <!-- Snippets -->
-    <div class="switch" role="tablist" aria-label="Snippets" style="margin-left:6px">
-      <button id="snipOn" class="active" aria-selected="true">Snippets</button>
-      <button id="snipOff" aria-selected="false">Hide</button>
-    </div>
-
-    <!-- Auto & CC -->
-    <div class="switch" role="tablist" aria-label="Playback" style="margin-left:6px">
-      <button id="autoOn" class="active" aria-selected="true">Auto-Advance</button>
-      <button id="autoOff" aria-selected="false">Manual</button>
-    </div>
-
-    <span class="pill">Captions:
+    <!-- Captions -->
+    <span class="pill">CC:
       <select id="ccLang" aria-label="Caption language">
         <option value="en">English</option>
         <option value="no">Norwegian</option>
@@ -228,33 +149,26 @@
     <span class="pill">
       <span class="row">
         <strong>Tones</strong>
-        <label><input type="checkbox" id="tone128" checked> 128 Hz</label>
-        <label><input type="checkbox" id="tone256" checked> 256 Hz</label>
+        <label><input type="checkbox" id="tone128" checked> 128</label>
+        <label><input type="checkbox" id="tone256" checked> 256</label>
         <label>Level <input id="toneLevel" type="range" min="0" max="100" value="68" style="vertical-align:middle"></label>
         <button id="toneToggle" class="btn" style="padding:6px 10px">On</button>
       </span>
     </span>
 
-    <button id="burstNow" class="btn" style="padding:6px 10px">Clarity Burst</button>
+    <button id="burstNow" class="btn" style="padding:6px 10px" title="Hidden Red/Blue burst — music only">Clarity Burst</button>
 
-    <span class="pill">Status: <span id="statusTone" class="pill" style="background:#0f1b2a;border-color:#223047;color:#b7c6dc">waiting</span></span>
-
-    <div class="small" style="width:100%;margin-top:6px">
-      One tap. Then breathe with 128 (root), blend 256 (air). Headphones welcome; speakers okay.
-    </div>
+    <span class="pill">Status: <span id="statusTone" class="badge">waiting</span></span>
   </section>
 
   <section class="notice">
-    <strong>Tip:</strong> Tap a slot to load it into the Featured Player. With Auto-Advance, the next slot plays at end.
-    CC requests YouTube captions (when available). Prewarmed players reduce start latency.
+    <strong>Ritual:</strong> arrive → 2-min settle → optional burst (Tracks only) → 8–20 min flow → 1-min close.  
+    Breath cue: inhale 128 (root), exhale 256 (air). Off-ramps always visible. Kindness-first alignment.
   </section>
 
   <!-- FEATURED PLAYER -->
   <section class="featured" aria-live="polite">
-    <div class="fp-box">
-      <div id="fp"></div>
-      <div class="fp-duo" aria-hidden="true"></div>
-    </div>
+    <div class="fp-box"><div id="fp"></div></div>
     <div class="fp-meta">
       <div>
         <div id="fpTitle" class="fp-title">—</div>
@@ -273,6 +187,18 @@
   <!-- SLOTS -->
   <section id="grid" class="grid" aria-label="Playlist slots"></section>
 
+  <!-- Norwegian Whisper -->
+  <section class="whisper" id="whisper">
+    <h3>🇳🇴 Norwegian Whisper</h3>
+    <div class="row2">
+      <span class="badge" id="phraseTxt">—</span>
+      <span class="badge" id="ipaTxt">—</span>
+      <span class="badge" id="meaningTxt">—</span>
+      <button class="btn" id="speakNo" style="padding:6px 10px">Speak</button>
+      <span class="small" id="voiceNote" style="opacity:.8"></span>
+    </div>
+  </section>
+
   <!-- BONUS -->
   <details id="bonus">
     <summary>✨ Bonus Live Cuts</summary>
@@ -281,142 +207,110 @@
 
   <footer>
     <div class="notice">
-      <div><strong>Language bridge:</strong> clarity is a language. <em>“Jeg ser deg.”</em> (I see you.)</div>
-      <div class="small">Ålesund ≈ “Eel Strait” — light over moving water.</div>
+      Ethics: desire = care + consent. Align to shared values (clarity, kindness, steadiness).  
+      If anything feels too intense: lower volume, pause, or skip burst.
     </div>
-    <p>Made with care for Sigrid — and for you. <span class="small">“Clarity is mutual seeing.”</span></p>
-    <p class="small">Privacy: saved locally (localStorage). No tracking.</p>
+    <p class="small">Local only (no tracking). Media © respective owners.</p>
   </footer>
 </div>
 
-<!-- Off-screen bin for prewarmed iframes -->
-<div id="prewarmBin" aria-hidden="true"></div>
+<div id="prewarmBin" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:0;height:0;overflow:hidden"></div>
 
-<!-- YouTube API -->
 <script id="yt-iframe-api" src="https://www.youtube.com/iframe_api"></script>
-
 <script>
-/* ---------- Core state ---------- */
-const STATE_KEY = 'clarity.playlists.v8.dark.wash';
+/* ===== Core State ===== */
+const STATE_KEY = 'clarity.ritual.v10';
 const state = {
-  tab:'sigrid', set:'interviews', showSnippets:true, autoAdvance:true,
-  ccOn:true, ccLang:'en',
-  sigrid:[], you:[],
-  players:{}, bonusPlayers:{}, warmPlayers:{},
-  fp:null, fpIndex:0, ctx:null, tonesOn:true, audio:{}, deviceProfile:'default'
+  set:'interviews', fp:null, fpIndex:0, autoAdvance:true,
+  ccOn:true, ccLang:'en', ctx:null, tonesOn:true, device:'default',
+  audio:{}, burst:null, ritual:false, intensity:3
 };
 
-/* ---------- Presets ---------- */
-const PREFILL_TRACKS = [
+/* ===== Presets ===== */
+const TRACKS = [
   {id:'cIriwVhRPVA', title:'Strangers (Official)'},
-  {id:'w5x93pXSmRM', title:'Don’t Feel Like Crying (Official)'},
-  {id:'1uHt2LrCSWg', title:'Sucker Punch (Official)'},
-  {id:'E7lr7pU9fYA', title:'Mirror (Official)'},
-  {id:'xzonQoON9eo', title:'Don’t Kill My Vibe (Official)'},
-  {id:'z6A2LHGx8_A', title:'High Five (Official)'},
-  {id:'udRAIF6MOm8', title:'Burning Bridges (Official)'},
-  {id:'4j7LGMc9ZGU', title:'It Gets Dark (Official)'},
-  {id:'hKvbaZTAQN0', title:'Dynamite (Acoustic — Official)'},
-  {id:'bNuCNZK-r5A', title:'Plot Twist (Official)'}
+  {id:'w5x93pXSmRM', title:'Don’t Feel Like Crying'},
+  {id:'1uHt2LrCSWg', title:'Sucker Punch'},
+  {id:'E7lr7pU9fYA', title:'Mirror'},
+  {id:'xzonQoON9eo', title:'Don’t Kill My Vibe'},
+  {id:'z6A2LHGx8_A', title:'High Five'},
+  {id:'udRAIF6MOm8', title:'Burning Bridges'},
+  {id:'4j7LGMc9ZGU', title:'It Gets Dark'},
+  {id:'hKvbaZTAQN0', title:'Dynamite (Acoustic)'},
+  {id:'bNuCNZK-r5A', title:'Plot Twist'}
 ];
-const PREFILL_INTERVIEWS = [
+const INTERVIEWS = [
   {id:'oEC6zOhHydI', title:'Strangers — Glasto 2019 (Live)'},
-  {id:'wk1NDhE_A1o', title:'Dynamite — Øya 2023 (Live)'},
-  {id:'cn7kW-6ZNYQ', title:'Sucker Punch — Øya 2019 (Live)'},
+  {id:'wk1NDhE_A1o', title:'Dynamite — Øya 2023'},
+  {id:'cn7kW-6ZNYQ', title:'Sucker Punch — Øya 2019'},
   {id:'M4Sbee9Mj2o', title:'Strangers — BBC Live Lounge'},
-  {id:'zgB5unpoEaY', title:'Strangers — Nobel 2017 (Live)'},
+  {id:'zgB5unpoEaY', title:'Strangers — Nobel 2017'},
   {id:'9rLgag0tCAU', title:'BBC Sound of 2018 — Profile'},
   {id:'O-ozpz4JD8o', title:'Abbie McCarthy — Interview'},
   {id:'XkAyr6u2Mp0', title:'How To Let Go — Interview'},
   {id:'shDlDZQoAaY', title:'Making “It Gets Dark” — BTS'},
   {id:'CeZklpxa51A', title:'Pop Around — Full Interview'}
 ];
-const BONUS_LIVE = [
-  {id:'oEC6zOhHydI', title:'Strangers — Glasto 2019'},
-  {id:'wk1NDhE_A1o', title:'Dynamite — Øya 2023'},
-  {id:'M4Sbee9Mj2o', title:'Live Lounge — Strangers'},
-  {id:'zgB5unpoEaY', title:'Nobel — Strangers'},
-  {id:'cn7kW-6ZNYQ', title:'Øya — Sucker Punch'},
-  {id:'XkAyr6u2Mp0', title:'Album talk — HTLG'}
+
+/* ===== Norwegian Whisper (rotating) ===== */
+const WHISPER = [
+  {no:"Jeg ser deg.", ipa:"/jæɡ seːr dæɡ/", en:"I see you."},
+  {no:"Tusen takk.", ipa:"/ˈtʉːsn̩ tɑk/", en:"Thank you so much."},
+  {no:"Rolig pust.", ipa:"/ˈruːli ˌpʉst/", en:"Calm breath."},
+  {no:"Klart hjerte.", ipa:"/klɑːrt ˈjæʈe/", en:"Clear heart."},
+  {no:"La lyset inn.", ipa:"/lɑ ˈlyːsə ˈɪn/", en:"Let the light in."},
+  {no:"Jeg er her.", ipa:"/jæɡ æːr hæːr/", en:"I am here."}
 ];
-const SNIPPETS = {
-  'cIriwVhRPVA':'Two hearts out of sync; dancing with honesty.',
-  'w5x93pXSmRM':'Choosing lightness; tears can wait for later.',
-  '1uHt2LrCSWg':'Headlong rush; punchy hope, no apologies.',
-  'E7lr7pU9fYA':'Holding a mirror and telling the truth kindly.',
-  'xzonQoON9eo':'Boundaries as love; saying no to doubt.',
-  'z6A2LHGx8_A':'Playful sparks; friendship charged to ten.',
-  'udRAIF6MOm8':'Cutting the rope to cross the fire.',
-  '4j7LGMc9ZGU':'Space-dark sky; courage turns the lights on.',
-  'hKvbaZTAQN0':'Soft confessional glow; piano as lighthouse.',
-  'bNuCNZK-r5A':'Plot thickens; heart chooses the bolder path.',
-  'oEC6zOhHydI':'Festival roar meets clear, steady voice.',
-  'wk1NDhE_A1o':'City lights, fjord wind; sparkle and grit.',
-  'cn7kW-6ZNYQ':'Summer stage bounce; punch lands smiling.',
-  'M4Sbee9Mj2o':'Stripped back truth; radio room intimacy.',
-  'zgB5unpoEaY':'Quiet ceremony, brave tenderness.',
-  '9rLgag0tCAU':'Origin story; early compass points.',
-  'O-ozpz4JD8o':'Craft talk; process, practice, patience.',
-  'XkAyr6u2Mp0':'Letting go to let in more light.',
-  'shDlDZQoAaY':'Studio galaxies; how the chorus breathes.',
-  'CeZklpxa51A':'Full-frame conversation; wit and warmth.'
-};
 
-/* ---------- Load/Save ---------- */
-function save(){ localStorage.setItem(STATE_KEY, JSON.stringify({
-  tab:state.tab,set:state.set,showSnippets:state.showSnippets,autoAdvance:state.autoAdvance,
-  ccOn:state.ccOn,ccLang:state.ccLang,fpIndex:state.fpIndex, tonesOn:state.tonesOn
-})); }
-function load(){
-  try{
-    const raw = localStorage.getItem(STATE_KEY);
-    if(raw){ const s=JSON.parse(raw);
-      state.tab=s.tab||'sigrid'; state.set=s.set||'interviews';
-      state.showSnippets = typeof s.showSnippets==='boolean'? s.showSnippets : true;
-      state.autoAdvance = typeof s.autoAdvance==='boolean'? s.autoAdvance : true;
-      state.ccOn = typeof s.ccOn==='boolean'? s.ccOn : true;
-      state.ccLang = s.ccLang || 'en';
-      state.fpIndex = Number.isInteger(s.fpIndex)? s.fpIndex : 0;
-      state.tonesOn = typeof s.tonesOn==='boolean'? s.tonesOn : true;
-    }
-  }catch{}
-}
-load();
-
-/* ---------- DOM ---------- */
+/* ===== DOM ===== */
 const grid = document.getElementById('grid');
 const bonusGrid = document.getElementById('bonusGrid');
 const fpTitle = document.getElementById('fpTitle');
 const fpCaption = document.getElementById('fpCaption');
-const prewarmBin = document.getElementById('prewarmBin');
-const wash = document.getElementById('wash');
+const primer = document.getElementById('primer');
+const primerBtn = document.getElementById('primerBtn');
+const setTracksBtn = document.getElementById('setTracks');
+const setInterBtn = document.getElementById('setInterviews');
+const ccToggle = document.getElementById('ccToggle');
+const ccLang = document.getElementById('ccLang');
+const tone128 = document.getElementById('tone128');
+const tone256 = document.getElementById('tone256');
+const toneToggle = document.getElementById('toneToggle');
+const toneLevel = document.getElementById('toneLevel');
+const statusTone = document.getElementById('statusTone');
+const burstNow = document.getElementById('burstNow');
+const modeNormal = document.getElementById('modeNormal');
+const modeRitual = document.getElementById('modeRitual');
+const intensity = document.getElementById('intensity');
+const intensityLbl = document.getElementById('intensityLbl');
+/* whisper */
+const phraseTxt = document.getElementById('phraseTxt');
+const ipaTxt = document.getElementById('ipaTxt');
+const meaningTxt = document.getElementById('meaningTxt');
+const speakNo = document.getElementById('speakNo');
+const voiceNote = document.getElementById('voiceNote');
 
-/* ---------- YouTube API ---------- */
+/* ===== Helpers ===== */
+function listBySet(){ return state.set==='tracks'?TRACKS:INTERVIEWS; }
+function setBadge(txt, mode){
+  statusTone.textContent = txt;
+  const map = {on:['#102a21','#174a3a','#b9ffe6'], off:['#2a210f','#4a3a17','#ffd596'], wait:['#0f1b2a','#223047','#b7c6dc']};
+  const [bg,bd,fg]=map[mode]||map.on; statusTone.style.background=bg; statusTone.style.borderColor=bd; statusTone.style.color=fg;
+}
+setBadge('waiting','wait');
+
+/* ===== YouTube ===== */
 let YT_READY=false;
 window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); prewarmAll(); };
 
-/* ---------- Helpers ---------- */
-function currentList(){ return state.set==='tracks' ? PREFILL_TRACKS : PREFILL_INTERVIEWS; }
-function preloadThumbs(list){
-  (list||currentList()).slice(0,8).forEach(v=>{
-    const link=document.createElement('link');
-    link.rel='preload'; link.as='image';
-    link.href=`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;
-    document.head.appendChild(link);
-  });
-}
-
-/* ---------- Build UI ---------- */
 function buildUI(){ buildFeatured(); buildSlots(); buildBonus(); reflectButtons(); }
 
-/* Featured Player */
 function buildFeatured(){
   if(!YT_READY) return;
-  const list=currentList();
-  const item=list[state.fpIndex] || list[0];
+  const L = listBySet();
+  const item = L[state.fpIndex]||L[0];
   fpTitle.textContent = item? (item.title||'') : '—';
-  fpCaption.textContent = (item && SNIPPETS[item.id])? SNIPPETS[item.id] : '—';
-
+  fpCaption.textContent = item? '' : '—';
   if(state.fp){ try{ state.fp.destroy(); }catch{} }
   state.fp = new YT.Player('fp', {
     height:'100%', width:'100%', videoId: item? item.id : '',
@@ -427,399 +321,221 @@ function buildFeatured(){
     events:{
       onReady: (e)=>{ try{ e.target.setPlaybackQuality('hd1080'); }catch{} setMediaSession(item); },
       onStateChange: (e)=>{
-        if(e.data === YT.PlayerState.PLAYING){ pauseAllBonus(); try{ e.target.setPlaybackQuality('hd1080'); }catch{} }
         if(e.data === YT.PlayerState.ENDED && state.autoAdvance){ nextTrack(); }
       }
     }
   });
 }
 
-/* Slots */
 function buildSlots(){
   grid.innerHTML='';
-  const list=currentList(); preloadThumbs(list);
-  for(let i=0;i<Math.max(10,list.length);i++){
-    const it = list[i];
-    const slot = document.createElement('article'); slot.className='slot';
-    const thumb = document.createElement('div'); thumb.className='thumb';
-    const img = document.createElement('img');
-    if(it){
-      img.src = `https://i.ytimg.com/vi/${it.id}/hqdefault.jpg`;
-      img.loading='lazy'; img.decoding='async'; img.crossOrigin='anonymous';
-      if(i===0) img.fetchPriority='high';
-      img.alt = it.title || 'Video thumbnail';
-    }else{
-      img.alt='Empty slot';
-    }
-    const duo = document.createElement('div'); duo.className='duo';
-    thumb.append(img, duo);
-    thumb.setAttribute('role','button'); thumb.setAttribute('aria-label','Load in featured player');
-    thumb.onclick = ()=> { state.fpIndex = i; save(); buildFeatured(); requestPlayReady(); };
-    const title = document.createElement('div'); title.className='title'; title.textContent = it? (it.title||'Slot '+(i+1)) : 'empty';
-    const snip = document.createElement('div'); snip.className='snip'; snip.textContent = (it && state.showSnippets && SNIPPETS[it.id])? SNIPPETS[it.id] : (state.showSnippets? '—' : '');
-    slot.append(thumb, title, snip);
-    grid.appendChild(slot);
+  const L=listBySet();
+  for(let i=0;i<Math.max(10,L.length);i++){
+    const it=L[i];
+    const slot=document.createElement('article'); slot.className='slot';
+    const thumb=document.createElement('div'); thumb.className='thumb';
+    const img=document.createElement('img'); img.alt=it?it.title:'Empty'; if(it){ img.src=`https://i.ytimg.com/vi/${it.id}/hqdefault.jpg`; img.loading='lazy'; }
+    const title=document.createElement('div'); title.className='title'; title.textContent=it?it.title:'empty';
+    const snip=document.createElement('div'); snip.className='snip'; snip.textContent='';
+    thumb.appendChild(img); slot.append(thumb,title,snip); grid.appendChild(slot);
+    if(it){ thumb.onclick=()=>{ state.fpIndex=i; buildFeatured(); try{ state.fp.playVideo(); }catch{} }; }
   }
 }
-
-/* Bonus */
 function buildBonus(){
   bonusGrid.innerHTML='';
-  for(let i=0;i<BONUS_LIVE.length;i++){
-    const it = BONUS_LIVE[i];
-    const slot = document.createElement('article'); slot.className='slot';
-    const box = document.createElement('div'); box.className='thumb';
-    const inner = document.createElement('div'); inner.id = `bonus_${i}`;
-    box.appendChild(inner);
-    const title = document.createElement('div'); title.className='title'; title.textContent = it.title;
-    const snip = document.createElement('div'); snip.className='snip'; snip.textContent = state.showSnippets && SNIPPETS[it.id]? SNIPPETS[it.id] : '';
-    slot.append(box, title, snip);
-    bonusGrid.appendChild(slot);
-    if(YT_READY){
-      if(state.bonusPlayers[`bonus_${i}`]) try{ state.bonusPlayers[`bonus_${i}`].destroy(); }catch{}
-      state.bonusPlayers[`bonus_${i}`]=new YT.Player(`bonus_${i}`,{
-        height:'100%',width:'100%',videoId:it.id,
-        playerVars:{autoplay:0,controls:1,modestbranding:1,rel:0,playsinline:1,iv_load_policy:3}
-      });
-    }
+  for(let i=0;i<6;i++){
+    const it = (INTERVIEWS[i]||TRACKS[i]);
+    const slot=document.createElement('article'); slot.className='slot';
+    const box=document.createElement('div'); box.className='thumb';
+    const img=document.createElement('img'); img.src=`https://i.ytimg.com/vi/${it.id}/hqdefault.jpg`; img.alt=it.title;
+    box.appendChild(img); const title=document.createElement('div'); title.className='title'; title.textContent=it.title;
+    const snip=document.createElement('div'); snip.className='snip'; snip.textContent='';
+    slot.append(box,title,snip); bonusGrid.appendChild(slot);
   }
 }
-function pauseAllBonus(){
-  for(const k of Object.keys(state.bonusPlayers)){ try{ state.bonusPlayers[k].pauseVideo(); }catch{} }
-}
-
-/* Prewarm off-screen players */
 function prewarmAll(){
   if(!YT_READY) return;
-  const list=currentList();
-  prewarmBin.innerHTML=''; state.warmPlayers={};
-  list.forEach((item, idx)=>{
-    const div = document.createElement('div');
-    const id = `warm_${idx}`;
-    div.id = id; prewarmBin.appendChild(div);
-    state.warmPlayers[id] = new YT.Player(id, {
-      height:'0', width:'0', videoId:item.id,
-      playerVars:{autoplay:0,controls:0,rel:0,playsinline:1,iv_load_policy:3, mute:1},
-      events:{ onReady:(e)=>{ try{ e.target.cueVideoById(item.id); }catch{} } }
-    });
+  const L=listBySet(); const bin=document.getElementById('prewarmBin'); bin.innerHTML='';
+  L.forEach((v,i)=>{ const d=document.createElement('div'); d.id='warm_'+i; bin.appendChild(d);
+    new YT.Player(d.id,{height:'0',width:'0',videoId:v.id,playerVars:{autoplay:0,controls:0,rel:0,playsinline:1,iv_load_policy:3,mute:1}});
   });
 }
+function nextTrack(){ const L=listBySet(); let idx=state.fpIndex+1; if(idx>=Math.max(10,L.length)) idx=0; state.fpIndex=idx; buildFeatured(); setTimeout(()=>{ try{ state.fp.playVideo(); }catch{} },100); }
 
-/* Playback helpers */
-function nextTrack(){
-  const list=currentList();
-  let idx = state.fpIndex + 1; if(idx >= Math.max(10,list.length)) idx = 0;
-  state.fpIndex = idx; save(); buildFeatured(); setTimeout(requestPlayReady, 120);
-}
-function prevTrack(){
-  const list=currentList();
-  let idx = state.fpIndex - 1; if(idx < 0) idx = Math.max(10,list.length) - 1;
-  state.fpIndex = idx; save(); buildFeatured(); setTimeout(requestPlayReady, 120);
-}
-function requestPlayReady(){ try{ state.fp.playVideo(); }catch{} }
-
-/* Buttons */
-document.getElementById('fpPlay').onclick = ()=> requestPlayReady();
-document.getElementById('fpPause').onclick = ()=>{ try{ state.fp.pauseVideo(); }catch{} };
-document.getElementById('fpNext').onclick = ()=> nextTrack();
-document.getElementById('fpPrev').onclick = ()=> prevTrack();
-document.getElementById('fpPiP').onclick = async ()=>{
-  const el = document.querySelector('video'); if(el && el.requestPictureInPicture){ try{ await el.requestPictureInPicture(); }catch{} }
-};
-
-/* Color mode toggles */
-const colorNatural = document.getElementById('colorNatural');
-const colorRB = document.getElementById('colorRB');
-const colorOpp = document.getElementById('colorOpp');
-function setColorMode(mode){
-  document.body.classList.remove('mode-natural','mode-redblue','mode-opposite');
-  document.body.classList.add(`mode-${mode}`);
-  [colorNatural,colorRB,colorOpp].forEach(b=>b.classList.remove('active'));
-  ({natural:colorNatural,redblue:colorRB,opposite:colorOpp}[mode]).classList.add('active');
-  colorNatural.setAttribute('aria-selected', mode==='natural');
-  colorRB.setAttribute('aria-selected', mode==='redblue');
-  colorOpp.setAttribute('aria-selected', mode==='opposite');
-}
-colorNatural.onclick = ()=> setColorMode('natural');
-colorRB.onclick = ()=> setColorMode('redblue');
-colorOpp.onclick = ()=> setColorMode('opposite');
-
-/* Set/Tab/Snippets/Auto/CC */
-const tabS = document.getElementById('tabSigrid');
-const tabY = document.getElementById('tabYou');
-const setTracksBtn = document.getElementById('setTracks');
-const setInterBtn = document.getElementById('setInterviews');
-const snOn = document.getElementById('snipOn');
-const snOff = document.getElementById('snipOff');
-const autoOn = document.getElementById('autoOn');
-const autoOff = document.getElementById('autoOff');
-const ccToggle = document.getElementById('ccToggle');
-const ccLang = document.getElementById('ccLang');
-
-function reflectButtons(){
-  tabS.classList.toggle('active', state.tab==='sigrid'); tabS.setAttribute('aria-selected', state.tab==='sigrid');
-  tabY.classList.toggle('active', state.tab==='you'); tabY.setAttribute('aria-selected', state.tab==='you');
-  setTracksBtn.classList.toggle('active', state.set==='tracks'); setTracksBtn.setAttribute('aria-selected', state.set==='tracks');
-  setInterBtn.classList.toggle('active', state.set==='interviews'); setInterBtn.setAttribute('aria-selected', state.set==='interviews');
-  snOn.classList.toggle('active', state.showSnippets); snOn.setAttribute('aria-selected', state.showSnippets);
-  snOff.classList.toggle('active', !state.showSnippets); snOff.setAttribute('aria-selected', !state.showSnippets);
-  autoOn.classList.toggle('active', state.autoAdvance); autoOn.setAttribute('aria-selected', state.autoAdvance);
-  autoOff.classList.toggle('active', !state.autoAdvance); autoOff.setAttribute('aria-selected', !state.autoAdvance);
-  ccLang.value = state.ccLang;
-  ccToggle.textContent = state.ccOn ? 'CC On' : 'CC Off';
-}
-tabS.onclick = ()=>{ state.tab='sigrid'; save(); buildUI(); prewarmAll(); };
-tabY.onclick = ()=>{ state.tab='you'; save(); buildUI(); prewarmAll(); };
-setTracksBtn.onclick = ()=>{ state.set='tracks'; state.fpIndex=0; save(); buildUI(); prewarmAll(); };
-setInterBtn.onclick = ()=>{ state.set='interviews'; state.fpIndex=0; save(); buildUI(); prewarmAll(); };
-snOn.onclick = ()=>{ state.showSnippets=true; save(); buildSlots(); };
-snOff.onclick = ()=>{ state.showSnippets=false; save(); buildSlots(); };
-autoOn.onclick = ()=>{ state.autoAdvance=true; save(); reflectButtons(); };
-autoOff.onclick = ()=>{ state.autoAdvance=false; save(); reflectButtons(); };
-ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; save(); buildFeatured(); reflectButtons(); };
-ccLang.onchange = ()=>{ state.ccLang=ccLang.value; save(); buildFeatured(); };
-
-/* ---------- Primer & TONAL ENGINE (128 / 256 + airy halo) ---------- */
-const primer = document.getElementById('primer');
-const primerBtn = document.getElementById('primerBtn');
-const statusTone = document.getElementById('statusTone');
-const toneToggle = document.getElementById('toneToggle');
-const tone128 = document.getElementById('tone128');
-const tone256 = document.getElementById('tone256');
-const toneLevel = document.getElementById('toneLevel');
-
-function setToneBadge(txt, mode){
-  statusTone.textContent = txt;
-  const maps = { on:['#102a21','#174a3a','#b9ffe6'], off:['#2a210f','#4a3a17','#ffd596'], wait:['#0f1b2a','#223047','#b7c6dc'] };
-  const [bg,bd,fg]=maps[mode]||maps.on; statusTone.style.background=bg; statusTone.style.borderColor=bd; statusTone.style.color=fg;
-}
-setToneBadge('waiting','wait');
-
-/* Device tuning */
-(function detectDevice(){
-  const ua = navigator.userAgent||'';
-  const mobile = /iPhone|Android/.test(ua) || (navigator.maxTouchPoints>1 && screen.width<820);
-  if(/iPhone/.test(ua)) state.deviceProfile='iphone';
-  else if(mobile) state.deviceProfile='mobile';
-  else state.deviceProfile='default';
-})();
+/* ===== Tone Engine ===== */
+(function detect(){ const ua=navigator.userAgent||''; if(/iPhone/.test(ua)) state.device='iphone'; else if(/Android/.test(ua)) state.device='mobile'; })();
 
 function initTones(){
   if(state.ctx) return;
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const AC = window.AudioContext||window.webkitAudioContext; state.ctx = new AC();
 
-  /* Buses */
-  const main = ctx.createGain();                    // master
-  const merger = ctx.createChannelMerger(2);        // stereo
-  const wide = ctx.createGain(); wide.gain.value=1; // stereo bus
-  const mono = ctx.createGain();                    // mono safety bus
-  mono.gain.value = (state.deviceProfile==='iphone'||state.deviceProfile==='mobile') ? 0.25 : 0.12;
-  merger.connect(wide).connect(main); mono.connect(main); main.connect(ctx.destination);
-
-  /* Gentle dynamics */
-  const comp = ctx.createDynamicsCompressor();
-  comp.threshold.value=-24; comp.knee.value=12; comp.ratio.value=2; comp.attack.value=0.02; comp.release.value=0.25;
+  const ctx=state.ctx, main=ctx.createGain(), merger=ctx.createChannelMerger(2), mono=ctx.createGain(), wide=ctx.createGain(), comp=ctx.createDynamicsCompressor();
+  wide.gain.value=1; mono.gain.value=(state.device==='iphone'||state.device==='mobile')?0.25:0.12;
+  merger.connect(wide).connect(main); mono.connect(main); comp.threshold.value=-24; comp.knee.value=12; comp.ratio.value=2; comp.attack.value=.02; comp.release.value=.25;
   main.connect(comp).connect(ctx.destination);
 
-  /* Binaural delta (subtle) */
-  const delta = (state.deviceProfile==='iphone'||state.deviceProfile==='mobile') ? 0.7 : 1.2; // Hz
-
-  function tonePair(freq, baseGain){
-    const oscL = ctx.createOscillator(); oscL.type='sine'; oscL.frequency.value=freq - delta/2;
-    const oscR = ctx.createOscillator(); oscR.type='sine'; oscR.frequency.value=freq + delta/2;
-    const lfo = ctx.createOscillator(); lfo.type='sine';
-    lfo.frequency.value = (freq===128) ? 0.08 : 0.12;
-    const lfoGainL = ctx.createGain(); lfoGainL.gain.value= (freq===128) ? 0.12 : 0.08;
-    const lfoGainR = ctx.createGain(); lfoGainR.gain.value= (freq===128) ? 0.12 : 0.08;
-
-    const gL = ctx.createGain(); const gR = ctx.createGain();
-    gL.gain.value = baseGain; gR.gain.value = baseGain;
-
-    lfo.connect(lfoGainL).connect(gL.gain);
-    lfo.connect(lfoGainR).connect(gR.gain);
-    lfo.start();
-
-    oscL.connect(gL); oscR.connect(gR);
-    gL.connect(merger,0,0); gR.connect(merger,0,1);
-
-    // Mono sum for small speakers
-    const mL = ctx.createGain(); const mR = ctx.createGain();
-    mL.gain.value = baseGain*0.5; mR.gain.value = baseGain*0.5;
-    oscL.connect(mL).connect(mono); oscR.connect(mR).connect(mono);
-
-    oscL.start(); oscR.start();
-    return {oscL,oscR,gL,gR,lfo,lfoGainL,lfoGainR,mL,mR};
+  const delta=(state.device==='iphone'||state.device==='mobile')?0.7:1.2;
+  function pair(freq, base){
+    const l=ctx.createOscillator(), r=ctx.createOscillator(); l.type=r.type='sine'; l.frequency.value=freq-delta/2; r.frequency.value=freq+delta/2;
+    const gL=ctx.createGain(), gR=ctx.createGain(); gL.gain.value=gR.gain.value=base;
+    const lfo=ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=(freq===128)?0.08:0.12;
+    const lfoL=ctx.createGain(), lfoR=ctx.createGain(); lfoL.gain.value=(freq===128)?0.12:0.08; lfoR.gain.value=lfoL.gain.value;
+    lfo.connect(lfoL).connect(gL.gain); lfo.connect(lfoR).connect(gR.gain); lfo.start();
+    l.connect(gL); r.connect(gR); gL.connect(merger,0,0); gR.connect(merger,0,1);
+    const mL=ctx.createGain(), mR=ctx.createGain(); mL.gain.value=mR.gain.value=base*0.5; l.connect(mL).connect(mono); r.connect(mR).connect(mono);
+    l.start(); r.start(); return {gL,gR};
   }
 
-  // Build tones
-  const t128 = tonePair(128, 0.16);
-  const t256 = tonePair(256, 0.12);
-
-  // Air halo
-  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
-  const data = noiseBuf.getChannelData(0); for(let i=0;i<data.length;i++){ data[i] = (Math.random()*2-1)*0.02; }
-  const noise = ctx.createBufferSource(); noise.buffer=noiseBuf; noise.loop=true;
-  const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1500;
-  const airGain = ctx.createGain(); airGain.gain.value = 0.02;
-  noise.connect(hp).connect(airGain).connect(main); noise.start();
-
-  state.ctx = ctx;
-  state.audio = {main,comp,merger,mono,wide, t128, t256, airGain};
-  updateToneRouting();
+  // base tones
+  state.audio = {ctx, main, merger, mono, wide, comp,
+    t128: pair(128, .16), t256: pair(256, .12),
+    air: (()=>{ const n=ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate), d=n.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*.02;
+      const src=ctx.createBufferSource(); src.buffer=n; src.loop=true; const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1500; const g=ctx.createGain(); g.gain.value=.02; src.connect(hp).connect(g).connect(main); src.start(); return {g}; })(),
+    burst:null
+  };
+  applyIntensity(); routeTones();
+}
+function routeTones(){
+  if(!state.audio) return; const lvl=Number(toneLevel.value)/100, on=state.tonesOn;
+  state.audio.t128.gL.gain.value = state.audio.t128.gR.gain.value = (on && tone128.checked)? state._g128*lvl : 0;
+  state.audio.t256.gL.gain.value = state.audio.t256.gR.gain.value = (on && tone256.checked)? state._g256*lvl : 0;
+  state.audio.air.g.gain.value = on ? state._gAir*lvl : 0;
+  setBadge(on?'tones on':'silent', on?'on':'off');
 }
 
-function updateToneRouting(){
-  if(!state.ctx || !state.audio) return;
-  const lvl = Number(toneLevel.value)/100;
-  const on = state.tonesOn;
-  state.audio.t128.gL.gain.value = (on && tone128.checked) ? 0.16*lvl : 0;
-  state.audio.t128.gR.gain.value = (on && tone128.checked) ? 0.16*lvl : 0;
-  state.audio.t256.gL.gain.value = (on && tone256.checked) ? 0.12*lvl : 0;
-  state.audio.t256.gR.gain.value = (on && tone256.checked) ? 0.12*lvl : 0;
-  state.audio.airGain.gain.value = on ? 0.02*lvl : 0;
-  setToneBadge(on ? 'tones on' : 'silent', on ? 'on' : 'off');
+/* ===== Intensity shaping (1–5) =====
+   - Gains stay safe; perception rises via depth, spread, and burst duration.
+*/
+function applyIntensity(){
+  const i = Number(intensity.value||3);
+  state.intensity = i;
+  // base gains (cap loudness, increase feel via small steps)
+  const g128 = {1:.12,2:.14,3:.16,4:.17,5:.18}[i];
+  const g256 = {1:.09,2:.11,3:.12,4:.13,5:.14}[i];
+  const gAir = {1:.014,2:.018,3:.02,4:.023,5:.026}[i];
+  state._g128=g128; state._g256=g256; state._gAir=gAir;
+
+  // burst shaping
+  state._burstDepth = {1:.16,2:.20,3:.22,4:.24,5:.26}[i];
+  state._burstDur   = {1:16,2:20,3:24,4:28,5:32}[i];
+
+  intensityLbl.textContent = i + (i<=2?' · gentle': i===3?' · steady': i===4?' · deep':' · unbelievable');
+  routeTones();
 }
 
-toneToggle.onclick = async ()=>{
-  if(!state.ctx){ initTones(); try{ await state.ctx.resume(); }catch{} }
-  state.tonesOn = !state.tonesOn; save(); updateToneRouting();
-  toneToggle.textContent = state.tonesOn ? 'On' : 'Off';
-};
-tone128.onchange = updateToneRouting;
-tone256.onchange = updateToneRouting;
-toneLevel.oninput = updateToneRouting;
+/* ===== Hidden Red/Blue Burst (music only) ===== */
+function clarityBurst(){
+  if(!state.ctx || state.set!=='tracks') return;
+  const ctx = state.ctx, lvl=Number(toneLevel.value)/100||.68;
+  // stop previous
+  if(state.burst && state.burst.stop){ try{ state.burst.stop(); }catch{} }
 
-/* ---------- Clarity Burst (with synchronized color wash) ---------- */
-const burstBtn = document.getElementById('burstNow');
-function clarityBurst(opts){
-  if(!state.ctx) return;
-  const ctx = state.ctx;
-  const level = Number(toneLevel.value)/100 || 0.68;
-
-  const p = Object.assign({
-    dur: 9.0, throbHz: 0.9, bodyMin: 40, bodyMax: 400,
-    base: 0.18, depth: 0.22, tone64:true, tone128:true, tone256:true
-  }, opts||{});
-
-  /* Audio nodes */
   const bus = ctx.createGain(); bus.gain.value = 0.0;
-  const throbLFO = ctx.createOscillator(); throbLFO.type='sine'; throbLFO.frequency.value=p.throbHz;
-  const throbAmt = ctx.createGain(); throbAmt.gain.value = p.depth * level;
-  const out = ctx.createGain(); out.gain.value = p.base * level;
+  const red=ctx.createGain(), blue=ctx.createGain(); red.gain.value=blue.gain.value=0;
+  const merger=ctx.createChannelMerger(2); red.connect(merger,0,0); blue.connect(merger,0,1);
+  const out=ctx.createGain(); out.gain.value = .18*lvl; merger.connect(out).connect(state.audio.main);
 
-  /* Body noise bed */
-  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate);
-  const nd = noiseBuf.getChannelData(0); for(let i=0;i<nd.length;i++){ nd[i] = (Math.random()*2-1)*0.08; }
-  const noise = ctx.createBufferSource(); noise.buffer = noiseBuf; noise.loop = true;
-  const hp = ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value = p.bodyMin;
-  const lp = ctx.createBiquadFilter(); lp.type='lowpass';  lp.frequency.value = p.bodyMax;
-  const nGain = ctx.createGain(); nGain.gain.value = 0.16 * level;
+  const throb=ctx.createOscillator(); throb.type='sine'; throb.frequency.value=.9;
+  const amtR=ctx.createGain(), amtB=ctx.createGain(); amtR.gain.value=amtB.gain.value= state._burstDepth * lvl;
+  throb.connect(amtR).connect(red.gain); throb.connect(amtB).connect(blue.gain); throb.start();
 
-  function makeTone(freq, g=0.14){
-    const delta = (state.deviceProfile==='iphone'||state.deviceProfile==='mobile') ? 0.6 : 1.1;
-    const oL = ctx.createOscillator(); oL.type='sine'; oL.frequency.value = freq - delta/2;
-    const oR = ctx.createOscillator(); oR.type='sine'; oR.frequency.value = freq + delta/2;
-    const gL = ctx.createGain(); gL.gain.value = g * level;
-    const gR = ctx.createGain(); gR.gain.value = g * level;
-    oL.connect(gL).connect(bus); oR.connect(gR).connect(bus);
-    oL.start(); oR.start();
-    return ()=>{ try{oL.stop();oR.stop();}catch{}; };
-  }
+  function tone(f, gl, gr){ const l=ctx.createOscillator(), r=ctx.createOscillator(); l.type=r.type='sine'; l.frequency.value=f; r.frequency.value=f;
+    const gL=ctx.createGain(), gR=ctx.createGain(); gL.gain.value=gl*lvl; gR.gain.value=gr*lvl; l.connect(gL).connect(red); r.connect(gR).connect(blue); l.start(); r.start(); return ()=>{try{l.stop();r.stop();}catch{}};}
+  const stops=[ tone(64,.10,.06), tone(128,.12,.12), tone(256,.08,.10) ];
 
-  const stops = [];
-  if(p.tone64)  stops.push(makeTone(64,  0.12));
-  if(p.tone128) stops.push(makeTone(128, 0.15));
-  if(p.tone256) stops.push(makeTone(256, 0.12));
+  // envelope
+  const t0=ctx.currentTime+.02, dur=state._burstDur;
+  bus.gain.setValueAtTime(0,t0); bus.gain.linearRampToValueAtTime(1,t0+.30);
+  const tEnd=t0+dur-.8; bus.gain.setTargetAtTime(0,tEnd,.35);
+  red.connect(bus); blue.connect(bus);
 
-  noise.connect(hp).connect(lp).connect(nGain).connect(bus); noise.start();
-  throbLFO.connect(throbAmt); throbAmt.connect(bus.gain); throbLFO.start();
-  bus.connect(out).connect(state.audio ? state.audio.main : ctx.destination);
-
-  /* Envelope */
-  const t0 = ctx.currentTime + 0.02;
-  bus.gain.cancelScheduledValues(0);
-  bus.gain.setValueAtTime(0.0, t0);
-  bus.gain.linearRampToValueAtTime(p.base * level, t0 + 0.28);
-  const tEnd = t0 + p.dur - 0.8;
-  bus.gain.setTargetAtTime(0.0, tEnd, 0.35);
-
-  /* Visuals: synchronized color wash + featured tint */
-  document.body.classList.add('burst-on','wash-strong');
-  const washAnim = wash.animate(
-    [
-      { transform: 'translate3d(0,0,0) rotate(0deg)',    opacity: .10 },
-      { transform: 'translate3d(2vmax,-1vmax,0) rotate(90deg)', opacity: .33 },
-      { transform: 'translate3d(-1vmax,1vmax,0) rotate(180deg)', opacity: .18 },
-      { transform: 'translate3d(0,0,0) rotate(360deg)', opacity: .10 }
-    ],
-    { duration: p.dur*1000, easing:'ease-in-out' }
-  );
-  /* Sub-pulses on body to feel the heartbeat */
-  const pulseAnim = document.body.animate(
-    [
-      { boxShadow:'inset 0 0 0 0 rgba(127,208,255,0)' },
-      { boxShadow:'inset 0 0 0 22px rgba(127,208,255,0.10)' },
-      { boxShadow:'inset 0 0 0 0 rgba(127,208,255,0)' }
-    ],
-    { duration: 1000/p.throbHz, iterations: Math.max(1, Math.round(p.dur*p.throbHz)), easing:'ease-in-out' }
-  );
-
-  /* Cleanup visuals at end */
-  setTimeout(()=>{
-    document.body.classList.remove('burst-on');
-    document.body.classList.remove('wash-strong');
-    document.body.classList.add('wash-soft');
-    setTimeout(()=> document.body.classList.remove('wash-soft'), 1200);
-  }, p.dur*1000 + 200);
-
-  /* Hard cleanup */
-  setTimeout(()=>{
-    try{ throbLFO.stop(); noise.stop(); }catch{}
-    out.disconnect(); bus.disconnect(); throbAmt.disconnect();
-  }, p.dur*1000 + 400);
+  const stop=()=>{ try{ throb.stop(); }catch{} stops.forEach(s=>{ try{s();}catch{} }); [red,blue,merger,out,bus].forEach(n=>{ try{ n.disconnect(); }catch{} }); state.burst=null; };
+  setTimeout(stop, dur*1000+400);
+  state.burst = {stop};
 }
 
-burstBtn.onclick = ()=> clarityBurst();
+/* ===== Controls ===== */
+document.getElementById('fpPlay').onclick = ()=>{ try{ state.fp.playVideo(); }catch{} };
+document.getElementById('fpPause').onclick = ()=>{ try{ state.fp.pauseVideo(); }catch{} };
+document.getElementById('fpNext').onclick = ()=> nextTrack();
+document.getElementById('fpPrev').onclick = ()=>{ const L=listBySet(); let i=state.fpIndex-1; if(i<0) i=Math.max(10,L.length)-1; state.fpIndex=i; buildFeatured(); setTimeout(()=>{try{state.fp.playVideo();}catch{}},100); };
+document.getElementById('fpPiP').onclick = async ()=>{ const v=document.querySelector('video'); if(v && v.requestPictureInPicture){ try{ await v.requestPictureInPicture(); }catch{} } };
 
-/* Primer: init tones, start first video, fire Burst */
+setTracksBtn.onclick = ()=>{ state.set='tracks'; state.fpIndex=0; buildUI(); prewarmAll(); reflectButtons(); };
+setInterBtn.onclick = ()=>{ state.set='interviews'; state.fpIndex=0; buildUI(); prewarmAll(); reflectButtons(); };
+ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; buildFeatured(); reflectButtons(); };
+ccLang.onchange = ()=>{ state.ccLang=ccLang.value; buildFeatured(); };
+toneToggle.onclick = async ()=>{ if(!state.ctx){ initTones(); try{ await state.ctx.resume(); }catch{} } state.tonesOn=!state.tonesOn; routeTones(); this.textContent=state.tonesOn?'On':'Off'; };
+tone128.onchange = routeTones; tone256.onchange = routeTones; toneLevel.oninput = routeTones;
+burstNow.onclick = ()=> clarityBurst();
+intensity.oninput = applyIntensity;
+modeNormal.onclick = ()=>{ state.ritual=false; modeNormal.classList.add('active'); modeRitual.classList.remove('active'); };
+modeRitual.onclick = ()=>{ state.ritual=true; modeRitual.classList.add('active'); modeNormal.classList.remove('active');
+  // ritual defaults
+  state.set='tracks'; state.ccOn=false; ccLang.value='en'; intensity.value='4'; applyIntensity();
+  tone128.checked=true; tone256.checked=true; toneLevel.value=68; buildUI(); prewarmAll(); reflectButtons();
+};
+
+function reflectButtons(){
+  setTracksBtn.classList.toggle('active', state.set==='tracks'); setTracksBtn.setAttribute('aria-selected', state.set==='tracks');
+  setInterBtn.classList.toggle('active', state.set==='interviews'); setInterBtn.setAttribute('aria-selected', state.set==='interviews');
+  ccToggle.textContent = state.ccOn ? 'CC On' : 'CC Off';
+  // Burst gating
+  burstNow.disabled = state.set!=='tracks';
+  burstNow.title = state.set==='tracks' ? 'Hidden Red/Blue burst — music only' : 'Switch to Tracks for burst';
+}
+
+/* ===== Primer ===== */
 primerBtn.onclick = async ()=>{
   initTones(); try{ await state.ctx.resume(); }catch{}
-  setToneBadge('tones on','on');
+  setBadge('tones on','on');
   if(!state.fp) buildFeatured();
-  requestPlayReady();
+  try{ state.fp.playVideo(); }catch{}
   primer.style.display='none';
-  setTimeout(()=> clarityBurst(), 140);
+  // if Ritual + Tracks, kick a first burst after settle
+  if(state.ritual && state.set==='tracks'){ setTimeout(()=> clarityBurst(), 1400); }
 };
 
-/* Media Session */
+/* ===== Media Session ===== */
 function setMediaSession(item){
   if(!('mediaSession' in navigator) || !item) return;
   try{
-    navigator.mediaSession.metadata = new MediaMetadata({
-      title: item.title||'Clarity',
-      artist: 'Sigrid ↔ You',
-      album: state.set==='tracks'?'Tracks':'Interviews',
-      artwork: [{src:`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`,sizes:'480x360',type:'image/jpeg'}]
-    });
-    navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
-    navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
-    navigator.mediaSession.setActionHandler('play', ()=> requestPlayReady());
+    navigator.mediaSession.metadata = new MediaMetadata({ title:item.title||'Clarity', artist:'Sigrid ↔ You', album: state.set==='tracks'?'Tracks':'Interviews',
+      artwork:[{src:`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`,sizes:'480x360',type:'image/jpeg'}] });
+    navigator.mediaSession.setActionHandler('previoustrack', ()=>{ document.getElementById('fpPrev').click(); });
+    navigator.mediaSession.setActionHandler('nexttrack', ()=>{ document.getElementById('fpNext').click(); });
+    navigator.mediaSession.setActionHandler('play', ()=>{ try{ state.fp.playVideo(); }catch{} });
     navigator.mediaSession.setActionHandler('pause', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
   }catch{}
 }
 
-/* Keyboard shortcuts */
-window.addEventListener('keydown',(e)=>{
-  if(e.target && (/input|textarea|select/i).test(e.target.tagName)) return;
-  if(e.code==='Space'){ e.preventDefault(); try{
-    const s = state.fp.getPlayerState();
-    if(s===YT.PlayerState.PLAYING) state.fp.pauseVideo(); else state.fp.playVideo();
-  }catch{} }
-  if(e.code==='ArrowRight') nextTrack();
-  if(e.code==='ArrowLeft') prevTrack();
-});
+/* ===== Norwegian Whisper (SpeechSynthesis) ===== */
+let chosen = null, noVoice = null;
+function pickPhrase(){ chosen = WHISPER[Math.floor(Math.random()*WHISPER.length)]; phraseTxt.textContent=chosen.no; ipaTxt.textContent=chosen.ipa; meaningTxt.textContent=chosen.en; }
+function pickVoice(){
+  const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  const noVoices = voices.filter(v=> /no|nb|bokmål|norsk/i.test(v.lang+v.name));
+  noVoice = noVoices[0] || voices.find(v=>/en/i.test(v.lang)) || null;
+  voiceNote.textContent = noVoice ? `voice: ${noVoice.name}` : 'voice unavailable (device)';
+}
+if('speechSynthesis' in window){
+  speechSynthesis.onvoiceschanged = ()=>{ pickVoice(); };
+  pickVoice();
+}
+pickPhrase();
+speakNo.onclick = ()=>{
+  if(!('speechSynthesis' in window) || !chosen) return;
+  const u = new SpeechSynthesisUtterance(chosen.no);
+  if(noVoice) u.voice = noVoice;
+  u.rate = .98; u.pitch = 1.02; u.lang = (noVoice && noVoice.lang) || 'no-NO';
+  // gentle ducking of tones while speaking
+  const g = state.audio?.main; const old = g? g.gain?.value : null;
+  if(g && g.gain){ try{ g.gain.setTargetAtTime((old||1)*0.8, state.ctx.currentTime, .02); }catch{} }
+  u.onend = ()=>{ if(g && g.gain && old!=null){ try{ g.gain.setTargetAtTime(old, state.ctx.currentTime, .05); }catch{} } pickPhrase(); };
+  speechSynthesis.speak(u);
+};
 
-/* Stars (parallax) */
+/* ===== Stars ===== */
 (function stars(){
   const c=document.getElementById('stars'); const dpr=Math.max(1,window.devicePixelRatio||1);
   const x=c.getContext('2d'); let flakes=[], mouseY=0, scrollY=0;
@@ -837,15 +553,6 @@ window.addEventListener('keydown',(e)=>{
   window.addEventListener('scroll', ()=>{ scrollY=window.scrollY||0; });
   size(); seed(); draw();
 })();
-
-/* Boot */
-(function injectYT(){
-  if(document.getElementById('yt-iframe-api')) return;
-  const tag=document.createElement('script'); tag.id='yt-iframe-api'; tag.src='https://www.youtube.com/iframe_api';
-  document.body.appendChild(tag);
-})();
-buildSlots(); buildBonus(); preloadThumbs();
-setColorMode('natural'); // default
 </script>
 </body>
 </html>
