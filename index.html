@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta
-  name="viewport"
-  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Clarity · Sigrid — Focus + Reliable Tones ❄️</title>
 
 <!-- iPhone / PWA Dark Theme -->
@@ -13,7 +11,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Clarity · Sigrid">
-<meta name="description" content="One-video focus (loop) + reliable 160/162 Hz binaural tone with 512 Hz shimmer option. iPhone-dark theme, safe-area, meters, and quick reinit.">
+<meta name="description" content="One-video focus (loop) + reliable 160/162 Hz binaural with 512 Hz shimmer. Jellyfish pulse, AURORA Morse hint, and a 2:22 · 1:28 · 0:42 puzzle.">
 
 <style>
 /* ---- Dark iPhone theme foundation ---- */
@@ -23,32 +21,27 @@
   --card:#0f1621; --ring:#182232; --accent:#9ed0ff; --ok:#89f7d6; --halo:#bee4ff;
   --gradA:#111827; --gradB:#0b0d11; --tap: rgba(158,208,255,.15);
   --shadow: 0 0 0 1px #1a2436 inset, 0 10px 30px rgba(0,0,0,.35);
+  --gold:#ffd27a;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 html{background:#000}
 body{
   margin:0; color:var(--ink);
-  background:
-    radial-gradient(1200px 800px at 50% -10%, var(--gradA) 0%, var(--gradB) 55%);
+  background:radial-gradient(1200px 800px at 50% -10%, var(--gradA) 0%, var(--gradB) 55%);
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
   padding-top: calc(env(safe-area-inset-top, 0px) + 6px);
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
   -webkit-text-size-adjust: 100%;
 }
-/* reduce iOS tap highlight / selection jolt */
 *{-webkit-tap-highlight-color: transparent}
 :focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 
-/* Safe-area padders (visual polish) */
-.ios-top, .ios-bottom{
-  position:fixed; left:0; right:0; z-index:5; pointer-events:none;
-}
+.ios-top,.ios-bottom{position:fixed; left:0; right:0; z-index:5; pointer-events:none}
 .ios-top{ top:0; height: env(safe-area-inset-top, 0px); background:linear-gradient(#070b12,#0b0d11)}
 .ios-bottom{ bottom:0; height: env(safe-area-inset-bottom, 0px); background:linear-gradient(#0b0d11,#090d14)}
 
-/* Layout */
 .header{padding:2.2rem 1rem 1rem; text-align:center}
 h1{margin:0 0 .25rem; font-weight:700; letter-spacing:.02em}
 .tag{color:var(--muted); font-size:.95rem}
@@ -61,39 +54,30 @@ h1{margin:0 0 .25rem; font-weight:700; letter-spacing:.02em}
 }
 .row{display:flex; flex-wrap:wrap; gap:.65rem; align-items:center}
 
-/* Buttons & controls */
+/* buttons & controls */
 button{
   border:0; border-radius:14px; padding:.9rem 1.2rem; font-weight:650; cursor:pointer;
   background:var(--accent); color:#071018; transition:transform .06s ease, opacity .18s ease, box-shadow .2s ease, filter .2s ease;
 }
 button:active{transform:translateY(1px)}
-button.ghost{
-  background:rgba(255,255,255,0.02); color:var(--ink); border:1px solid var(--ring)
-}
+button.ghost{background:rgba(255,255,255,0.02); color:var(--ink); border:1px solid var(--ring)}
 button.ghost:active{background:var(--tap)}
 label.toggle{display:inline-flex; align-items:center; gap:.5rem}
-input[type="checkbox"]{
-  width:1.1rem; height:1.1rem; accent-color: var(--accent);
-}
+input[type="checkbox"]{width:1.1rem; height:1.1rem; accent-color: var(--accent)}
 .small{font-size:.92rem; color:var(--muted)}
 .timer{
   font-variant-numeric:tabular-nums; font-weight:750; letter-spacing:.02em;
   background:#0d1522; border:1px solid var(--ring); padding:.5rem .7rem; border-radius:10px;
 }
-.slider{
-  appearance:none; width:160px; height:6px; border-radius:999px;
-  background:#1a2740; outline:none
-}
+.slider{appearance:none; width:160px; height:6px; border-radius:999px; background:#1a2740; outline:none}
 .slider::-webkit-slider-thumb{appearance:none; width:18px; height:18px; border-radius:50%; background:var(--accent); border:1px solid #0c1628}
+.sep{height:1px; background:linear-gradient(90deg,transparent,#21304a,transparent); border:0; margin:1rem 0}
 
-/* Focus player */
-.player{
-  position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--ring);
-  aspect-ratio:16/9; background:#0d1522; margin-top:.75rem;
-}
+/* focus player */
+.player{position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--ring); aspect-ratio:16/9; background:#0d1522; margin-top:.75rem}
 .player iframe{position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:14px}
 
-/* Tracklist */
+/* tracklist */
 .list{display:grid; grid-template-columns:1fr; gap:.4rem; margin-top:.75rem}
 .track{
   display:flex; gap:.6rem; align-items:center; justify-content:space-between;
@@ -103,26 +87,17 @@ input[type="checkbox"]{
 .track .t{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70%}
 .active{outline:2px solid var(--accent); box-shadow:0 0 0 2px rgba(158,208,255,.25) inset}
 
-.sep{height:1px; background:linear-gradient(90deg,transparent,#21304a,transparent); border:0; margin:1rem 0}
 .footer{color:var(--muted); text-align:center; padding:1.25rem}
-
-/* Ribbon (sticky, safe for notch) */
 .ribbon{
   position:fixed; top: calc(env(safe-area-inset-top, 0px) + .35rem);
   left:50%; transform:translateX(-50%); z-index:6;
   display:flex; gap:.5rem; background:rgba(9,14,22,.88); border:1px solid var(--ring);
   padding:.35rem .5rem; border-radius:999px; backdrop-filter:blur(10px)
 }
-.ribbon a{
-  display:inline-block; padding:.45rem .75rem; border-radius:999px; background:#0d1522; border:1px solid var(--ring);
-  color:var(--accent); text-decoration:none; font-weight:650; font-size:.92rem
-}
+.ribbon a{display:inline-block; padding:.45rem .75rem; border-radius:999px; background:#0d1522; border:1px solid var(--ring); color:var(--accent); text-decoration:none; font-weight:650; font-size:.92rem}
 
-/* Animated Start button */
-#start{
-  position:relative; isolation:isolate;
-  box-shadow:0 0 0 0 rgba(158,208,255,.6), inset 0 0 12px rgba(255,255,255,.15);
-}
+/* animated Start */
+#start{position:relative; isolation:isolate; box-shadow:0 0 0 0 rgba(158,208,255,.6), inset 0 0 12px rgba(255,255,255,.15)}
 #start::before,#start::after{
   content:""; position:absolute; inset:-8px; border-radius:18px; z-index:-1;
   background:conic-gradient(from 0deg, transparent 0 30%, rgba(158,208,255,.25) 40% 60%, transparent 70% 100%);
@@ -135,17 +110,44 @@ input[type="checkbox"]{
 .spark{position:absolute; pointer-events:none; width:8px; height:8px; border-radius:50%; background:#eaf9ff; filter:drop-shadow(0 0 12px var(--halo)); opacity:.95; animation:spark .6s ease-out forwards}
 @keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0}}
 
-/* Tone meters */
+/* tone meters + honey-thread class */
 .meterRow{display:flex; gap:.5rem; align-items:center; margin-top:.5rem; flex-wrap:wrap}
 .meter{height:8px; width:110px; background:#162236; border:1px solid #24324a; border-radius:999px; overflow:hidden}
 .fill{height:100%; width:0%; background:linear-gradient(90deg,#89f7d6,#9ed0ff); box-shadow:0 0 8px rgba(137,247,214,.35)}
+.honey .fill{background:linear-gradient(90deg,#ffd27a,#9ed0ff); box-shadow:0 0 10px rgba(255,210,122,.35)}
 .badge{font-size:.82rem; color:var(--muted)}
+
+/* jellyfish glyph */
+.jelly{
+  width:62px; height:62px; border-radius:50%;
+  background:radial-gradient(60% 60% at 50% 45%, rgba(158,208,255,.45), rgba(158,208,255,.08) 70%, transparent 71%);
+  border:1px solid #21324a; box-shadow:0 0 18px rgba(158,208,255,.15);
+  position:relative; margin-left:.4rem;
+  transition:filter .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.jelly:after, .jelly:before{
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  width:36px; height:12px; bottom:-4px;
+  background: radial-gradient(50% 100% at 50% 0%, rgba(158,208,255,.28), transparent 70%);
+  filter:blur(4px);
+}
+.jelly:before{width:44px; bottom:-8px; opacity:.6}
+.honey .jelly{border-color:#3a2a1e; box-shadow:0 0 18px rgba(255,210,122,.14)}
+/* morse line */
+.morse{height:3px; width:100%; background:#19253a; border-radius:999px; overflow:hidden; margin-top:.6rem; position:relative}
+.morse .blink{position:absolute; top:0; left:0; height:100%; width:0%; background:#9ed0ff; box-shadow:0 0 10px rgba(158,208,255,.6)}
+.honey .morse .blink{background:var(--gold); box-shadow:0 0 10px rgba(255,210,122,.6)}
+
+/* puzzle bells */
+.bells{display:flex; gap:.4rem; flex-wrap:wrap; align-items:center; margin-top:.6rem}
+.bell{display:inline-flex; align-items:center; gap:.35rem; padding:.35rem .6rem; border:1px solid var(--ring); border-radius:999px; background:#0d1522; color:var(--ink); font-size:.92rem; user-select:none; cursor:pointer}
+.bell[data-hit="1"]{background:rgba(255,210,122,.12); border-color:#3a2a1e}
+.reveal{display:none; margin-top:.6rem; padding:.6rem .75rem; border:1px solid var(--ring); border-radius:10px; background:#101827}
+.reveal.show{display:block}
 </style>
 </head>
 <body>
-<!-- Safe-area polish for iPhone notch areas -->
-<div class="ios-top"></div>
-<div class="ios-bottom"></div>
+<div class="ios-top"></div><div class="ios-bottom"></div>
 
 <nav class="ribbon">
   <a href="https://jar.plnt.earth" target="_self" rel="noopener">↩ Jar</a>
@@ -174,6 +176,9 @@ input[type="checkbox"]{
       <button id="next" class="ghost">Next ⟶</button>
       <button id="focus" class="ghost">⭐ Focus “Strangers”</button>
       <button id="resync" class="ghost">⟲ Re-init Audio</button>
+
+      <!-- Jellyfish glyph (pulse driven by meters) -->
+      <div id="jelly" class="jelly" aria-label="Northlight jelly — pulses with tone"></div>
     </div>
 
     <div class="meterRow">
@@ -182,6 +187,15 @@ input[type="checkbox"]{
       <span class="badge" id="state">Locked</span>
     </div>
 
+    <!-- Puzzle: bells at 2:22 · 1:28 · 0:42 -->
+    <div class="bells" role="group" aria-label="Northlight bells puzzle">
+      <div class="bell" data-target="142">🔔 2:22</div>
+      <div class="bell" data-target="88">🔔 1:28</div>
+      <div class="bell" data-target="42">🔔 0:42</div>
+    </div>
+    <div id="reveal" class="reveal">🗝️ <strong>Northlight Note</strong>: “Breathe the truth in. Exhale what isn’t yours.”  
+      Bridge key → <code>512</code>. If honey glows, follow the mirror.</div>
+
     <p class="small" style="margin:.5rem 0 0">First run tips (iPhone): volume up, ringer ON, keep screen on ~15s after start. If tone drops after backgrounding → “Re-init Audio”.</p>
   </section>
 
@@ -189,6 +203,11 @@ input[type="checkbox"]{
     <div class="player">
       <iframe id="yt" title="Sigrid — player" allow="autoplay; encrypted-media" allowfullscreen playsinline></iframe>
     </div>
+
+    <!-- Morse hint line: AURORA -->
+    <div class="morse" aria-hidden="true"><div id="blink" class="blink"></div></div>
+    <div class="small" style="margin-top:.35rem">hint: · = short blink, – = long — listen for the bell.</div>
+
     <hr class="sep">
     <div class="list" id="tracklist"></div>
   </section>
@@ -219,15 +238,9 @@ var current = 0;
 function buildSrc(id, muted) {
   var base = 'https://www.youtube.com/embed/'+id;
   var q = [
-    'autoplay=1',
-    'mute='+(muted?1:0),
-    'loop=1',
-    'playlist='+id,
-    'controls=0',
-    'playsinline=1',
-    'modestbranding=1',
-    'rel=0',
-    'enablejsapi=1'
+    'autoplay=1','mute='+(muted?1:0),
+    'loop=1','playlist='+id,'controls=0',
+    'playsinline=1','modestbranding=1','rel=0','enablejsapi=1'
   ].join('&');
   return base+'?'+q;
 }
@@ -249,16 +262,15 @@ function loadIndex(i, keepMute){
 /* ---------------- Tone engine with iOS unlock + meters ---------------- */
 var ctx,leftOsc,rightOsc,shimOsc,lGain,rGain,sGain,merger,analyserL,analyserR,splitter,vuTimer=null;
 var stateBadge=document.getElementById('state'), mL=document.getElementById('mL'), mR=document.getElementById('mR');
+var jelly=document.getElementById('jelly');
 
 function ramp(p,to,t){ try{p.linearRampToValueAtTime(to,t);}catch(e){} }
 
 function unlockAudioOnce(){
-  // iOS sometimes needs a 'real' buffer source triggered on a gesture.
   try{
     var src = ctx.createBufferSource();
     src.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
-    src.connect(ctx.destination);
-    src.start(0); src.stop(0);
+    src.connect(ctx.destination); src.start(0); src.stop(0);
   }catch(e){}
 }
 
@@ -287,7 +299,6 @@ function startTone(){
   leftOsc.connect(lGain).connect(merger,0,0);
   rightOsc.connect(rGain).connect(merger,0,1);
 
-  // to meters and to output
   merger.connect(splitter);
   splitter.connect(analyserL, 0);
   splitter.connect(analyserR, 1);
@@ -309,6 +320,7 @@ function startTone(){
     shimOsc.connect(sGain).connect(ctx.destination); shimOsc.start();
   }
 
+  // meters + jelly pulse
   if(vuTimer){ cancelAnimationFrame(vuTimer); vuTimer=null; }
   function vu(){
     if(!analyserL || !analyserR){ return; }
@@ -318,9 +330,14 @@ function startTone(){
     analyserR.getByteTimeDomainData(bufR);
     var pkL=0, pkR=0;
     for(var i=0;i<bufL.length;i++){ pkL = Math.max(pkL, Math.abs(bufL[i]-128)); }
-    for(var j=0;j<bufR.length;j++){ pkR = Math.max(pkR, Math.abs(bufR[j]-128)); }
-    mL.style.width = Math.min(100, Math.round(pkL/128*100))+'%';
-    mR.style.width = Math.min(100, Math.round(pkR/128*100))+'%';
+    for(var j=0;j<bufR.length;j'){ pkR = Math.max(pkR, Math.abs(bufR[j]-128)); }
+    var wl = Math.min(100, Math.round(pkL/128*100));
+    var wr = Math.min(100, Math.round(pkR/128*100));
+    mL.style.width = wl+'%';
+    mR.style.width = wr+'%';
+    // jelly glow from average
+    var avg = (wl+wr)/2;
+    jelly.style.filter = 'brightness('+(1+avg/140)+')';
     vuTimer = requestAnimationFrame(vu);
   }
   vu();
@@ -341,15 +358,13 @@ function stopTone(){
       analyserL=analyserR=splitter=null;
       if(vuTimer){ cancelAnimationFrame(vuTimer); vuTimer=null; }
       mL.style.width='0%'; mR.style.width='0%';
+      jelly.style.filter='brightness(1)';
       stateBadge.textContent = 'Audio: stopped';
     }, Math.ceil(fade*1000)+80);
   }catch(e){}
 }
 
-function reinitAudio(){
-  stopTone();
-  setTimeout(function(){ startTone(); }, 140);
-}
+function reinitAudio(){ stopTone(); setTimeout(startTone, 140); }
 
 /* ---------------- UI wiring ---------------- */
 var START=document.getElementById('start');
@@ -375,12 +390,11 @@ function spark(x,y){
     s.style.top=(y - host.getBoundingClientRect().top - 4)+'px';
     s.style.setProperty('--dx', Math.cos(ang)*dist+'px');
     s.style.setProperty('--dy', Math.sin(ang)*dist+'px');
-    host.appendChild(s);
-    (function(el){ setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 620); })(s);
+    host.appendChild(s); (function(el){ setTimeout(function(){ if(el && el.parentNode) el.parentNode.removeChild(el); }, 620); })(s);
   }
 }
 
-/* Build clickable list */
+/* Build track list */
 function buildList(){
   LIST.innerHTML='';
   for(var i=0;i<TRACKS.length;i++){
@@ -407,19 +421,15 @@ function start(ev){
   if(running) return;
   running=true;
 
-  // Belt-and-suspenders: ensure context resume on the first few gestures (iOS)
   function resumeOnce(){ try{ if(ctx && ctx.state==='suspended') ctx.resume(); }catch(e){} }
   document.body.addEventListener('pointerup', resumeOnce, {once:true, passive:true});
   document.body.addEventListener('touchend', resumeOnce, {once:true, passive:true});
   document.body.addEventListener('click', resumeOnce, {once:true, passive:true});
 
-  startTone();               // tones first (gesture-locked)
-  loadIndex(current, true);  // start muted for autoplay
-  setTimeout(function(){     // then unmute if desired
-    if(!MUTE.checked){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }
-  }, 800);
+  startTone();
+  loadIndex(current, true);
+  setTimeout(function(){ if(!MUTE.checked){ send('unMute'); setVol(parseInt(VOL.value,10)||40); } }, 800);
 
-  // 3:00 timer
   var until=Date.now()+180000;
   CLOCK.textContent='03:00';
   if(timerId) clearInterval(timerId);
@@ -434,16 +444,13 @@ function start(ev){
   if(ev && ev.clientX) spark(ev.clientX, ev.clientY);
 }
 function stop(){
-  if(!running) return;
-  running=false;
-  stopTone();
-  send('mute'); send('pauseVideo');
+  if(!running) return; running=false;
+  stopTone(); send('mute'); send('pauseVideo');
   if(timerId){ clearInterval(timerId); timerId=null; }
-  CLOCK.textContent='03:00';
-  START.disabled=false; STOP.disabled=true;
+  CLOCK.textContent='03:00'; START.disabled=false; STOP.disabled=true;
 }
 
-/* Visibility: resume on return (iOS suspends sometimes) */
+/* Visibility resume */
 document.addEventListener('visibilitychange', function(){
   try{
     if(document.visibilityState==='visible' && ctx && ctx.state==='suspended'){
@@ -461,14 +468,73 @@ PREV.addEventListener('click', function(){ loadIndex(current-1, true); if(!MUTE.
 NEXT.addEventListener('click', function(){ loadIndex(current+1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }, 300);} }, {passive:true});
 FOCUS.addEventListener('click', function(){
   var i = TRACKS.findIndex(function(x){ return /strangers/i.test(x.t); });
-  if(i<0) i=0;
-  loadIndex(i, true);
+  if(i<0) i=0; loadIndex(i, true);
   if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }, 420); }
 }, {passive:true});
 RESYNC.addEventListener('click', reinitAudio, {passive:true});
 
+/* Shimmer → honey thread tint */
+SHIM.addEventListener('change', function(){
+  document.body.classList.toggle('honey', this.checked);
+  if(ctx && ctx.state==='running'){ reinitAudio(); } // re-apply shimmer gain gently
+}, {passive:true});
+
 /* Init list */
 buildList(); highlight();
+
+/* ---------------- Morse hint: AURORA ---------------- */
+(function(){
+  var blink = document.getElementById('blink');
+  var DOT = 250, DASH = 750, GAP = 250, LETTER = 750;
+  var seq = ['.-','..-','.-.','---','.-.','.-']; // A U R O R A
+  var idxL=0, idxS=0;
+
+  function run(){
+    var code = seq[idxL];
+    if(idxS >= code.length){
+      idxS = 0; setTimeout(function(){ idxL=(idxL+1)%seq.length; run(); }, LETTER);
+      return;
+    }
+    var sym = code[idxS]; idxS++;
+    blink.style.transition = 'none'; blink.style.width = '0%';
+    setTimeout(function(){
+      blink.style.transition = 'width '+(sym==='.'?DOT:DASH)+'ms linear';
+      blink.style.width = '100%';
+      setTimeout(function(){ blink.style.transition='width 60ms linear'; blink.style.width='0%'; setTimeout(run, GAP); }, (sym==='.'?DOT:DASH));
+    }, 10);
+  }
+  run();
+})();
+
+/* ---------------- Puzzle bells ---------------- */
+(function(){
+  var bells = document.querySelectorAll('.bell');
+  var reveal = document.getElementById('reveal');
+
+  function nowSec(){
+    var t = (document.getElementById('clock').textContent||'03:00').split(':');
+    var m = parseInt(t[0],10)||0, s=parseInt(t[1],10)||0;
+    return m*60+s;
+  }
+  function checkWin(){
+    var all = true;
+    bells.forEach(function(b){ if(b.getAttribute('data-hit')!=='1') all=false; });
+    if(all){ reveal.classList.add('show'); }
+  }
+  bells.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var target = parseInt(btn.getAttribute('data-target'),10);
+      var diff = Math.abs(nowSec() - target);
+      if(diff <= 3){ // within ±3s
+        btn.setAttribute('data-hit','1');
+        btn.innerHTML = '✅ ' + btn.textContent.replace('🔔 ','');
+        checkWin();
+      } else {
+        btn.animate([{transform:'translateY(0)'},{transform:'translateY(-2px)'},{transform:'translateY(0)'}], {duration:220});
+      }
+    }, {passive:true});
+  });
+})();
 </script>
 </body>
 </html>
