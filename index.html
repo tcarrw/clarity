@@ -4,13 +4,22 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Clarity · Sigrid Field — clarity.plnt.earth</title>
-<meta name="description" content="Clarity Field — full-width featured player with auto-advance, captions, 128/256 Hz tones, lyric-feel snippets, and bonus live cuts.">
+<meta name="description" content="Clarity Field — featured player with auto-advance, captions, 128/256 Hz tones, lyric snippets, and interviews.">
 <meta name="theme-color" content="#f1fbff" media="(prefers-color-scheme: light)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+
+<!-- Performance: warm up YouTube origins -->
+<link rel="dns-prefetch" href="https://www.youtube.com">
+<link rel="dns-prefetch" href="https://i.ytimg.com">
+<link rel="dns-prefetch" href="https://www.google.com">
+<link rel="preconnect" href="https://www.youtube.com" crossorigin>
+<link rel="preconnect" href="https://i.ytimg.com" crossorigin>
+<link rel="preconnect" href="https://www.google.com" crossorigin>
+
 <style>
   :root{
-    --bg:#f6fbff; --ink:#10222e; --muted:#6b7a86; --card:#ffffff; --ring:#dceaf3;
+    --bg:#f6fbff; --ink:#10222e; --muted:#5d6a75; --card:#ffffff; --ring:#dceaf3;
     --accent:#6de1ff; --accent-2:#b9ffe6; --jelly:#9ad7ff; --shadow:0 10px 30px rgba(6,37,58,.12);
   }
   *{box-sizing:border-box} html,body{height:100%}
@@ -20,6 +29,8 @@
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
   }
   #snow{position:fixed; inset:0; z-index:-1; filter:drop-shadow(0 0 2px rgba(255,255,255,.6))}
+
+  /* Animated ambient glow */
   .shimmer::before{
     content:""; position:fixed; inset:-20vmax; pointer-events:none; z-index:-2;
     background:radial-gradient(120% 120% at 20% 10%, rgba(109,225,255,.12), transparent 50%),
@@ -43,6 +54,7 @@
   .small{font-size:12px;color:var(--muted)}
   .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#e9fbff;border:1px solid var(--ring);color:#0e3948}
 
+  /* Controls */
   .tonebar{
     display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--ring);
     border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)
@@ -55,11 +67,13 @@
   .btn:active{transform:translateY(1px)}
   .btn.primary{background:linear-gradient(180deg,#e9fdff,#d8f7ff); border-color:#bfefff; box-shadow:0 10px 24px rgba(86,205,255,.25), inset 0 0 0 1px #ffffff}
   .btn.glow{animation:pulse 1.4s ease-in-out infinite}
-  @keyframes pulse{0%{box-shadow:0 0 0 rgba(109,225,255,0)}50%{box-shadow:0 0 24px rgba(109,225,255,.6)}100%{box-shadow:0 0 0 rgba(109,225,255,0)}}
+  @keyframes pulse{0%{box-shadow:0 0 0 rgba(109,225,255,0)}50%{box-shadow:0 0 24px rgba(109,225,255,.7)}100%{box-shadow:0 0 0 rgba(109,225,255,0)}}
+
   .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden}
   .switch button{border:0;background:transparent;padding:8px 12px;cursor:pointer}
   .switch button.active{background:#e8fbff;font-weight:700}
   .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#f7feff}
+  .pill .row{display:inline-flex;gap:8px;align-items:center}
 
   /* Featured player */
   .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
@@ -81,37 +95,62 @@
   footer{margin:28px 0 0;color:var(--muted);font-size:13px}
   details{background:var(--card); border:1px solid var(--ring); border-radius:14px; box-shadow:var(--shadow); padding:10px 12px; margin-top:18px}
   summary{cursor:pointer; font-weight:700}
+
+  /* Full-screen primer overlay */
+  #primer{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(120% 120% at 50% 20%, rgba(185,255,230,.35), rgba(109,225,255,.25) 40%, rgba(255,255,255,.92) 70%);
+    backdrop-filter: blur(4px);
+    z-index:999;
+  }
+  #primerBtn{
+    font-size:18px; padding:16px 22px; border-radius:16px;
+    border:2px solid #bfefff; box-shadow:0 10px 30px rgba(86,205,255,.35), inset 0 0 0 1px #ffffff;
+    animation:pop 1.8s ease-in-out infinite, floaty 4s ease-in-out infinite;
+  }
+  #primerBtn .hint{display:block; font-size:12px; color:#0b4a5b; opacity:.8; margin-top:4px}
+  @keyframes pop{0%{transform:scale(1)} 50%{transform:scale(1.04)} 100%{transform:scale(1)}}
+  @keyframes floaty{0%{transform:translateY(0)} 50%{transform:translateY(-4px)} 100%{transform:translateY(0)}}
+
+  /* Hidden bin for prewarmed iframes */
+  #prewarmBin{position:absolute; left:-9999px; top:auto; width:0; height:0; overflow:hidden}
 </style>
 </head>
 <body class="shimmer">
 <canvas id="snow" aria-hidden="true"></canvas>
 
+<!-- Primer overlay (one clear action to enable media) -->
+<div id="primer" role="dialog" aria-modal="true" aria-label="Start session">
+  <button id="primerBtn" class="btn primary glow">
+    ▶ Start Session
+    <span class="hint">Enables audio + preloads and starts the first video</span>
+  </button>
+</div>
+
 <div class="wrap">
   <header>
-    <a class="brand" href="#">
+    <a class="brand" href="#" aria-label="Clarity Field">
       <div class="jelly" aria-hidden="true"></div>
       <div>
         <h1>Clarity Field · <span class="small">Sigrid ↔ You</span></h1>
-        <div class="small">Root in the Air — 128 Hz + 256 Hz · Featured full-width player • Auto-advance</div>
+        <div class="small">Root in the Air — 128 Hz + 256 Hz · Featured player • Auto-advance</div>
       </div>
     </a>
     <span class="tag">jellyfish · bright</span>
   </header>
 
-  <!-- TONES + MASTER -->
-  <section class="tonebar">
-    <button id="enableAudio" class="btn primary glow">Enable Sound</button>
-
+  <!-- TOP BAR -->
+  <section class="tonebar" aria-label="Controls">
     <!-- View tabs -->
-    <div class="switch" role="tablist" aria-label="View">
+    <div class="switch" role="tablist" aria-label="Perspective">
       <button id="tabSigrid" class="active" aria-selected="true">Sigrid</button>
       <button id="tabYou" aria-selected="false">You</button>
     </div>
 
-    <!-- Set toggle -->
+    <!-- Set toggle (Tracks vs Interviews) -->
     <div class="switch" role="tablist" aria-label="Playlist set" style="margin-left:6px">
-      <button id="setOfficial" class="active" aria-selected="true">Set: Official</button>
-      <button id="setLive" aria-selected="false">Set: Live / Interviews</button>
+      <button id="setTracks" class="active" aria-selected="true">Tracks</button>
+      <button id="setInterviews" aria-selected="false">Interviews / Live</button>
     </div>
 
     <!-- Snippets toggle -->
@@ -120,34 +159,48 @@
       <button id="snipOff" aria-selected="false">Hide Snippets</button>
     </div>
 
-    <!-- NEW: Auto-advance & CC -->
+    <!-- Auto-advance & CC -->
     <div class="switch" role="tablist" aria-label="Playback" style="margin-left:6px">
       <button id="autoOn" class="active" aria-selected="true">Auto-Advance</button>
       <button id="autoOff" aria-selected="false">Manual</button>
     </div>
 
     <span class="pill">Captions:
-      <select id="ccLang">
+      <select id="ccLang" aria-label="Caption language">
         <option value="en">English</option>
         <option value="no">Norwegian</option>
       </select>
       <button id="ccToggle" class="btn" style="padding:6px 10px">CC On</button>
     </span>
 
-    <span class="pill">Status: <span id="statusTone" class="pill" style="background:#fff8e1;border-color:#ffecb5;color:#664d03">silent</span></span>
+    <!-- Tones -->
+    <span class="pill">
+      <span class="row">
+        <strong>Tones</strong>
+        <label><input type="checkbox" id="tone128" checked> 128 Hz</label>
+        <label><input type="checkbox" id="tone256" checked> 256 Hz</label>
+        <label>Level <input id="toneLevel" type="range" min="0" max="100" value="65" style="vertical-align:middle"></label>
+        <button id="toneToggle" class="btn" style="padding:6px 10px">On</button>
+      </span>
+    </span>
+
+    <span class="pill">Status: <span id="statusTone" class="pill" style="background:#fff8e1;border-color:#ffecb5;color:#664d03">waiting</span></span>
 
     <div class="small" style="width:100%;margin-top:6px">
-      Tip: breathe 4–6 cycles with 128 Hz (root), then blend 256 Hz (air). PiP may help background play; OS rules apply.
+      Tip: click “Start Session” once. Then breathe 4–6 cycles with 128 Hz (root), blend 256 Hz (air). PiP may help; OS rules apply.
     </div>
   </section>
 
   <section class="notice">
-    <strong>How it works:</strong> Tap a slot to load it into the **Featured Player**. With **Auto-Advance**, the next slot plays when one ends. **CC** requests YouTube captions (when available). Quality is requested at 1080p.
+    <strong>How it works:</strong> Tap a slot to load it into the **Featured Player**. With **Auto‑Advance**, the next slot plays when one ends.
+    **CC** requests YouTube captions (when available). Quality is requested at 1080p. The app preloads thumbnails and cues videos for snappy starts.
   </section>
 
   <!-- FEATURED PLAYER -->
   <section class="featured" aria-live="polite">
-    <div id="fpBox" class="fp-box"><div id="fp"></div></div>
+    <div class="fp-box">
+      <div id="fp"></div>
+    </div>
     <div class="fp-meta">
       <div>
         <div id="fpTitle" class="fp-title">—</div>
@@ -182,25 +235,22 @@
   </footer>
 </div>
 
-<!-- Hidden channel (for Sigrid):
-If you find this, search TikTok for:  Clarity Jellyfish Cipher — “root in the air”
-The profile with aqua-mint jelly + 128·256 tone is him.
-Morse hint:  -.-. .-.. .- .-. .. - -.--   .--- . .-.. .-.. -.-- ..-. .. ... ....   -.-. .. .--. .... . .-.
--->
+<!-- Off-screen bin for prewarmed iframes -->
+<div id="prewarmBin" aria-hidden="true"></div>
 
 <script>
 /* ---------- Core state ---------- */
-const STATE_KEY = 'clarity.playlists.v4';
+const STATE_KEY = 'clarity.playlists.v5';
 const state = {
-  tab:'sigrid', set:'official', showSnippets:true, autoAdvance:true,
+  tab:'sigrid', set:'tracks', showSnippets:true, autoAdvance:true,
   ccOn:true, ccLang:'en',
   sigrid:[], you:[],
-  players:{}, bonusPlayers:{},
-  fp:null, fpIndex:0, ctx:null, nodes:{}
+  players:{}, bonusPlayers:{}, warmPlayers:{},
+  fp:null, fpIndex:0, ctx:null, nodes:{}, tonesOn:true
 };
 
 /* ---------- Presets ---------- */
-const PREFILL_OFFICIAL = [
+const PREFILL_TRACKS = [
   {id:'cIriwVhRPVA', title:'Strangers (Official)'},
   {id:'w5x93pXSmRM', title:'Don’t Feel Like Crying (Official)'},
   {id:'1uHt2LrCSWg', title:'Sucker Punch (Official)'},
@@ -212,7 +262,7 @@ const PREFILL_OFFICIAL = [
   {id:'hKvbaZTAQN0', title:'Dynamite (Acoustic — Official)'},
   {id:'bNuCNZK-r5A', title:'Plot Twist (Official)'}
 ];
-const PREFILL_LIVE = [
+const PREFILL_INTERVIEWS = [
   {id:'oEC6zOhHydI', title:'Strangers — Glasto 2019 (Live)'},
   {id:'wk1NDhE_A1o', title:'Dynamite — Øya 2023 (Live)'},
   {id:'cn7kW-6ZNYQ', title:'Sucker Punch — Øya 2019 (Live)'},
@@ -258,32 +308,41 @@ const SNIPPETS = {
 /* ---------- Load/Save ---------- */
 function save(){ localStorage.setItem(STATE_KEY, JSON.stringify({
   tab:state.tab,set:state.set,showSnippets:state.showSnippets,autoAdvance:state.autoAdvance,
-  ccOn:state.ccOn,ccLang:state.ccLang,sigrid:state.sigrid,you:state.you,fpIndex:state.fpIndex
+  ccOn:state.ccOn,ccLang:state.ccLang,sigrid:state.sigrid,you:state.you,fpIndex:state.fpIndex, tonesOn:state.tonesOn
 })); }
 function load(){
   try{
     const raw = localStorage.getItem(STATE_KEY);
     if(!raw){
-      state.sigrid = PREFILL_OFFICIAL.slice();
-      state.you = PREFILL_OFFICIAL.slice();
+      state.sigrid = PREFILL_TRACKS.slice();
+      state.you = PREFILL_TRACKS.slice();
       return;
     }
     const s = JSON.parse(raw);
     Object.assign(state, {
-      tab:s.tab||'sigrid', set:s.set||'official',
+      tab: s.tab || 'sigrid',
+      set: s.set || 'tracks',
       showSnippets: typeof s.showSnippets==='boolean'? s.showSnippets : true,
       autoAdvance: typeof s.autoAdvance==='boolean'? s.autoAdvance : true,
       ccOn: typeof s.ccOn==='boolean'? s.ccOn : true,
       ccLang: s.ccLang || 'en',
-      sigrid:Array.isArray(s.sigrid)? s.sigrid : PREFILL_OFFICIAL.slice(),
-      you:Array.isArray(s.you)? s.you : PREFILL_OFFICIAL.slice(),
+      tonesOn: typeof s.tonesOn==='boolean'? s.tonesOn : true,
+      sigrid: Array.isArray(s.sigrid)? s.sigrid : PREFILL_TRACKS.slice(),
+      you: Array.isArray(s.you)? s.you : PREFILL_TRACKS.slice(),
       fpIndex: Number.isInteger(s.fpIndex)? s.fpIndex : 0
     });
   }catch{
-    state.sigrid = PREFILL_OFFICIAL.slice(); state.you = PREFILL_OFFICIAL.slice();
+    state.sigrid = PREFILL_TRACKS.slice(); state.you = PREFILL_TRACKS.slice();
   }
 }
 load();
+
+/* ---------- DOM ---------- */
+const grid = document.getElementById('grid');
+const bonusGrid = document.getElementById('bonusGrid');
+const fpTitle = document.getElementById('fpTitle');
+const fpCaption = document.getElementById('fpCaption');
+const prewarmBin = document.getElementById('prewarmBin');
 
 /* ---------- YouTube API ---------- */
 let YT_READY=false;
@@ -293,32 +352,38 @@ function injectYT(){
   tag.id='yt-iframe-api'; tag.src='https://www.youtube.com/iframe_api';
   document.body.appendChild(tag);
 }
-window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); };
+window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); prewarmAll(); };
 
-/* ---------- UI Build ---------- */
-const grid = document.getElementById('grid');
-const bonusGrid = document.getElementById('bonusGrid');
-const fpBox = document.getElementById('fp');
-const fpTitle = document.getElementById('fpTitle');
-const fpCaption = document.getElementById('fpCaption');
+/* ---------- Helpers ---------- */
+function currentList(){ return state.set==='tracks' ? PREFILL_TRACKS : PREFILL_INTERVIEWS; }
+function setListToState(){ // mirror list into per-tab storage (kept for forward-compat)
+  const list=currentList();
+  if(state.tab==='sigrid') state.sigrid=list.slice();
+  else state.you=list.slice();
+}
+function preloadThumbs(list){
+  // Preload thumbnails for snappier grid
+  (list||currentList()).forEach(v=>{
+    const link=document.createElement('link');
+    link.rel='preload'; link.as='image';
+    link.href=`https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`;
+    document.head.appendChild(link);
+  });
+}
 
-function currentList(){ return state[state.tab]||[]; }
-function setCurrentList(arr){ state[state.tab]=arr; }
-
+/* ---------- Build UI ---------- */
 function buildUI(){
-  buildFeatured();
-  buildSlots();
-  buildBonus();
-  reflectButtons();
+  buildFeatured(); buildSlots(); buildBonus(); reflectButtons();
 }
 
 /* Featured Player */
 function buildFeatured(){
   if(!YT_READY) return;
-  const list = currentList();
-  const item = list[state.fpIndex] || list[0];
+  const list=currentList();
+  const item=list[state.fpIndex] || list[0];
   fpTitle.textContent = item? (item.title||'') : '—';
   fpCaption.textContent = (item && SNIPPETS[item.id])? SNIPPETS[item.id] : '—';
+
   if(state.fp){ try{ state.fp.destroy(); }catch{} }
   state.fp = new YT.Player('fp', {
     height:'100%', width:'100%', videoId: item? item.id : '',
@@ -330,12 +395,10 @@ function buildFeatured(){
       onReady: (e)=>{ try{ e.target.setPlaybackQuality('hd1080'); }catch{} setMediaSession(item); },
       onStateChange: (e)=>{
         if(e.data === YT.PlayerState.PLAYING){
-          stopAllSlots(); stopAllBonus();
+          pauseAllBonus();
           try{ e.target.setPlaybackQuality('hd1080'); }catch{}
         }
-        if(e.data === YT.PlayerState.ENDED && state.autoAdvance){
-          nextTrack();
-        }
+        if(e.data === YT.PlayerState.ENDED && state.autoAdvance){ nextTrack(); }
       }
     }
   });
@@ -345,13 +408,14 @@ function buildFeatured(){
 function buildSlots(){
   grid.innerHTML='';
   const list=currentList();
+  preloadThumbs(list);
   for(let i=0;i<Math.max(10,list.length);i++){
     const it = list[i];
     const slot = document.createElement('article'); slot.className='slot';
     const thumb = document.createElement('div'); thumb.className='thumb';
     thumb.style.background = it ? `#eef7ff url(https://i.ytimg.com/vi/${it.id}/hqdefault.jpg) center/cover no-repeat` : '#f7feff';
     thumb.setAttribute('role','button'); thumb.setAttribute('aria-label','Load in featured player');
-    thumb.onclick = ()=> { state.fpIndex = i; save(); buildFeatured(); };
+    thumb.onclick = ()=> { state.fpIndex = i; save(); buildFeatured(); requestPlayReady(); };
     const title = document.createElement('div'); title.className='title'; title.textContent = it? (it.title||'Slot '+(i+1)) : 'empty';
     const snip = document.createElement('div'); snip.className='snip'; snip.textContent = (it && state.showSnippets && SNIPPETS[it.id])? SNIPPETS[it.id] : (state.showSnippets? '—' : '');
     slot.append(thumb, title, snip);
@@ -381,6 +445,34 @@ function buildBonus(){
     }
   }
 }
+function pauseAllBonus(){
+  for(const k of Object.keys(state.bonusPlayers)){
+    try{ state.bonusPlayers[k].pauseVideo(); }catch{}
+  }
+}
+
+/* Prewarm all videos: create off-screen players and cue them so metadata is ready */
+function prewarmAll(){
+  if(!YT_READY) return;
+  const list=currentList();
+  // Clear previous
+  prewarmBin.innerHTML='';
+  state.warmPlayers={};
+  list.forEach((item, idx)=>{
+    const div = document.createElement('div');
+    const id = `warm_${idx}`;
+    div.id = id;
+    prewarmBin.appendChild(div);
+    state.warmPlayers[id] = new YT.Player(id, {
+      height:'0', width:'0', videoId:item.id,
+      playerVars:{autoplay:0,controls:0,rel:0,playsinline:1,iv_load_policy:3, mute:1},
+      events:{
+        onReady:(e)=>{ try{ e.target.cueVideoById(item.id); }catch{} },
+        onError:()=>{}
+      }
+    });
+  });
+}
 
 /* Playback helpers */
 function nextTrack(){
@@ -388,37 +480,31 @@ function nextTrack(){
   let idx = state.fpIndex + 1;
   if(idx >= Math.max(10,list.length)) idx = 0;
   state.fpIndex = idx; save(); buildFeatured();
-  setTimeout(()=>{ try{ state.fp.playVideo(); }catch{} }, 200);
+  setTimeout(()=> requestPlayReady(), 120);
 }
 function prevTrack(){
   const list=currentList();
   let idx = state.fpIndex - 1;
   if(idx < 0) idx = Math.max(10,list.length) - 1;
   state.fpIndex = idx; save(); buildFeatured();
-  setTimeout(()=>{ try{ state.fp.playVideo(); }catch{} }, 200);
+  setTimeout(()=> requestPlayReady(), 120);
 }
-function stopAllSlots(){ /* only featured plays now */ }
-function stopAllBonus(){
-  for(const k of Object.keys(state.bonusPlayers)){
-    try{ state.bonusPlayers[k].pauseVideo(); }catch{}
-  }
-}
+function requestPlayReady(){ try{ state.fp.playVideo(); }catch{} }
 
 /* Buttons */
-document.getElementById('fpPlay').onclick = ()=>{ try{ state.fp.playVideo(); }catch{} };
+document.getElementById('fpPlay').onclick = ()=> requestPlayReady();
 document.getElementById('fpPause').onclick = ()=>{ try{ state.fp.pauseVideo(); }catch{} };
 document.getElementById('fpNext').onclick = ()=> nextTrack();
 document.getElementById('fpPrev').onclick = ()=> prevTrack();
 document.getElementById('fpPiP').onclick = async ()=>{
-  // Best-effort: request PiP if browser bridges YT iframe to PiP (varies by platform)
   const el = document.querySelector('video'); if(el && el.requestPictureInPicture){ try{ await el.requestPictureInPicture(); }catch{} }
 };
 
-/* Set/Tab/Snippets/Auto buttons */
+/* Set/Tab/Snippets/Auto/CC buttons */
 const tabS = document.getElementById('tabSigrid');
 const tabY = document.getElementById('tabYou');
-const setOfficialBtn = document.getElementById('setOfficial');
-const setLiveBtn = document.getElementById('setLive');
+const setTracksBtn = document.getElementById('setTracks');
+const setInterBtn = document.getElementById('setInterviews');
 const snOn = document.getElementById('snipOn');
 const snOff = document.getElementById('snipOff');
 const autoOn = document.getElementById('autoOn');
@@ -429,8 +515,8 @@ const ccLang = document.getElementById('ccLang');
 function reflectButtons(){
   tabS.classList.toggle('active', state.tab==='sigrid'); tabS.setAttribute('aria-selected', state.tab==='sigrid');
   tabY.classList.toggle('active', state.tab==='you'); tabY.setAttribute('aria-selected', state.tab==='you');
-  setOfficialBtn.classList.toggle('active', state.set==='official'); setOfficialBtn.setAttribute('aria-selected', state.set==='official');
-  setLiveBtn.classList.toggle('active', state.set==='live'); setLiveBtn.setAttribute('aria-selected', state.set==='live');
+  setTracksBtn.classList.toggle('active', state.set==='tracks'); setTracksBtn.setAttribute('aria-selected', state.set==='tracks');
+  setInterBtn.classList.toggle('active', state.set==='interviews'); setInterBtn.setAttribute('aria-selected', state.set==='interviews');
   snOn.classList.toggle('active', state.showSnippets); snOn.setAttribute('aria-selected', state.showSnippets);
   snOff.classList.toggle('active', !state.showSnippets); snOff.setAttribute('aria-selected', !state.showSnippets);
   autoOn.classList.toggle('active', state.autoAdvance); autoOn.setAttribute('aria-selected', state.autoAdvance);
@@ -438,80 +524,83 @@ function reflectButtons(){
   ccLang.value = state.ccLang;
   ccToggle.textContent = state.ccOn ? 'CC On' : 'CC Off';
 }
-tabS.onclick = ()=>{ state.tab='sigrid'; save(); buildUI(); };
-tabY.onclick = ()=>{ state.tab='you'; save(); buildUI(); };
-setOfficialBtn.onclick = ()=>{ state.set='official'; state.sigrid=PREFILL_OFFICIAL.slice(); state.you=PREFILL_OFFICIAL.slice(); state.fpIndex=0; save(); buildUI(); };
-setLiveBtn.onclick = ()=>{ state.set='live'; state.sigrid=PREFILL_LIVE.slice(); state.you=PREFILL_LIVE.slice(); state.fpIndex=0; save(); buildUI(); };
-snOn.onclick = ()=>{ state.showSnippets=true; save(); buildUI(); };
-snOff.onclick = ()=>{ state.showSnippets=false; save(); buildUI(); };
+tabS.onclick = ()=>{ state.tab='sigrid'; setListToState(); save(); buildUI(); prewarmAll(); };
+tabY.onclick = ()=>{ state.tab='you'; setListToState(); save(); buildUI(); prewarmAll(); };
+setTracksBtn.onclick = ()=>{ state.set='tracks'; state.fpIndex=0; save(); buildUI(); prewarmAll(); };
+setInterBtn.onclick = ()=>{ state.set='interviews'; state.fpIndex=0; save(); buildUI(); prewarmAll(); };
+snOn.onclick = ()=>{ state.showSnippets=true; save(); buildSlots(); };
+snOff.onclick = ()=>{ state.showSnippets=false; save(); buildSlots(); };
 autoOn.onclick = ()=>{ state.autoAdvance=true; save(); reflectButtons(); };
 autoOff.onclick = ()=>{ state.autoAdvance=false; save(); reflectButtons(); };
 ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; save(); buildFeatured(); reflectButtons(); };
 ccLang.onchange = ()=>{ state.ccLang=ccLang.value; save(); buildFeatured(); };
 
-/* Add/Import/Export (optional – kept from earlier versions) */
-document.getElementById('exportList').addEventListener('click', ()=>{
-  const data = JSON.stringify({set:state.set,showSnippets:state.showSnippets,autoAdvance:state.autoAdvance,ccOn:state.ccOn,ccLang:state.ccLang,sigrid:state.sigrid,you:state.you,fpIndex:state.fpIndex}, null, 2);
-  const blob = new Blob([data], {type:'application/json'}); const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'clarity-playlists.json'; a.click();
-  setTimeout(()=> URL.revokeObjectURL(a.href), 3000);
-});
-document.getElementById('importList').addEventListener('click', async ()=>{
-  const input = document.createElement('input'); input.type='file'; input.accept='application/json';
-  input.onchange = async ()=>{
-    const f = input.files?.[0]; if(!f) return; const text = await f.text();
-    try{
-      const obj = JSON.parse(text);
-      ['set','showSnippets','autoAdvance','ccOn','ccLang','sigrid','you','fpIndex'].forEach(k=>{ if(obj[k]!==undefined) state[k]=obj[k]; });
-      save(); buildUI();
-    }catch{ alert('Could not parse JSON.'); }
-  };
-  input.click();
-});
-document.getElementById('addVideo').addEventListener('click', ()=> addVideoPrompt(state.tab, currentList().length));
-document.getElementById('playAll').addEventListener('click', ()=>{ try{ state.fp.playVideo(); }catch{} });
-document.getElementById('stopAll').addEventListener('click', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
-
-/* Add/Remove one slot */
-function addVideoPrompt(tab, index){
-  const raw = prompt('Paste YouTube link or 11-char ID:'); if(!raw) return;
-  const id = parseYouTubeId(raw.trim()); if(!id){ alert('Could not detect a YouTube ID.'); return; }
-  const title = prompt('Optional: title/label:') || '';
-  const list = state[tab]; for(let i=list.length;i<index;i++) list[i]=null;
-  list[index] = {id, title}; save(); if(tab===state.tab) buildSlots();
-}
-function parseYouTubeId(url){
-  try{
-    if(/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
-    const u = new URL(url);
-    if(u.hostname.includes('youtu.be')) return u.pathname.split('/')[1];
-    if(u.searchParams.get('v')) return u.searchParams.get('v');
-    const parts=u.pathname.split('/'); if(parts[1]==='shorts'||parts[1]==='embed') return parts[2];
-    return null;
-  }catch{return null;}
-}
-
-/* Audio (128 & 256 Hz) */
+/* ---------- Primer & tones ---------- */
+const primer = document.getElementById('primer');
+const primerBtn = document.getElementById('primerBtn');
 const statusTone = document.getElementById('statusTone');
-function setToneBadge(on){
-  statusTone.textContent = on ? 'tones on' : 'silent';
-  statusTone.style.background = on ? '#e7fff0' : '#fff8e1';
-  statusTone.style.borderColor = on ? '#c8f5da' : '#ffecb5';
-  statusTone.style.color = on ? '#0b5130' : '#664d03';
+const toneToggle = document.getElementById('toneToggle');
+const tone128 = document.getElementById('tone128');
+const tone256 = document.getElementById('tone256');
+const toneLevel = document.getElementById('toneLevel');
+
+function setToneBadge(txt, mode){
+  statusTone.textContent = txt;
+  const maps = {
+    on:  ['#e7fff0','#c8f5da','#0b5130'],
+    off: ['#fff8e1','#ffecb5','#664d03'],
+    wait:['#eef6ff','#d8eafe','#0b3b61']
+  };
+  const [bg, bd, fg] = maps[mode] || maps.on;
+  statusTone.style.background = bg; statusTone.style.borderColor = bd; statusTone.style.color = fg;
 }
-document.getElementById('enableAudio').addEventListener('click', async ()=>{
-  if(state.ctx) { try{ await state.ctx.resume(); }catch{} setToneBadge(true); return; }
+setToneBadge('waiting','wait');
+
+function initTonesIfNeeded(){
+  if(state.ctx) return;
   const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const main=ctx.createGain(); main.gain.value=0.9; main.connect(ctx.destination);
+  const main=ctx.createGain(); main.gain.value=Number(toneLevel.value)/100; main.connect(ctx.destination);
+
   const osc128=ctx.createOscillator(); osc128.type='sine'; osc128.frequency.value=128;
-  const g128=ctx.createGain(); g128.gain.value=0.18; osc128.connect(g128).connect(main); osc128.start();
+  const g128=ctx.createGain(); g128.gain.value = tone128.checked ? 0.18 : 0; osc128.connect(g128).connect(main); osc128.start();
+
   const osc256=ctx.createOscillator(); osc256.type='sine'; osc256.frequency.value=256;
-  const g256=ctx.createGain(); g256.gain.value=0.12; osc256.connect(g256).connect(main); osc256.start();
+  const g256=ctx.createGain(); g256.gain.value = tone256.checked ? 0.12 : 0; osc256.connect(g256).connect(main); osc256.start();
+
   const lfo=ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.12;
   const lfoGain=ctx.createGain(); lfoGain.gain.value=0.6; lfo.connect(lfoGain); lfoGain.connect(osc256.detune); lfo.start();
-  state.ctx=ctx; state.nodes={main,osc128,g128,osc256,g256,lfo,lfoGain}; setToneBadge(true);
-  document.getElementById('enableAudio').classList.remove('glow'); document.getElementById('enableAudio').textContent='Sound Enabled';
-});
+
+  state.ctx=ctx; state.nodes={main,osc128,g128,osc256,g256,lfo,lfoGain};
+}
+function updateToneRouting(){
+  if(!state.ctx) return;
+  state.nodes.g128.gain.value = (state.tonesOn && tone128.checked) ? 0.18 : 0;
+  state.nodes.g256.gain.value = (state.tonesOn && tone256.checked) ? 0.12 : 0;
+  state.nodes.main.gain.value = (state.tonesOn ? Number(toneLevel.value)/100 : 0);
+  setToneBadge(state.tonesOn ? 'tones on' : 'silent', state.tonesOn ? 'on' : 'off');
+}
+toneToggle.onclick = async ()=>{
+  if(!state.ctx){ initTonesIfNeeded(); try{ await state.ctx.resume(); }catch{} }
+  state.tonesOn = !state.tonesOn; save(); updateToneRouting();
+  toneToggle.textContent = state.tonesOn ? 'On' : 'Off';
+};
+tone128.onchange = updateToneRouting;
+tone256.onchange = updateToneRouting;
+toneLevel.oninput = updateToneRouting;
+
+primerBtn.onclick = async ()=>{
+  // One user gesture to: resume audio, start first video, and prewarm iframes
+  initTonesIfNeeded();
+  try{ await state.ctx.resume(); }catch{}
+  setToneBadge('tones on','on');
+
+  // Ensure featured is built, then play
+  if(!state.fp) buildFeatured();
+  requestPlayReady();
+
+  // Hide the overlay
+  primer.style.display='none';
+};
 
 /* Media Session: better lock-screen controls (when supported) */
 function setMediaSession(item){
@@ -520,22 +609,33 @@ function setMediaSession(item){
     navigator.mediaSession.metadata = new MediaMetadata({
       title: item.title||'Clarity',
       artist: 'Sigrid ↔ You',
-      album: state.set==='official'?'Official':'Live/Interviews',
+      album: state.set==='tracks'?'Tracks':'Interviews',
       artwork: [{src:`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`,sizes:'480x360',type:'image/jpeg'}]
     });
     navigator.mediaSession.setActionHandler('previoustrack', prevTrack);
     navigator.mediaSession.setActionHandler('nexttrack', nextTrack);
-    navigator.mediaSession.setActionHandler('play', ()=>{ try{ state.fp.playVideo(); }catch{} });
+    navigator.mediaSession.setActionHandler('play', ()=> requestPlayReady());
     navigator.mediaSession.setActionHandler('pause', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
   }catch{}
 }
+
+/* Keyboard shortcuts */
+window.addEventListener('keydown',(e)=>{
+  if(e.target && (/input|textarea|select/i).test(e.target.tagName)) return;
+  if(e.code==='Space'){ e.preventDefault(); try{
+    const s = state.fp.getPlayerState();
+    if(s===YT.PlayerState.PLAYING) state.fp.pauseVideo(); else state.fp.playVideo();
+  }catch{} }
+  if(e.code==='ArrowRight') nextTrack();
+  if(e.code==='ArrowLeft') prevTrack();
+});
 
 /* Parallax snow */
 (function snow(){
   const c=document.getElementById('snow'); const dpr=Math.max(1,window.devicePixelRatio||1);
   const x=c.getContext('2d'); let flakes=[], mouseY=0, scrollY=0;
   function size(){ c.width=innerWidth*dpr; c.height=innerHeight*dpr; x.setTransform(dpr,0,0,dpr,0,0); }
-  function seed(N=140){ flakes=new Array(N).fill(0).map(()=>({x:Math.random()*innerWidth,y:-10-Math.random()*innerHeight,r:1+Math.random()*2.5,s:.4+Math.random()*1.2,o:.4+Math.random()*.6,l:.2+Math.random()*.8})); }
+  function seed(N=120){ flakes=new Array(N).fill(0).map(()=>({x:Math.random()*innerWidth,y:-10-Math.random()*innerHeight,r:1+Math.random()*2.5,s:.4+Math.random()*1.2,o:.4+Math.random()*.6,l:.2+Math.random()*.8})); }
   function draw(){
     x.clearRect(0,0,innerWidth,innerHeight);
     const par=(scrollY*0.15+(mouseY-innerHeight/2)*0.02);
@@ -550,24 +650,12 @@ function setMediaSession(item){
 })();
 
 /* Boot */
+setListToState();
 injectYT();
-document.getElementById('setOfficial').classList.toggle('active', state.set==='official');
-document.getElementById('setOfficial').setAttribute('aria-selected', state.set==='official');
-document.getElementById('setLive').classList.toggle('active', state.set==='live');
-document.getElementById('setLive').setAttribute('aria-selected', state.set==='live');
-document.getElementById('snipOn').classList.toggle('active', state.showSnippets);
-document.getElementById('snipOn').setAttribute('aria-selected', state.showSnippets);
-document.getElementById('snipOff').classList.toggle('active', !state.showSnippets);
-document.getElementById('snipOff').setAttribute('aria-selected', !state.showSnippets);
-document.getElementById('autoOn').classList.toggle('active', state.autoAdvance);
-document.getElementById('autoOn').setAttribute('aria-selected', state.autoAdvance);
-document.getElementById('autoOff').classList.toggle('active', !state.autoAdvance);
-document.getElementById('autoOff').setAttribute('aria-selected', !state.autoAdvance);
-document.getElementById('ccLang').value = state.ccLang;
-document.getElementById('ccToggle').textContent = state.ccOn ? 'CC On' : 'CC Off';
+buildSlots(); // draw UI skeleton even before YT is ready
+buildBonus();
+preloadThumbs();
 
-/* Quick instruction line, keep for iOS quirks */
-document.querySelector('.notice .mono')?.remove();
 </script>
 </body>
 </html>
