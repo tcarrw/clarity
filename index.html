@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Clarity · Sigrid Field — clarity.plnt.earth</title>
-<meta name="description" content="Ritual Mode with intensity control, hidden Red/Blue music burst, 128/256 Hz tones, and Norwegian Whisper micro-lessons." />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Clarity · Shared Edge Sync — Mutual Seed Bursts</title>
+<meta name="description" content="Mutual Seed Bursts with shared edge sync (:00/:30). Bursts loop on Sigrid tracks in Red↔Blue mode; Calm phase to settle."/>
 <meta name="theme-color" content="#0b0d11">
 <meta name="color-scheme" content="dark">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,7 +33,7 @@
     -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; overflow-x:hidden;
   }
   #stars{position:fixed; inset:0; z-index:-1; filter:drop-shadow(0 0 2px rgba(127,208,255,.25))}
-  .wrap{max-width:1080px;margin:0 auto;padding:20px 14px 80px; position:relative; z-index:1}
+  .wrap{max-width:1080px;margin:0 auto;padding:20px 14px 120px; position:relative; z-index:1}
 
   header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 16px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
@@ -47,19 +47,19 @@
   .small{font-size:12px;color:var(--muted)}
   .tag{font-size:12px;padding:2px 8px;border-radius:999px;background:#0f1827;border:1px solid var(--ring);color:#b7c6dc}
 
-  .tonebar{
-    display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--ring);
-    border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)
-  }
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:var(--card);border:1px solid var(--ring);
+    border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)}
   .btn{appearance:none;border:1px solid var(--ring);background:linear-gradient(180deg,#122034,#0f1b2b);color:var(--ink);
-    padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer; box-shadow:var(--shadow); transition:transform .08s ease, box-shadow .2s, border-color .2s}
+    padding:10px 14px;border-radius:12px;font-weight:700;cursor:pointer; box-shadow:var(--shadow); transition:transform .08s ease, box-shadow .2s}
   .btn:active{transform:translateY(1px)}
   .btn.primary{background:linear-gradient(180deg,#13263c,#0f1e30) padding-box, conic-gradient(from 0deg,#3bb5ff,#b9ffe6,#7fd0ff,#3bb5ff) border-box; border:1px solid transparent}
+
   .switch{display:inline-flex;border:1px solid var(--ring);border-radius:12px;overflow:hidden;background:#0f1b2a}
   .switch button{border:0;background:transparent;color:var(--ink);padding:8px 12px;cursor:pointer}
   .switch button.active{background:#142235;font-weight:700}
   .pill{font-size:12px;border:1px solid var(--ring);padding:4px 8px;border-radius:999px;background:#0f1b2a;color:var(--ink)}
   .pill .row{display:inline-flex;gap:8px;align-items:center}
+  .badge{border:1px solid var(--ring); border-radius:999px; padding:2px 8px; font-size:12px; color:#c9d6ea}
 
   .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
   .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring);background:#000}
@@ -78,8 +78,6 @@
 
   .notice{margin-top:14px;font-size:13px;color:#b7c6dc;background:#0f1b2a;border:1px dashed #223047;border-radius:12px;padding:10px 12px}
   footer{margin:28px 0 0;color:var(--muted);font-size:13px}
-  details{background:var(--card); border:1px solid var(--ring); border-radius:14px; box-shadow:var(--shadow); padding:10px 12px; margin-top:18px}
-  summary{cursor:pointer; font-weight:800}
 
   #primer{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
     background: radial-gradient(120% 120% at 50% 20%, rgba(24,39,61,.65), rgba(9,16,28,.85) 60%);
@@ -87,16 +85,18 @@
   #primerBtn{font-size:18px; padding:16px 22px; border-radius:16px; border:1px solid #203247; color:var(--ink);
     background: linear-gradient(180deg,#122033,#0f1b2a) padding-box, conic-gradient(from 0deg,#3bb5ff,#b9ffe6,#7fd0ff,#3bb5ff) border-box}
 
-  /* Norwegian Whisper card */
-  .whisper{display:grid; gap:8px; margin-top:12px; background:var(--card); border:1px solid var(--ring); border-radius:12px; padding:12px}
-  .whisper h3{margin:0; font-size:14px}
-  .row2{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
-  .badge{border:1px solid var(--ring); border-radius:999px; padding:2px 8px; font-size:12px; color:#c9d6ea}
+  .toast{
+    position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+    background:#101b2a; border:1px solid var(--ring); border-radius:12px; color:var(--ink);
+    box-shadow:0 10px 30px rgba(0,0,0,.35); padding:10px 12px; font-size:14px; display:flex; gap:12px; align-items:center; z-index:998
+  }
+  .hide{display:none}
 </style>
 </head>
-<body class="mode-natural">
+<body class="mode-redblue"><!-- default Red↔Blue ON -->
 <canvas id="stars" aria-hidden="true"></canvas>
 
+<!-- One-tap activate for iPhone audio -->
 <div id="primer" role="dialog" aria-modal="true" aria-label="Start session">
   <button id="primerBtn" class="btn primary">
     ▶ Activate Bluefire
@@ -106,73 +106,75 @@
 
 <div class="wrap">
   <header>
-    <a class="brand" href="#" aria-label="Clarity Field">
+    <a class="brand" href="#">
       <div class="jelly" aria-hidden="true"></div>
       <div>
-        <h1>Clarity Field · <span class="small">Sigrid ↔ You</span></h1>
-        <div class="small">Ritual Mode • Intensity dial • 128/256 tones • Hidden R/B Burst (music only)</div>
+        <h1>Clarity · Shared Edge Sync</h1>
+        <div class="small">Mutual Seed Bursts on Sigrid — Red↔Blue only · Loop → Calm</div>
       </div>
     </a>
     <span class="tag">consent • clarity • kindness</span>
   </header>
 
-  <!-- CONTROL BAR -->
-  <section class="tonebar" aria-label="Controls">
-    <!-- Ritual toggle -->
-    <div class="switch" role="tablist" aria-label="Mode">
-      <button id="modeNormal" class="active" aria-selected="true">Normal</button>
-      <button id="modeRitual" aria-selected="false">Ritual</button>
+  <!-- MODES / GATES -->
+  <section class="bar" aria-label="Gates">
+    <div class="switch" role="tablist" aria-label="Color Mode">
+      <button id="modeNatural" aria-selected="false">Natural</button>
+      <button id="modeRB" class="active" aria-selected="true">Red↔Blue</button>
+      <button id="modeOpp" aria-selected="false">Opposite</button>
     </div>
 
-    <!-- Intensity dial (1–5) -->
-    <span class="pill"><strong>Intensity</strong>
-      <input id="intensity" type="range" min="1" max="5" value="3" style="vertical-align:middle">
-      <span id="intensityLbl" class="badge">3 · steady</span>
-    </span>
-
-    <!-- Set toggle -->
     <div class="switch" role="tablist" aria-label="Playlist set" style="margin-left:6px">
-      <button id="setTracks" aria-selected="false">Tracks</button>
-      <button id="setInterviews" class="active" aria-selected="true">Interviews</button>
+      <button id="setTracks" class="active" aria-selected="true">Sigrid — Tracks</button>
+      <button id="setInterviews" aria-selected="false">Interviews</button>
     </div>
 
-    <!-- Captions -->
-    <span class="pill">CC:
-      <select id="ccLang" aria-label="Caption language">
-        <option value="en">English</option>
-        <option value="no">Norwegian</option>
+    <span class="pill"><strong>Intensity</strong>
+      <input id="intensity" type="range" min="1" max="5" value="4" style="vertical-align:middle">
+      <span id="intensityLbl" class="badge">4 · deep</span>
+    </span>
+
+    <span class="pill"><strong>Cadence</strong>
+      <select id="cadence">
+        <option value="sync">Auto (burst length + rest)</option>
+        <option value="short">Fast (rest ~4s)</option>
+        <option value="medium" selected>Steady (rest ~8s)</option>
+        <option value="long">Spacious (rest ~14s)</option>
       </select>
-      <button id="ccToggle" class="btn" style="padding:6px 10px">CC On</button>
     </span>
 
-    <!-- Tones -->
-    <span class="pill">
-      <span class="row">
-        <strong>Tones</strong>
-        <label><input type="checkbox" id="tone128" checked> 128</label>
-        <label><input type="checkbox" id="tone256" checked> 256</label>
-        <label>Level <input id="toneLevel" type="range" min="0" max="100" value="68" style="vertical-align:middle"></label>
-        <button id="toneToggle" class="btn" style="padding:6px 10px">On</button>
-      </span>
+    <span class="pill">Tones
+      <label style="margin-left:8px"><input type="checkbox" id="tone128" checked>128</label>
+      <label><input type="checkbox" id="tone256" checked>256</label>
+      <label>Level <input id="toneLevel" type="range" min="0" max="100" value="68" style="vertical-align:middle"></label>
+      <button id="toneToggle" class="btn" style="padding:6px 10px">On</button>
     </span>
 
-    <button id="burstNow" class="btn" style="padding:6px 10px" title="Hidden Red/Blue burst — music only">Clarity Burst</button>
+    <span class="pill">Status: <span id="status" class="badge">waiting</span></span>
+  </section>
 
-    <span class="pill">Status: <span id="statusTone" class="badge">waiting</span></span>
+  <!-- SYNC / BURSTS -->
+  <section class="bar" aria-label="Shared Edge Sync">
+    <button id="syncEdge" class="btn" title="Arm burst at next :00 or :30">Sync at :00/:30</button>
+    <button id="shareSync" class="btn" title="Copy a shared-edge link">Share Sync</button>
+    <button id="burstOnce" class="btn" title="One Seed Burst (RB + Tracks)">One Seed Burst</button>
+    <button id="startLoop" class="btn" title="Loop bursts until Calm">Start Seed Loop</button>
+    <button id="calmNow" class="btn" title="Stop/settle into Calm">Calm Now</button>
+    <span class="pill">Loop: <span id="loopState" class="badge">idle</span></span>
   </section>
 
   <section class="notice">
-    <strong>Ritual:</strong> arrive → 2-min settle → optional burst (Tracks only) → 8–20 min flow → 1-min close.  
-    Breath cue: inhale 128 (root), exhale 256 (air). Off-ramps always visible. Kindness-first alignment.
+    **How it works:** **Activate** → pick **Red↔Blue** + **Tracks** → **Sync at :00/:30**.  
+    After sync starts, bursts loop (burst → rest) until **Calm Now**. Interviews never burst.
   </section>
 
-  <!-- FEATURED PLAYER -->
+  <!-- PLAYER -->
   <section class="featured" aria-live="polite">
     <div class="fp-box"><div id="fp"></div></div>
     <div class="fp-meta">
       <div>
         <div id="fpTitle" class="fp-title">—</div>
-        <div id="fpCaption" class="fp-caption">Select a video from the slots below.</div>
+        <div id="fpCaption" class="fp-caption"></div>
       </div>
       <div class="fp-controls">
         <button class="btn" id="fpPlay">Play</button>
@@ -184,34 +186,22 @@
     </div>
   </section>
 
-  <!-- SLOTS -->
-  <section id="grid" class="grid" aria-label="Playlist slots"></section>
-
-  <!-- Norwegian Whisper -->
-  <section class="whisper" id="whisper">
-    <h3>🇳🇴 Norwegian Whisper</h3>
-    <div class="row2">
-      <span class="badge" id="phraseTxt">—</span>
-      <span class="badge" id="ipaTxt">—</span>
-      <span class="badge" id="meaningTxt">—</span>
-      <button class="btn" id="speakNo" style="padding:6px 10px">Speak</button>
-      <span class="small" id="voiceNote" style="opacity:.8"></span>
-    </div>
-  </section>
-
-  <!-- BONUS -->
-  <details id="bonus">
-    <summary>✨ Bonus Live Cuts</summary>
-    <div id="bonusGrid" class="grid" style="margin-top:10px"></div>
-  </details>
+  <!-- TRACKS -->
+  <section id="grid" class="grid" aria-label="Sigrid tracks"></section>
 
   <footer>
     <div class="notice">
-      Ethics: desire = care + consent. Align to shared values (clarity, kindness, steadiness).  
-      If anything feels too intense: lower volume, pause, or skip burst.
+      Start low. Intensity scales feel (depth/width/duration) — not raw loudness.  
+      Off-ramps always visible. Bursts are **music-only** and **RB-only** by design.
     </div>
-    <p class="small">Local only (no tracking). Media © respective owners.</p>
+    <p class="small">Local only. Media © respective owners.</p>
   </footer>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast hide">
+  <span id="toastMsg">—</span>
+  <button id="toastClose" class="btn" style="padding:6px 10px">OK</button>
 </div>
 
 <div id="prewarmBin" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:0;height:0;overflow:hidden"></div>
@@ -219,16 +209,15 @@
 <script id="yt-iframe-api" src="https://www.youtube.com/iframe_api"></script>
 <script>
 /* ===== Core State ===== */
-const STATE_KEY = 'clarity.ritual.v10';
 const state = {
-  set:'interviews', fp:null, fpIndex:0, autoAdvance:true,
-  ccOn:true, ccLang:'en', ctx:null, tonesOn:true, device:'default',
-  audio:{}, burst:null, ritual:false, intensity:3
+  color:'redblue', set:'tracks', ctx:null, tonesOn:true, device:'default',
+  audio:{}, fp:null, fpIndex:0, loop:{active:false, timer:null}, intensity:4,
+  cadence:'medium', burstNode:null, widthNode:null, pendingSync:null
 };
 
-/* ===== Presets ===== */
+/* ===== Data ===== */
 const TRACKS = [
-  {id:'cIriwVhRPVA', title:'Strangers (Official)'},
+  {id:'cIriwVhRPVA', title:'Strangers'},
   {id:'w5x93pXSmRM', title:'Don’t Feel Like Crying'},
   {id:'1uHt2LrCSWg', title:'Sucker Punch'},
   {id:'E7lr7pU9fYA', title:'Mirror'},
@@ -252,115 +241,93 @@ const INTERVIEWS = [
   {id:'CeZklpxa51A', title:'Pop Around — Full Interview'}
 ];
 
-/* ===== Norwegian Whisper (rotating) ===== */
-const WHISPER = [
-  {no:"Jeg ser deg.", ipa:"/jæɡ seːr dæɡ/", en:"I see you."},
-  {no:"Tusen takk.", ipa:"/ˈtʉːsn̩ tɑk/", en:"Thank you so much."},
-  {no:"Rolig pust.", ipa:"/ˈruːli ˌpʉst/", en:"Calm breath."},
-  {no:"Klart hjerte.", ipa:"/klɑːrt ˈjæʈe/", en:"Clear heart."},
-  {no:"La lyset inn.", ipa:"/lɑ ˈlyːsə ˈɪn/", en:"Let the light in."},
-  {no:"Jeg er her.", ipa:"/jæɡ æːr hæːr/", en:"I am here."}
-];
-
 /* ===== DOM ===== */
-const grid = document.getElementById('grid');
-const bonusGrid = document.getElementById('bonusGrid');
-const fpTitle = document.getElementById('fpTitle');
-const fpCaption = document.getElementById('fpCaption');
-const primer = document.getElementById('primer');
-const primerBtn = document.getElementById('primerBtn');
+const statusEl = document.getElementById('status');
+const loopState = document.getElementById('loopState');
+const modeNatural = document.getElementById('modeNatural');
+const modeRB = document.getElementById('modeRB');
+const modeOpp = document.getElementById('modeOpp');
 const setTracksBtn = document.getElementById('setTracks');
 const setInterBtn = document.getElementById('setInterviews');
-const ccToggle = document.getElementById('ccToggle');
-const ccLang = document.getElementById('ccLang');
+const intensityEl = document.getElementById('intensity');
+const intensityLbl = document.getElementById('intensityLbl');
+const cadenceEl = document.getElementById('cadence');
 const tone128 = document.getElementById('tone128');
 const tone256 = document.getElementById('tone256');
 const toneToggle = document.getElementById('toneToggle');
 const toneLevel = document.getElementById('toneLevel');
-const statusTone = document.getElementById('statusTone');
-const burstNow = document.getElementById('burstNow');
-const modeNormal = document.getElementById('modeNormal');
-const modeRitual = document.getElementById('modeRitual');
-const intensity = document.getElementById('intensity');
-const intensityLbl = document.getElementById('intensityLbl');
-/* whisper */
-const phraseTxt = document.getElementById('phraseTxt');
-const ipaTxt = document.getElementById('ipaTxt');
-const meaningTxt = document.getElementById('meaningTxt');
-const speakNo = document.getElementById('speakNo');
-const voiceNote = document.getElementById('voiceNote');
+const startLoop = document.getElementById('startLoop');
+const burstOnce = document.getElementById('burstOnce');
+const calmNow = document.getElementById('calmNow');
+const syncEdge = document.getElementById('syncEdge');
+const shareSync = document.getElementById('shareSync');
+const toast = document.getElementById('toast');
+const toastMsg = document.getElementById('toastMsg');
+const toastClose = document.getElementById('toastClose');
+const primer = document.getElementById('primer');
+const primerBtn = document.getElementById('primerBtn');
+const grid = document.getElementById('grid');
+const fpTitle = document.getElementById('fpTitle');
 
 /* ===== Helpers ===== */
-function listBySet(){ return state.set==='tracks'?TRACKS:INTERVIEWS; }
-function setBadge(txt, mode){
-  statusTone.textContent = txt;
-  const map = {on:['#102a21','#174a3a','#b9ffe6'], off:['#2a210f','#4a3a17','#ffd596'], wait:['#0f1b2a','#223047','#b7c6dc']};
-  const [bg,bd,fg]=map[mode]||map.on; statusTone.style.background=bg; statusTone.style.borderColor=bd; statusTone.style.color=fg;
+function tag(txt, mode){
+  statusEl.textContent = txt;
+  const map = {ok:['#102a21','#174a3a','#b9ffe6'], wait:['#0f1b2a','#223047','#b7c6dc'], warn:['#2a210f','#4a3a17','#ffd596']};
+  const [bg,bd,fg]=map[mode||'ok']; statusEl.style.background=bg; statusEl.style.borderColor=bd; statusEl.style.color=fg;
 }
-setBadge('waiting','wait');
+function toastShow(msg){ toastMsg.textContent = msg; toast.classList.remove('hide'); }
+toastClose.onclick = ()=> toast.classList.add('hide');
+
+function gateOK(){ return state.color==='redblue' && state.set==='tracks'; }
+function updateButtons(){
+  const ok = gateOK();
+  startLoop.disabled = !ok; burstOnce.disabled = !ok; syncEdge.disabled = !ok; shareSync.disabled = !ok;
+  const t = ok ? '' : 'Requires Red↔Blue + Tracks';
+  startLoop.title = t || 'Loop bursts until Calm';
+  burstOnce.title = t || 'One Seed Burst';
+  syncEdge.title = t || 'Arm for next :00/:30';
+  shareSync.title = t || 'Copy a shared-edge link';
+}
 
 /* ===== YouTube ===== */
 let YT_READY=false;
 window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); prewarmAll(); };
 
-function buildUI(){ buildFeatured(); buildSlots(); buildBonus(); reflectButtons(); }
+function listBySet(){ return state.set==='tracks'?TRACKS:INTERVIEWS; }
 
+function buildUI(){ buildFeatured(); buildSlots(); updateButtons(); }
 function buildFeatured(){
   if(!YT_READY) return;
-  const L = listBySet();
-  const item = L[state.fpIndex]||L[0];
+  const L=listBySet(), item=L[state.fpIndex]||L[0];
   fpTitle.textContent = item? (item.title||'') : '—';
-  fpCaption.textContent = item? '' : '—';
   if(state.fp){ try{ state.fp.destroy(); }catch{} }
   state.fp = new YT.Player('fp', {
-    height:'100%', width:'100%', videoId: item? item.id : '',
-    playerVars:{
-      autoplay:0, controls:1, modestbranding:1, rel:0, playsinline:1, iv_load_policy:3,
-      cc_load_policy: state.ccOn?1:0, cc_lang_pref: state.ccLang, hl: state.ccLang
-    },
-    events:{
-      onReady: (e)=>{ try{ e.target.setPlaybackQuality('hd1080'); }catch{} setMediaSession(item); },
-      onStateChange: (e)=>{
-        if(e.data === YT.PlayerState.ENDED && state.autoAdvance){ nextTrack(); }
-      }
-    }
+    height:'100%', width:'100%', videoId:item?item.id:'',
+    playerVars:{autoplay:0, controls:1, modestbranding:1, rel:0, playsinline:1, iv_load_policy:3}
   });
 }
-
 function buildSlots(){
   grid.innerHTML='';
-  const L=listBySet();
-  for(let i=0;i<Math.max(10,L.length);i++){
-    const it=L[i];
-    const slot=document.createElement('article'); slot.className='slot';
-    const thumb=document.createElement('div'); thumb.className='thumb';
-    const img=document.createElement('img'); img.alt=it?it.title:'Empty'; if(it){ img.src=`https://i.ytimg.com/vi/${it.id}/hqdefault.jpg`; img.loading='lazy'; }
-    const title=document.createElement('div'); title.className='title'; title.textContent=it?it.title:'empty';
-    const snip=document.createElement('div'); snip.className='snip'; snip.textContent='';
-    thumb.appendChild(img); slot.append(thumb,title,snip); grid.appendChild(slot);
-    if(it){ thumb.onclick=()=>{ state.fpIndex=i; buildFeatured(); try{ state.fp.playVideo(); }catch{} }; }
-  }
-}
-function buildBonus(){
-  bonusGrid.innerHTML='';
-  for(let i=0;i<6;i++){
-    const it = (INTERVIEWS[i]||TRACKS[i]);
-    const slot=document.createElement('article'); slot.className='slot';
-    const box=document.createElement('div'); box.className='thumb';
-    const img=document.createElement('img'); img.src=`https://i.ytimg.com/vi/${it.id}/hqdefault.jpg`; img.alt=it.title;
-    box.appendChild(img); const title=document.createElement('div'); title.className='title'; title.textContent=it.title;
-    const snip=document.createElement('div'); snip.className='snip'; snip.textContent='';
-    slot.append(box,title,snip); bonusGrid.appendChild(slot);
+  const L = listBySet();
+  for(let i=0;i<Math.max(10, L.length); i++){
+    const it = L[i];
+    const slot = document.createElement('article'); slot.className='slot';
+    const thumb = document.createElement('div'); thumb.className='thumb';
+    const img = document.createElement('img'); img.alt = it? it.title : 'empty';
+    if(it){ img.src=`https://i.ytimg.com/vi/${it.id}/hqdefault.jpg`; img.loading='lazy'; }
+    const title = document.createElement('div'); title.className='title'; title.textContent = it? it.title : 'empty';
+    const snip = document.createElement('div'); snip.className='snip'; snip.textContent='';
+    thumb.appendChild(img); slot.append(thumb, title, snip); grid.appendChild(slot);
+    if(it){ thumb.onclick = ()=>{ state.fpIndex=i; buildFeatured(); try{ state.fp.playVideo(); }catch{} }; }
   }
 }
 function prewarmAll(){
   if(!YT_READY) return;
-  const L=listBySet(); const bin=document.getElementById('prewarmBin'); bin.innerHTML='';
+  const L = listBySet(); const bin=document.getElementById('prewarmBin'); bin.innerHTML='';
   L.forEach((v,i)=>{ const d=document.createElement('div'); d.id='warm_'+i; bin.appendChild(d);
     new YT.Player(d.id,{height:'0',width:'0',videoId:v.id,playerVars:{autoplay:0,controls:0,rel:0,playsinline:1,iv_load_policy:3,mute:1}});
   });
 }
-function nextTrack(){ const L=listBySet(); let idx=state.fpIndex+1; if(idx>=Math.max(10,L.length)) idx=0; state.fpIndex=idx; buildFeatured(); setTimeout(()=>{ try{ state.fp.playVideo(); }catch{} },100); }
 
 /* ===== Tone Engine ===== */
 (function detect(){ const ua=navigator.userAgent||''; if(/iPhone/.test(ua)) state.device='iphone'; else if(/Android/.test(ua)) state.device='mobile'; })();
@@ -368,11 +335,20 @@ function nextTrack(){ const L=listBySet(); let idx=state.fpIndex+1; if(idx>=Math
 function initTones(){
   if(state.ctx) return;
   const AC = window.AudioContext||window.webkitAudioContext; state.ctx = new AC();
+  const ctx=state.ctx;
 
-  const ctx=state.ctx, main=ctx.createGain(), merger=ctx.createChannelMerger(2), mono=ctx.createGain(), wide=ctx.createGain(), comp=ctx.createDynamicsCompressor();
+  const main=ctx.createGain(), merger=ctx.createChannelMerger(2), mono=ctx.createGain(), wide=ctx.createGain(), comp=ctx.createDynamicsCompressor();
   wide.gain.value=1; mono.gain.value=(state.device==='iphone'||state.device==='mobile')?0.25:0.12;
-  merger.connect(wide).connect(main); mono.connect(main); comp.threshold.value=-24; comp.knee.value=12; comp.ratio.value=2; comp.attack.value=.02; comp.release.value=.25;
+  merger.connect(wide).connect(main); mono.connect(main);
+  comp.threshold.value=-24; comp.knee.value=12; comp.ratio.value=2; comp.attack.value=.02; comp.release.value=.25;
   main.connect(comp).connect(ctx.destination);
+
+  // gentle true-peak guard
+  const shaper = ctx.createWaveShaper(); const curve = new Float32Array(44100);
+  for (let i=0;i<curve.length;i++){ const x = (i/22050)-1; curve[i] = Math.tanh(1.2*x); }
+  shaper.curve = curve; shaper.oversample = '4x';
+  const post = ctx.createGain(); post.gain.value = 0.98;
+  main.disconnect(); main.connect(shaper).connect(post).connect(comp);
 
   const delta=(state.device==='iphone'||state.device==='mobile')?0.7:1.2;
   function pair(freq, base){
@@ -386,154 +362,187 @@ function initTones(){
     l.start(); r.start(); return {gL,gR};
   }
 
-  // base tones
   state.audio = {ctx, main, merger, mono, wide, comp,
-    t128: pair(128, .16), t256: pair(256, .12),
-    air: (()=>{ const n=ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate), d=n.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*.02;
-      const src=ctx.createBufferSource(); src.buffer=n; src.loop=true; const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1500; const g=ctx.createGain(); g.gain.value=.02; src.connect(hp).connect(g).connect(main); src.start(); return {g}; })(),
-    burst:null
+    t128: pair(128,.17), t256: pair(256,.13),
+    air: (()=>{ const n=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate), d=n.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*.02;
+      const src=ctx.createBufferSource(); src.buffer=n; src.loop=true; const hp=ctx.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=1500; const g=ctx.createGain(); g.gain.value=.022;
+      src.connect(hp).connect(g).connect(main); src.start(); return {g}; })()
   };
   applyIntensity(); routeTones();
+}
+
+function applyIntensity(){
+  const i = Number(intensityEl.value||4); state.intensity=i;
+  state._g128 = {1:.12,2:.14,3:.16,4:.17,5:.18}[i];
+  state._g256 = {1:.10,2:.11,3:.12,4:.13,5:.14}[i];
+  state._gAir = {1:.014,2:.018,3:.021,4:.023,5:.026}[i];
+  intensityLbl.textContent = i + (i<=2?' · gentle': i===3?' · steady': i===4?' · deep':' · unbelievable');
+  routeTones();
 }
 function routeTones(){
   if(!state.audio) return; const lvl=Number(toneLevel.value)/100, on=state.tonesOn;
   state.audio.t128.gL.gain.value = state.audio.t128.gR.gain.value = (on && tone128.checked)? state._g128*lvl : 0;
   state.audio.t256.gL.gain.value = state.audio.t256.gR.gain.value = (on && tone256.checked)? state._g256*lvl : 0;
   state.audio.air.g.gain.value = on ? state._gAir*lvl : 0;
-  setBadge(on?'tones on':'silent', on?'on':'off');
+  tag(on?'tones on':'silent', on?'ok':'wait');
 }
 
-/* ===== Intensity shaping (1–5) =====
-   - Gains stay safe; perception rises via depth, spread, and burst duration.
-*/
-function applyIntensity(){
-  const i = Number(intensity.value||3);
-  state.intensity = i;
-  // base gains (cap loudness, increase feel via small steps)
-  const g128 = {1:.12,2:.14,3:.16,4:.17,5:.18}[i];
-  const g256 = {1:.09,2:.11,3:.12,4:.13,5:.14}[i];
-  const gAir = {1:.014,2:.018,3:.02,4:.023,5:.026}[i];
-  state._g128=g128; state._g256=g256; state._gAir=gAir;
+/* ===== Seed Burst (hidden Red/Blue) ===== */
+function burstDur(){ return ({1:18,2:24,3:32,4:38,5:45})[state.intensity]||32; }
+function burstDepth(){ return ({1:.18,2:.22,3:.26,4:.30,5:.34})[state.intensity]||.26; }
+function tremDepth(){ return ({1:.08,2:.10,3:.12,4:.14,5:.16})[state.intensity]||.12; }
+function widthMax(){ return ({1:.25,2:.35,3:.45,4:.55,5:.65})[state.intensity]||.45; }
 
-  // burst shaping
-  state._burstDepth = {1:.16,2:.20,3:.22,4:.24,5:.26}[i];
-  state._burstDur   = {1:16,2:20,3:24,4:28,5:32}[i];
+function claritySeedBurst(){
+  if(!gateOK() || !state.ctx) return 0;
+  const ctx = state.ctx; const lvl=Number(toneLevel.value)/100||.68;
 
-  intensityLbl.textContent = i + (i<=2?' · gentle': i===3?' · steady': i===4?' · deep':' · unbelievable');
-  routeTones();
+  if(state.burstNode && state.burstNode.stop){ try{ state.burstNode.stop(); }catch{} }
+
+  const mainBus  = ctx.createGain(); mainBus.gain.value = 0.0;
+  const redBus   = ctx.createGain(); redBus.gain.value  = 0.0;
+  const blueBus  = ctx.createGain(); blueBus.gain.value = 0.0;
+  const stereo   = ctx.createChannelMerger(2);
+  redBus.connect(stereo,0,0); blueBus.connect(stereo,0,1);
+
+  const width = ctx.createGain(); width.gain.value = 1.0; state.widthNode = width;
+  stereo.connect(width).connect(mainBus);
+
+  const limiter = ctx.createDynamicsCompressor();
+  limiter.threshold.value=-10; limiter.knee.value=12; limiter.ratio.value=6; limiter.attack.value=0.005; limiter.release.value=0.2;
+  const out = ctx.createGain(); out.gain.value = 0.19 * lvl;
+  mainBus.connect(limiter).connect(out).connect(state.audio.main);
+
+  const throb = ctx.createOscillator(); throb.type='sine'; throb.frequency.value=0.9;
+  const thR=ctx.createGain(), thB=ctx.createGain(); thR.gain.value=burstDepth()*lvl; thB.gain.value=burstDepth()*lvl;
+  throb.connect(thR).connect(redBus.gain); throb.connect(thB).connect(blueBus.gain); throb.start();
+
+  const tremor = ctx.createOscillator(); tremor.type='sine'; tremor.frequency.value=5.5;
+  const trR=ctx.createGain(), trB=ctx.createGain(); trR.gain.value=tremDepth()*lvl*.6; trB.gain.value=tremDepth()*lvl*.6;
+  tremor.connect(trR).connect(redBus.gain); tremor.connect(trB).connect(blueBus.gain); tremor.start();
+
+  function tone(f, gl, gr){
+    const l=ctx.createOscillator(), r=ctx.createOscillator(); l.type=r.type='sine'; l.frequency.value=f; r.frequency.value=f;
+    const g1=ctx.createGain(), g2=ctx.createGain(); const t0=ctx.currentTime+.002;
+    g1.gain.setValueAtTime(0,t0); g2.gain.setValueAtTime(0,t0);
+    g1.gain.linearRampToValueAtTime(gl, t0+.01); g2.gain.linearRampToValueAtTime(gr, t0+.01);
+    l.connect(g1).connect(redBus); r.connect(g2).connect(blueBus); l.start(); r.start();
+    return ()=>{ try{
+      const t1=ctx.currentTime; g1.gain.setTargetAtTime(0,t1,.01); g2.gain.setTargetAtTime(0,t1,.01);
+      setTimeout(()=>{ try{l.stop(); r.stop();}catch{} }, 30);
+    }catch{} };
+  }
+
+  const stops=[];
+  stops.push(tone(64, 0.12*lvl, 0.08*lvl));
+  stops.push(tone(128,0.13*lvl, 0.13*lvl));
+  stops.push(tone(256,0.09*lvl, 0.10*lvl));
+  if(state.device==='iphone'||state.device==='mobile'){ stops.push(tone(96,0.06*lvl,0.06*lvl)); }
+
+  const dur = burstDur();
+  const t0=ctx.currentTime+.02;
+  mainBus.gain.setValueAtTime(0,t0); mainBus.gain.linearRampToValueAtTime(1.0, t0+.35);
+  const hold=t0+dur-.9; mainBus.gain.setTargetAtTime(0, hold, .35);
+
+  const W=widthMax(); width.gain.setValueAtTime(1.0,t0);
+  width.gain.linearRampToValueAtTime(1.0+W, t0+.8);
+  width.gain.setTargetAtTime(1.05, hold,.35);
+
+  const stopAll=()=>{ try{ throb.stop(); tremor.stop(); }catch{} stops.forEach(fn=>{ try{fn();}catch{} }); 
+    [stereo,width,limiter,out,mainBus,redBus,blueBus].forEach(n=>{ try{ n.disconnect(); }catch{} }); state.burstNode=null; };
+  setTimeout(stopAll, dur*1000+500);
+  state.burstNode = { stop: stopAll, dur };
+  return dur;
 }
 
-/* ===== Hidden Red/Blue Burst (music only) ===== */
-function clarityBurst(){
-  if(!state.ctx || state.set!=='tracks') return;
-  const ctx = state.ctx, lvl=Number(toneLevel.value)/100||.68;
-  // stop previous
-  if(state.burst && state.burst.stop){ try{ state.burst.stop(); }catch{} }
-
-  const bus = ctx.createGain(); bus.gain.value = 0.0;
-  const red=ctx.createGain(), blue=ctx.createGain(); red.gain.value=blue.gain.value=0;
-  const merger=ctx.createChannelMerger(2); red.connect(merger,0,0); blue.connect(merger,0,1);
-  const out=ctx.createGain(); out.gain.value = .18*lvl; merger.connect(out).connect(state.audio.main);
-
-  const throb=ctx.createOscillator(); throb.type='sine'; throb.frequency.value=.9;
-  const amtR=ctx.createGain(), amtB=ctx.createGain(); amtR.gain.value=amtB.gain.value= state._burstDepth * lvl;
-  throb.connect(amtR).connect(red.gain); throb.connect(amtB).connect(blue.gain); throb.start();
-
-  function tone(f, gl, gr){ const l=ctx.createOscillator(), r=ctx.createOscillator(); l.type=r.type='sine'; l.frequency.value=f; r.frequency.value=f;
-    const gL=ctx.createGain(), gR=ctx.createGain(); gL.gain.value=gl*lvl; gR.gain.value=gr*lvl; l.connect(gL).connect(red); r.connect(gR).connect(blue); l.start(); r.start(); return ()=>{try{l.stop();r.stop();}catch{}};}
-  const stops=[ tone(64,.10,.06), tone(128,.12,.12), tone(256,.08,.10) ];
-
-  // envelope
-  const t0=ctx.currentTime+.02, dur=state._burstDur;
-  bus.gain.setValueAtTime(0,t0); bus.gain.linearRampToValueAtTime(1,t0+.30);
-  const tEnd=t0+dur-.8; bus.gain.setTargetAtTime(0,tEnd,.35);
-  red.connect(bus); blue.connect(bus);
-
-  const stop=()=>{ try{ throb.stop(); }catch{} stops.forEach(s=>{ try{s();}catch{} }); [red,blue,merger,out,bus].forEach(n=>{ try{ n.disconnect(); }catch{} }); state.burst=null; };
-  setTimeout(stop, dur*1000+400);
-  state.burst = {stop};
+/* ===== Loop Manager ===== */
+function cadenceRest(d){
+  const m = cadenceEl.value;
+  if(m==='short') return 4;
+  if(m==='medium') return 8;
+  if(m==='long') return 14;
+  return Math.max(6, 8); // auto
+}
+function loopTick(){
+  if(!state.loop.active) return;
+  const dur = claritySeedBurst();
+  if(!dur){ stopSeedLoop(); return; }
+  loopState.textContent = 'bursting';
+  const rest = cadenceRest(dur);
+  state.loop.timer = setTimeout(()=>{
+    if(!state.loop.active) return;
+    loopState.textContent = 'resting';
+    state.loop.timer = setTimeout(()=>{ if(state.loop.active) loopTick(); }, rest*1000);
+  }, (dur*1000)+200);
+}
+function startSeedLoop(){
+  if(!gateOK()){ toastShow('Enable Red↔Blue and choose Tracks.'); return; }
+  if(!state.ctx){ toastShow('Tap Activate first.'); return; }
+  stopSeedLoop();
+  state.loop.active = true; loopState.textContent = 'starting';
+  loopTick();
+}
+function stopSeedLoop(){
+  state.loop.active = false;
+  if(state.loop.timer){ clearTimeout(state.loop.timer); state.loop.timer=null; }
+  try{ state.burstNode?.stop?.(); }catch{}
+  loopState.textContent = 'idle';
 }
 
-/* ===== Controls ===== */
-document.getElementById('fpPlay').onclick = ()=>{ try{ state.fp.playVideo(); }catch{} };
-document.getElementById('fpPause').onclick = ()=>{ try{ state.fp.pauseVideo(); }catch{} };
-document.getElementById('fpNext').onclick = ()=> nextTrack();
-document.getElementById('fpPrev').onclick = ()=>{ const L=listBySet(); let i=state.fpIndex-1; if(i<0) i=Math.max(10,L.length)-1; state.fpIndex=i; buildFeatured(); setTimeout(()=>{try{state.fp.playVideo();}catch{}},100); };
-document.getElementById('fpPiP').onclick = async ()=>{ const v=document.querySelector('video'); if(v && v.requestPictureInPicture){ try{ await v.requestPictureInPicture(); }catch{} } };
-
-setTracksBtn.onclick = ()=>{ state.set='tracks'; state.fpIndex=0; buildUI(); prewarmAll(); reflectButtons(); };
-setInterBtn.onclick = ()=>{ state.set='interviews'; state.fpIndex=0; buildUI(); prewarmAll(); reflectButtons(); };
-ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; buildFeatured(); reflectButtons(); };
-ccLang.onchange = ()=>{ state.ccLang=ccLang.value; buildFeatured(); };
-toneToggle.onclick = async ()=>{ if(!state.ctx){ initTones(); try{ await state.ctx.resume(); }catch{} } state.tonesOn=!state.tonesOn; routeTones(); this.textContent=state.tonesOn?'On':'Off'; };
-tone128.onchange = routeTones; tone256.onchange = routeTones; toneLevel.oninput = routeTones;
-burstNow.onclick = ()=> clarityBurst();
-intensity.oninput = applyIntensity;
-modeNormal.onclick = ()=>{ state.ritual=false; modeNormal.classList.add('active'); modeRitual.classList.remove('active'); };
-modeRitual.onclick = ()=>{ state.ritual=true; modeRitual.classList.add('active'); modeNormal.classList.remove('active');
-  // ritual defaults
-  state.set='tracks'; state.ccOn=false; ccLang.value='en'; intensity.value='4'; applyIntensity();
-  tone128.checked=true; tone256.checked=true; toneLevel.value=68; buildUI(); prewarmAll(); reflectButtons();
-};
-
-function reflectButtons(){
-  setTracksBtn.classList.toggle('active', state.set==='tracks'); setTracksBtn.setAttribute('aria-selected', state.set==='tracks');
-  setInterBtn.classList.toggle('active', state.set==='interviews'); setInterBtn.setAttribute('aria-selected', state.set==='interviews');
-  ccToggle.textContent = state.ccOn ? 'CC On' : 'CC Off';
-  // Burst gating
-  burstNow.disabled = state.set!=='tracks';
-  burstNow.title = state.set==='tracks' ? 'Hidden Red/Blue burst — music only' : 'Switch to Tracks for burst';
+/* ===== Calm Phase ===== */
+function enterCalm(){
+  stopSeedLoop();
+  if(!state.audio || !state.ctx) return;
+  const ctx=state.ctx, lvl=Number(toneLevel.value)/100||.68;
+  const t=ctx.currentTime;
+  state.audio.t128.gL.gain.setTargetAtTime(state._g128*lvl*0.6, t,.06);
+  state.audio.t128.gR.gain.setTargetAtTime(state._g128*lvl*0.6, t,.06);
+  state.audio.t256.gL.gain.setTargetAtTime(state._g256*lvl*0.45, t,.06);
+  state.audio.t256.gR.gain.setTargetAtTime(state._g256*lvl*0.45, t,.06);
+  state.audio.air.g.gain.setTargetAtTime(state._gAir*lvl*0.6, t,.06);
+  loopState.textContent='calm';
+  setTimeout(()=>{
+    const t2=ctx.currentTime;
+    state.audio.t128.gL.gain.setTargetAtTime(0, t2,.4);
+    state.audio.t128.gR.gain.setTargetAtTime(0, t2,.4);
+    state.audio.t256.gL.gain.setTargetAtTime(0, t2,.4);
+    state.audio.t256.gR.gain.setTargetAtTime(0, t2,.4);
+    state.audio.air.g.gain.setTargetAtTime(0, t2,.4);
+    loopState.textContent='idle';
+  }, 120000);
 }
 
-/* ===== Primer ===== */
-primerBtn.onclick = async ()=>{
-  initTones(); try{ await state.ctx.resume(); }catch{}
-  setBadge('tones on','on');
-  if(!state.fp) buildFeatured();
-  try{ state.fp.playVideo(); }catch{}
-  primer.style.display='none';
-  // if Ritual + Tracks, kick a first burst after settle
-  if(state.ritual && state.set==='tracks'){ setTimeout(()=> clarityBurst(), 1400); }
-};
-
-/* ===== Media Session ===== */
-function setMediaSession(item){
-  if(!('mediaSession' in navigator) || !item) return;
-  try{
-    navigator.mediaSession.metadata = new MediaMetadata({ title:item.title||'Clarity', artist:'Sigrid ↔ You', album: state.set==='tracks'?'Tracks':'Interviews',
-      artwork:[{src:`https://i.ytimg.com/vi/${item.id}/hqdefault.jpg`,sizes:'480x360',type:'image/jpeg'}] });
-    navigator.mediaSession.setActionHandler('previoustrack', ()=>{ document.getElementById('fpPrev').click(); });
-    navigator.mediaSession.setActionHandler('nexttrack', ()=>{ document.getElementById('fpNext').click(); });
-    navigator.mediaSession.setActionHandler('play', ()=>{ try{ state.fp.playVideo(); }catch{} });
-    navigator.mediaSession.setActionHandler('pause', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
-  }catch{}
+/* ===== Shared Edge Sync ===== */
+function msToNextEdge30(now=Date.now()){
+  const s = new Date(now); const sec = s.getUTCSeconds(); const ms = s.getUTCMilliseconds();
+  return (sec<30 ? (30-sec)*1000 - ms : (60-sec)*1000 - ms);
 }
-
-/* ===== Norwegian Whisper (SpeechSynthesis) ===== */
-let chosen = null, noVoice = null;
-function pickPhrase(){ chosen = WHISPER[Math.floor(Math.random()*WHISPER.length)]; phraseTxt.textContent=chosen.no; ipaTxt.textContent=chosen.ipa; meaningTxt.textContent=chosen.en; }
-function pickVoice(){
-  const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
-  const noVoices = voices.filter(v=> /no|nb|bokmål|norsk/i.test(v.lang+v.name));
-  noVoice = noVoices[0] || voices.find(v=>/en/i.test(v.lang)) || null;
-  voiceNote.textContent = noVoice ? `voice: ${noVoice.name}` : 'voice unavailable (device)';
+let syncTimer = null;
+function scheduleEdge(){
+  if(!gateOK()){ toastShow('Enable Red↔Blue and choose Tracks.'); return; }
+  if(!state.ctx){ toastShow('Tap Activate first.'); return; }
+  if(syncTimer){ clearTimeout(syncTimer); syncTimer=null; }
+  const delay = msToNextEdge30();
+  const secs = Math.max(0, Math.round(delay/1000));
+  toastShow('Synced: starting burst at next edge in ~'+secs+'s');
+  syncTimer = setTimeout(()=>{ claritySeedBurst(); }, delay);
 }
-if('speechSynthesis' in window){
-  speechSynthesis.onvoiceschanged = ()=>{ pickVoice(); };
-  pickVoice();
+function buildShareURLEdge(){
+  const url = new URL(location.href.split('#')[0]);
+  url.searchParams.set('sync','edge');
+  url.searchParams.set('mode','rb');
+  url.searchParams.set('set','tracks');
+  url.searchParams.set('int', String(state.intensity||4));
+  return url.toString();
 }
-pickPhrase();
-speakNo.onclick = ()=>{
-  if(!('speechSynthesis' in window) || !chosen) return;
-  const u = new SpeechSynthesisUtterance(chosen.no);
-  if(noVoice) u.voice = noVoice;
-  u.rate = .98; u.pitch = 1.02; u.lang = (noVoice && noVoice.lang) || 'no-NO';
-  // gentle ducking of tones while speaking
-  const g = state.audio?.main; const old = g? g.gain?.value : null;
-  if(g && g.gain){ try{ g.gain.setTargetAtTime((old||1)*0.8, state.ctx.currentTime, .02); }catch{} }
-  u.onend = ()=>{ if(g && g.gain && old!=null){ try{ g.gain.setTargetAtTime(old, state.ctx.currentTime, .05); }catch{} } pickPhrase(); };
-  speechSynthesis.speak(u);
-};
+function parseSyncFromURL(){
+  const q = new URLSearchParams(location.search);
+  const s = q.get('sync'); const m = q.get('mode'); const st = q.get('set'); const it = Number(q.get('int')||4);
+  if(m==='rb'){ document.body.classList.remove('mode-natural','mode-opposite'); document.body.classList.add('mode-redblue'); state.color='redblue'; }
+  state.set = (st==='interviews')?'interviews':'tracks';
+  if(it>=1 && it<=5){ intensityEl.value = String(it); applyIntensity(); }
+  if(s==='edge'){ state.pendingSync = 'edge'; }
+}
 
 /* ===== Stars ===== */
 (function stars(){
@@ -552,6 +561,60 @@ speakNo.onclick = ()=>{
   window.addEventListener('mousemove', e=>{ mouseY=e.clientY; });
   window.addEventListener('scroll', ()=>{ scrollY=window.scrollY||0; });
   size(); seed(); draw();
+})();
+
+/* ===== Wire Controls ===== */
+document.getElementById('fpPlay').onclick=()=>{ try{ state.fp.playVideo(); }catch{} };
+document.getElementById('fpPause').onclick=()=>{ try{ state.fp.pauseVideo(); }catch{} };
+document.getElementById('fpNext').onclick=()=>{ const L=listBySet(); let i=state.fpIndex+1; if(i>=Math.max(10,L.length)) i=0; state.fpIndex=i; buildFeatured(); try{ state.fp.playVideo(); }catch{} };
+document.getElementById('fpPrev').onclick=()=>{ const L=listBySet(); let i=state.fpIndex-1; if(i<0) i=Math.max(10,L.length)-1; state.fpIndex=i; buildFeatured(); try{ state.fp.playVideo(); }catch{} };
+document.getElementById('fpPiP').onclick=async()=>{ const v=document.querySelector('video'); if(v && v.requestPictureInPicture){ try{ await v.requestPictureInPicture(); }catch{} } };
+
+modeNatural.onclick=()=>{ document.body.classList.remove('mode-redblue','mode-opposite'); document.body.classList.add('mode-natural'); state.color='natural'; updateButtons(); };
+modeRB.onclick=()=>{ document.body.classList.remove('mode-natural','mode-opposite'); document.body.classList.add('mode-redblue'); state.color='redblue'; updateButtons(); };
+modeOpp.onclick=()=>{ document.body.classList.remove('mode-redblue','mode-natural'); document.body.classList.add('mode-opposite'); state.color='opposite'; updateButtons(); };
+
+setTracksBtn.onclick=()=>{ state.set='tracks'; state.fpIndex=0; buildUI(); prewarmAll(); updateButtons(); };
+setInterBtn.onclick=()=>{ state.set='interviews'; state.fpIndex=0; buildUI(); prewarmAll(); updateButtons(); };
+
+intensityEl.oninput = ()=> applyIntensity();
+cadenceEl.onchange = ()=>{ state.cadence = cadenceEl.value; };
+
+toneToggle.onclick = async ()=>{ if(!state.ctx){ initTones(); try{ await state.ctx.resume(); }catch{} } state.tonesOn=!state.tonesOn; routeTones(); };
+tone128.onchange = routeTones; tone256.onchange = routeTones; toneLevel.oninput = routeTones;
+
+startLoop.onclick = ()=>{ if(!gateOK()){ toastShow('Enable Red↔Blue and choose Tracks.'); return; } startSeedLoop(); };
+burstOnce.onclick = ()=>{ if(!gateOK()){ toastShow('Enable Red↔Blue and choose Tracks.'); return; } claritySeedBurst(); };
+calmNow.onclick = ()=> enterCalm();
+
+syncEdge.onclick = ()=> scheduleEdge();
+shareSync.onclick = ()=>{
+  if(!gateOK()){ toastShow('Enable Red↔Blue and choose Tracks.'); return; }
+  const link = buildShareURLEdge();
+  if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(link); }
+  toastShow('Copied a shared-edge link. Tell them: tap Activate, then it will arm for the next :00/:30.');
+};
+
+primerBtn.onclick = async ()=>{
+  initTones(); try{ await state.ctx.resume(); }catch{}
+  tag('tones on','ok'); primer.style.display='none';
+  if(!state.fp) buildFeatured();
+  try{ state.fp.playVideo(); }catch{}
+  // auto-arm from URL after Activate
+  if(state.pendingSync==='edge'){ scheduleEdge(); }
+};
+
+/* ===== Boot ===== */
+function updateButtons(){ /* defined earlier; re-declare to ensure scope */ 
+  const ok = gateOK();
+  startLoop.disabled = !ok; burstOnce.disabled = !ok; syncEdge.disabled = !ok; shareSync.disabled = !ok;
+}
+(function init(){
+  // default RB + tracks already set by body class and set button
+  // build UI as soon as possible; YT player comes when API ready
+  buildUI();
+  // parse ?sync=edge&mode=rb&set=tracks&int=4
+  parseSyncFromURL();
 })();
 </script>
 </body>
