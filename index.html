@@ -2,59 +2,98 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Clarity · Sigrid — One-Video Focus + Tone ❄️</title>
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Clarity · Sigrid — Focus + Reliable Tones ❄️</title>
+
+<!-- iPhone / PWA Dark Theme -->
 <meta name="theme-color" content="#0b0d11">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0d11">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="description" content="Start to play 160/162 Hz binaural + optional 512 Hz shimmer, and exactly one Sigrid video inline on loop. Switch tracks without audio bugs.">
+<meta name="apple-mobile-web-app-title" content="Clarity · Sigrid">
+<meta name="description" content="One-video focus (loop) + reliable 160/162 Hz binaural tone with 512 Hz shimmer option. iPhone-dark theme, safe-area, meters, and quick reinit.">
+
 <style>
+/* ---- Dark iPhone theme foundation ---- */
 :root{
-  --bg:#0b0d11; --ink:#eaf9ff; --muted:#9fb4c2; --card:#0f1621; --ring:#182232;
-  --accent:#9ed0ff; --ok:#89f7d6; --halo:#bee4ff; --gradA:#142032; --gradB:#0b0d11;
+  color-scheme: dark;
+  --bg:#0b0d11; --bg-top:#0a0e16; --ink:#eaf9ff; --muted:#9fb4c2;
+  --card:#0f1621; --ring:#182232; --accent:#9ed0ff; --ok:#89f7d6; --halo:#bee4ff;
+  --gradA:#111827; --gradB:#0b0d11; --tap: rgba(158,208,255,.15);
+  --shadow: 0 0 0 1px #1a2436 inset, 0 10px 30px rgba(0,0,0,.35);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
+html{background:#000}
 body{
   margin:0; color:var(--ink);
-  background:radial-gradient(1200px 800px at 50% -10%, var(--gradA) 0%, var(--gradB) 55%);
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;
+  background:
+    radial-gradient(1200px 800px at 50% -10%, var(--gradA) 0%, var(--gradB) 55%);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
   -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 6px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 10px);
+  -webkit-text-size-adjust: 100%;
 }
-.header{padding:3rem 1rem 1rem; text-align:center}
+/* reduce iOS tap highlight / selection jolt */
+*{-webkit-tap-highlight-color: transparent}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* Safe-area padders (visual polish) */
+.ios-top, .ios-bottom{
+  position:fixed; left:0; right:0; z-index:5; pointer-events:none;
+}
+.ios-top{ top:0; height: env(safe-area-inset-top, 0px); background:linear-gradient(#070b12,#0b0d11)}
+.ios-bottom{ bottom:0; height: env(safe-area-inset-bottom, 0px); background:linear-gradient(#0b0d11,#090d14)}
+
+/* Layout */
+.header{padding:2.2rem 1rem 1rem; text-align:center}
 h1{margin:0 0 .25rem; font-weight:700; letter-spacing:.02em}
 .tag{color:var(--muted); font-size:.95rem}
 .wrap{max-width:980px; margin:0 auto; padding:0 1rem 4rem}
 .card{
   background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
-  border:1px solid var(--ring); border-radius:16px; padding:1rem; margin:1rem 0; backdrop-filter:blur(6px);
+  border:1px solid var(--ring); border-radius:16px; padding:1rem; margin:1rem 0;
+  backdrop-filter: blur(7px);
+  box-shadow: var(--shadow);
 }
 .row{display:flex; flex-wrap:wrap; gap:.65rem; align-items:center}
+
+/* Buttons & controls */
 button{
   border:0; border-radius:14px; padding:.9rem 1.2rem; font-weight:650; cursor:pointer;
-  background:var(--accent); color:#071018; transition:transform .06s ease, opacity .2s ease, box-shadow .2s ease;
+  background:var(--accent); color:#071018; transition:transform .06s ease, opacity .18s ease, box-shadow .2s ease, filter .2s ease;
 }
 button:active{transform:translateY(1px)}
-button.ghost{background:transparent; color:var(--ink); border:1px solid var(--ring)}
+button.ghost{
+  background:rgba(255,255,255,0.02); color:var(--ink); border:1px solid var(--ring)
+}
+button.ghost:active{background:var(--tap)}
 label.toggle{display:inline-flex; align-items:center; gap:.5rem}
-input[type="checkbox"]{width:1.1rem; height:1.1rem}
+input[type="checkbox"]{
+  width:1.1rem; height:1.1rem; accent-color: var(--accent);
+}
 .small{font-size:.92rem; color:var(--muted)}
 .timer{
   font-variant-numeric:tabular-nums; font-weight:750; letter-spacing:.02em;
   background:#0d1522; border:1px solid var(--ring); padding:.5rem .7rem; border-radius:10px;
 }
-.slider{appearance:none; width:160px; height:6px; border-radius:999px; background:#1a2740; outline:none}
+.slider{
+  appearance:none; width:160px; height:6px; border-radius:999px;
+  background:#1a2740; outline:none
+}
 .slider::-webkit-slider-thumb{appearance:none; width:18px; height:18px; border-radius:50%; background:var(--accent); border:1px solid #0c1628}
-.sep{height:1px; background:linear-gradient(90deg,transparent,#21304a,transparent); border:0; margin:1rem 0}
 
-/* focus video */
+/* Focus player */
 .player{
   position:relative; border-radius:14px; overflow:hidden; border:1px solid var(--ring);
   aspect-ratio:16/9; background:#0d1522; margin-top:.75rem;
 }
 .player iframe{position:absolute; inset:0; width:100%; height:100%; border:0; border-radius:14px}
 
-/* tracklist */
+/* Tracklist */
 .list{display:grid; grid-template-columns:1fr; gap:.4rem; margin-top:.75rem}
 .track{
   display:flex; gap:.6rem; align-items:center; justify-content:space-between;
@@ -63,15 +102,23 @@ input[type="checkbox"]{width:1.1rem; height:1.1rem}
 .track button{padding:.45rem .7rem; border-radius:10px; font-size:.9rem; background:#1a2740; color:var(--accent)}
 .track .t{white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:70%}
 .active{outline:2px solid var(--accent); box-shadow:0 0 0 2px rgba(158,208,255,.25) inset}
+
+.sep{height:1px; background:linear-gradient(90deg,transparent,#21304a,transparent); border:0; margin:1rem 0}
 .footer{color:var(--muted); text-align:center; padding:1.25rem}
+
+/* Ribbon (sticky, safe for notch) */
 .ribbon{
-  position:fixed; top:.65rem; left:50%; transform:translateX(-50%); z-index:3;
+  position:fixed; top: calc(env(safe-area-inset-top, 0px) + .35rem);
+  left:50%; transform:translateX(-50%); z-index:6;
   display:flex; gap:.5rem; background:rgba(9,14,22,.88); border:1px solid var(--ring);
   padding:.35rem .5rem; border-radius:999px; backdrop-filter:blur(10px)
 }
-.ribbon a{display:inline-block; padding:.45rem .75rem; border-radius:999px; background:#0d1522; border:1px solid var(--ring); color:var(--accent); text-decoration:none; font-weight:650; font-size:.92rem}
+.ribbon a{
+  display:inline-block; padding:.45rem .75rem; border-radius:999px; background:#0d1522; border:1px solid var(--ring);
+  color:var(--accent); text-decoration:none; font-weight:650; font-size:.92rem
+}
 
-/* animated Start button */
+/* Animated Start button */
 #start{
   position:relative; isolation:isolate;
   box-shadow:0 0 0 0 rgba(158,208,255,.6), inset 0 0 12px rgba(255,255,255,.15);
@@ -87,9 +134,19 @@ input[type="checkbox"]{width:1.1rem; height:1.1rem}
 #start.pulsing{animation:pulse 2.4s ease-out infinite}
 .spark{position:absolute; pointer-events:none; width:8px; height:8px; border-radius:50%; background:#eaf9ff; filter:drop-shadow(0 0 12px var(--halo)); opacity:.95; animation:spark .6s ease-out forwards}
 @keyframes spark{to{transform:translate(var(--dx),var(--dy)) scale(.2); opacity:0}}
+
+/* Tone meters */
+.meterRow{display:flex; gap:.5rem; align-items:center; margin-top:.5rem; flex-wrap:wrap}
+.meter{height:8px; width:110px; background:#162236; border:1px solid #24324a; border-radius:999px; overflow:hidden}
+.fill{height:100%; width:0%; background:linear-gradient(90deg,#89f7d6,#9ed0ff); box-shadow:0 0 8px rgba(137,247,214,.35)}
+.badge{font-size:.82rem; color:var(--muted)}
 </style>
 </head>
 <body>
+<!-- Safe-area polish for iPhone notch areas -->
+<div class="ios-top"></div>
+<div class="ios-bottom"></div>
+
 <nav class="ribbon">
   <a href="https://jar.plnt.earth" target="_self" rel="noopener">↩ Jar</a>
   <a href="https://tunes.plnt.earth" target="_self" rel="noopener">🎵 Tunes</a>
@@ -97,35 +154,47 @@ input[type="checkbox"]{width:1.1rem; height:1.1rem}
 
 <header class="header">
   <h1>❄️ Sigrid — Clarity Focus</h1>
-  <div class="tag">Binaural Air (160/162 Hz) + one inline video on loop — starts on tap.</div>
+  <div class="tag">iPhone-dark, reliable 160/162 Hz binaural + one inline video loop. Tap Start to unlock audio.</div>
 </header>
 
 <main class="wrap">
-  <section class="card">
+  <section class="card" aria-label="controls">
     <div class="row">
       <button id="start" class="pulsing">▶ Start Session</button>
       <button id="stop" class="ghost" disabled>⏸ Stop</button>
       <span class="timer" id="clock">03:00</span>
+
       <label class="toggle"><input type="checkbox" id="shimmer"> <span>512 Hz shimmer</span></label>
       <label class="toggle"><input type="checkbox" id="softfade" checked> <span>Soft fade</span></label>
+
       <label class="toggle"><input type="checkbox" id="mute" checked> <span>Muted</span></label>
       <span class="small">Volume</span><input id="vol" type="range" min="0" max="100" value="40" class="slider" />
+
       <button id="prev" class="ghost">⟵ Prev</button>
       <button id="next" class="ghost">Next ⟶</button>
-      <button id="resync" class="ghost">⟲ Resync</button>
+      <button id="focus" class="ghost">⭐ Focus “Strangers”</button>
+      <button id="resync" class="ghost">⟲ Re-init Audio</button>
     </div>
 
-    <div class="player" style="margin-top:.75rem">
+    <div class="meterRow">
+      <span class="badge">Left 160 Hz</span><div class="meter"><div id="mL" class="fill"></div></div>
+      <span class="badge">Right 162 Hz</span><div class="meter"><div id="mR" class="fill"></div></div>
+      <span class="badge" id="state">Locked</span>
+    </div>
+
+    <p class="small" style="margin:.5rem 0 0">First run tips (iPhone): volume up, ringer ON, keep screen on ~15s after start. If tone drops after backgrounding → “Re-init Audio”.</p>
+  </section>
+
+  <section class="card" aria-label="player">
+    <div class="player">
       <iframe id="yt" title="Sigrid — player" allow="autoplay; encrypted-media" allowfullscreen playsinline></iframe>
     </div>
-
     <hr class="sep">
-
     <div class="list" id="tracklist"></div>
   </section>
 </main>
 
-<footer class="footer">clarity.plnt.earth — One-Video Focus + Binaural · Headphones recommended</footer>
+<footer class="footer">clarity.plnt.earth — iPhone-Dark · Focus + Reliable Tones · Headphones recommended</footer>
 
 <script>
 /* ---------------- Playlist ---------------- */
@@ -152,49 +221,76 @@ function buildSrc(id, muted) {
   var q = [
     'autoplay=1',
     'mute='+(muted?1:0),
-    'loop=1',              // need playlist=id for loop
+    'loop=1',
     'playlist='+id,
     'controls=0',
     'playsinline=1',
     'modestbranding=1',
     'rel=0',
-    'enablejsapi=1',
-    'origin='+encodeURIComponent(location.origin||'https://clarity.plnt.earth')
+    'enablejsapi=1'
   ].join('&');
   return base+'?'+q;
-}
-function loadIndex(i, keepMute){
-  current = (i+TRACKS.length)%TRACKS.length;
-  var id = TRACKS[current].id;
-  player.src = buildSrc(id, keepMute);
-  highlight();
-  setTimeout(function(){ send('playVideo'); if(!keepMute && !MUTE.checked){ send('unMute'); setVol(); }}, 350);
 }
 function send(func, args){
   try{ player.contentWindow.postMessage(JSON.stringify({event:'command', func:func, args:args||[]}), '*'); }catch(e){}
 }
-function setVol(){
-  var v = parseInt(VOL.value,10)||40;
-  send('setVolume', [v]);
+function setVol(v){ send('setVolume', [Math.max(0,Math.min(100, v))]); }
+function loadIndex(i, keepMute){
+  current = (i+TRACKS.length)%TRACKS.length;
+  var id = TRACKS[current].id;
+  player.src = buildSrc(id, true); // start muted for autoplay reliability
+  highlight();
+  setTimeout(function(){
+    send('playVideo');
+    if(!keepMute && !MUTE.checked){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }
+  }, 450);
 }
 
-/* ---------------- Tone engine ---------------- */
-var ctx,leftOsc,rightOsc,shimOsc,lGain,rGain,sGain,merger;
+/* ---------------- Tone engine with iOS unlock + meters ---------------- */
+var ctx,leftOsc,rightOsc,shimOsc,lGain,rGain,sGain,merger,analyserL,analyserR,splitter,vuTimer=null;
+var stateBadge=document.getElementById('state'), mL=document.getElementById('mL'), mR=document.getElementById('mR');
+
 function ramp(p,to,t){ try{p.linearRampToValueAtTime(to,t);}catch(e){} }
+
+function unlockAudioOnce(){
+  // iOS sometimes needs a 'real' buffer source triggered on a gesture.
+  try{
+    var src = ctx.createBufferSource();
+    src.buffer = ctx.createBuffer(1, 1, ctx.sampleRate);
+    src.connect(ctx.destination);
+    src.start(0); src.stop(0);
+  }catch(e){}
+}
+
 function startTone(){
   if(!ctx){ ctx = new (window.AudioContext||window.webkitAudioContext)(); }
+  if(ctx.state === 'suspended'){ ctx.resume(); }
+  unlockAudioOnce();
+
   var now = ctx.currentTime;
+
   leftOsc = ctx.createOscillator(); rightOsc = ctx.createOscillator();
   lGain = ctx.createGain(); rGain = ctx.createGain();
+
   leftOsc.type='sine'; rightOsc.type='sine';
   leftOsc.frequency.setValueAtTime(160, now);
   rightOsc.frequency.setValueAtTime(162, now);
+
   lGain.gain.setValueAtTime(0.0001, now);
   rGain.gain.setValueAtTime(0.0001, now);
 
   merger = ctx.createChannelMerger(2);
+  splitter = ctx.createChannelSplitter(2);
+  analyserL = ctx.createAnalyser(); analyserR = ctx.createAnalyser();
+  analyserL.fftSize = 256; analyserR.fftSize = 256;
+
   leftOsc.connect(lGain).connect(merger,0,0);
   rightOsc.connect(rGain).connect(merger,0,1);
+
+  // to meters and to output
+  merger.connect(splitter);
+  splitter.connect(analyserL, 0);
+  splitter.connect(analyserR, 1);
 
   var out = ctx.createGain();
   merger.connect(out).connect(ctx.destination);
@@ -202,6 +298,7 @@ function startTone(){
   var fade = SOFT.checked ? 2.0 : 0.05;
   ramp(lGain.gain, 0.08, now + fade);
   ramp(rGain.gain, 0.08, now + fade);
+
   leftOsc.start(); rightOsc.start();
 
   if(SHIM.checked){
@@ -211,7 +308,26 @@ function startTone(){
     ramp(sGain.gain, 0.03, now + fade);
     shimOsc.connect(sGain).connect(ctx.destination); shimOsc.start();
   }
+
+  if(vuTimer){ cancelAnimationFrame(vuTimer); vuTimer=null; }
+  function vu(){
+    if(!analyserL || !analyserR){ return; }
+    var bufL = new Uint8Array(analyserL.frequencyBinCount);
+    var bufR = new Uint8Array(analyserR.frequencyBinCount);
+    analyserL.getByteTimeDomainData(bufL);
+    analyserR.getByteTimeDomainData(bufR);
+    var pkL=0, pkR=0;
+    for(var i=0;i<bufL.length;i++){ pkL = Math.max(pkL, Math.abs(bufL[i]-128)); }
+    for(var j=0;j<bufR.length;j++){ pkR = Math.max(pkR, Math.abs(bufR[j]-128)); }
+    mL.style.width = Math.min(100, Math.round(pkL/128*100))+'%';
+    mR.style.width = Math.min(100, Math.round(pkR/128*100))+'%';
+    vuTimer = requestAnimationFrame(vu);
+  }
+  vu();
+
+  stateBadge.textContent = 'Audio: running';
 }
+
 function stopTone(){
   if(!ctx) return;
   var now = ctx.currentTime, fade = SOFT.checked ? 1.2 : 0.05;
@@ -222,22 +338,32 @@ function stopTone(){
     setTimeout(function(){
       try{ leftOsc.stop(); rightOsc.stop(); if(shimOsc) shimOsc.stop(); }catch(e){}
       leftOsc=rightOsc=shimOsc=null; lGain=rGain=sGain=null;
+      analyserL=analyserR=splitter=null;
+      if(vuTimer){ cancelAnimationFrame(vuTimer); vuTimer=null; }
+      mL.style.width='0%'; mR.style.width='0%';
+      stateBadge.textContent = 'Audio: stopped';
     }, Math.ceil(fade*1000)+80);
   }catch(e){}
 }
 
+function reinitAudio(){
+  stopTone();
+  setTimeout(function(){ startTone(); }, 140);
+}
+
 /* ---------------- UI wiring ---------------- */
-var START = document.getElementById('start');
-var STOP  = document.getElementById('stop');
-var SHIM  = document.getElementById('shimmer');
-var SOFT  = document.getElementById('softfade');
-var MUTE  = document.getElementById('mute');
-var VOL   = document.getElementById('vol');
-var PREV  = document.getElementById('prev');
-var NEXT  = document.getElementById('next');
-var RESYNC= document.getElementById('resync');
-var CLOCK = document.getElementById('clock');
-var LIST  = document.getElementById('tracklist');
+var START=document.getElementById('start');
+var STOP=document.getElementById('stop');
+var SHIM=document.getElementById('shimmer');
+var SOFT=document.getElementById('softfade');
+var MUTE=document.getElementById('mute');
+var VOL=document.getElementById('vol');
+var PREV=document.getElementById('prev');
+var NEXT=document.getElementById('next');
+var FOCUS=document.getElementById('focus');
+var RESYNC=document.getElementById('resync');
+var CLOCK=document.getElementById('clock');
+var LIST=document.getElementById('tracklist');
 var running=false, timerId=null;
 
 function spark(x,y){
@@ -254,6 +380,7 @@ function spark(x,y){
   }
 }
 
+/* Build clickable list */
 function buildList(){
   LIST.innerHTML='';
   for(var i=0;i<TRACKS.length;i++){
@@ -261,7 +388,10 @@ function buildList(){
       var row=document.createElement('div'); row.className='track'; row.dataset.i=idx;
       var label=document.createElement('div'); label.className='t'; label.textContent=TRACKS[idx].t;
       var play=document.createElement('button'); play.textContent='Play';
-      play.addEventListener('click', function(){ loadIndex(idx, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(); }, 400); } }, {passive:true});
+      play.addEventListener('click', function(){
+        loadIndex(idx, true);
+        if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }, 420); }
+      }, {passive:true});
       row.appendChild(label); row.appendChild(play); LIST.appendChild(row);
     })(i);
   }
@@ -272,14 +402,21 @@ function highlight(){
   var r=LIST.querySelector('.track[data-i="'+current+'"]'); if(r) r.classList.add('active');
 }
 
+/* Lifecycle */
 function start(ev){
   if(running) return;
   running=true;
-  if(ctx && ctx.state==='suspended'){ ctx.resume(); }
-  startTone();
-  loadIndex(current, true); // start muted to satisfy autoplay
-  setTimeout(function(){
-    if(!MUTE.checked){ send('unMute'); setVol(); }
+
+  // Belt-and-suspenders: ensure context resume on the first few gestures (iOS)
+  function resumeOnce(){ try{ if(ctx && ctx.state==='suspended') ctx.resume(); }catch(e){} }
+  document.body.addEventListener('pointerup', resumeOnce, {once:true, passive:true});
+  document.body.addEventListener('touchend', resumeOnce, {once:true, passive:true});
+  document.body.addEventListener('click', resumeOnce, {once:true, passive:true});
+
+  startTone();               // tones first (gesture-locked)
+  loadIndex(current, true);  // start muted for autoplay
+  setTimeout(function(){     // then unmute if desired
+    if(!MUTE.checked){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }
   }, 800);
 
   // 3:00 timer
@@ -296,35 +433,41 @@ function start(ev){
   START.disabled=true; STOP.disabled=false; START.classList.add('pulsing');
   if(ev && ev.clientX) spark(ev.clientX, ev.clientY);
 }
-
 function stop(){
   if(!running) return;
   running=false;
   stopTone();
-  // Pause and mute player
   send('mute'); send('pauseVideo');
   if(timerId){ clearInterval(timerId); timerId=null; }
   CLOCK.textContent='03:00';
   START.disabled=false; STOP.disabled=true;
 }
 
+/* Visibility: resume on return (iOS suspends sometimes) */
+document.addEventListener('visibilitychange', function(){
+  try{
+    if(document.visibilityState==='visible' && ctx && ctx.state==='suspended'){
+      ctx.resume(); stateBadge.textContent='Audio: resumed';
+    }
+  }catch(e){}
+}, {passive:true});
+
+/* Buttons */
 START.addEventListener('click', start, {passive:true});
 STOP.addEventListener('click', stop, {passive:true});
-
-MUTE.addEventListener('change', function(){
-  if(this.checked){ send('mute'); }
-  else { send('unMute'); setVol(); }
+MUTE.addEventListener('change', function(){ if(this.checked){ send('mute'); } else { send('unMute'); setVol(parseInt(VOL.value,10)||40); }}, {passive:true});
+VOL.addEventListener('input', function(){ if(!MUTE.checked){ setVol(parseInt(this.value,10)||40); }}, {passive:true});
+PREV.addEventListener('click', function(){ loadIndex(current-1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }, 300);} }, {passive:true});
+NEXT.addEventListener('click', function(){ loadIndex(current+1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }, 300);} }, {passive:true});
+FOCUS.addEventListener('click', function(){
+  var i = TRACKS.findIndex(function(x){ return /strangers/i.test(x.t); });
+  if(i<0) i=0;
+  loadIndex(i, true);
+  if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(parseInt(VOL.value,10)||40); }, 420); }
 }, {passive:true});
+RESYNC.addEventListener('click', reinitAudio, {passive:true});
 
-VOL.addEventListener('input', function(){
-  if(!MUTE.checked){ setVol(); }
-}, {passive:true});
-
-PREV.addEventListener('click', function(){ loadIndex(current-1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(); }, 300);} }, {passive:true});
-NEXT.addEventListener('click', function(){ loadIndex(current+1, true); if(!MUTE.checked){ setTimeout(function(){ send('unMute'); setVol(); }, 300);} }, {passive:true});
-RESYNC.addEventListener('click', function(){ send('playVideo'); if(!MUTE.checked){ send('unMute'); setVol(); } }, {passive:true});
-
-/* init */
+/* Init list */
 buildList(); highlight();
 </script>
 </body>
