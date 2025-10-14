@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Clarity · Sigrid Field — clarity.plnt.earth</title>
-<meta name="description" content="Clarity Field — full-width player with auto-advance, captions, tones, lyric snippets, bonus live cuts, and an emoji score for flow." />
+<meta name="description" content="Clarity Field — full-width featured player with auto-advance, captions, 128/256 Hz tones, lyric-feel snippets, and bonus live cuts.">
 <meta name="theme-color" content="#f1fbff" media="(prefers-color-scheme: light)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -64,7 +64,7 @@
   /* Featured player */
   .featured{margin-top:16px;background:var(--card);border:1px solid var(--ring);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
   .fp-box{position:relative;width:100%;aspect-ratio:16/9;border-bottom:1px solid var(--ring)}
-  .fp-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;flex-wrap:wrap}
+  .fp-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px}
   .fp-title{font-weight:700}
   .fp-caption{font-size:13px;color:var(--muted)}
   .fp-controls{display:flex;gap:8px;flex-wrap:wrap}
@@ -81,14 +81,6 @@
   footer{margin:28px 0 0;color:var(--muted);font-size:13px}
   details{background:var(--card); border:1px solid var(--ring); border-radius:14px; box-shadow:var(--shadow); padding:10px 12px; margin-top:18px}
   summary{cursor:pointer; font-weight:700}
-
-  /* Scoreboard */
-  .score{
-    display:flex;align-items:center;gap:8px;margin-left:auto;border:1px solid var(--ring);
-    background:#f7feff;border-radius:12px;padding:6px 10px
-  }
-  .score b{font-size:12px}
-  .score .emojis{font-size:16px;line-height:1}
 </style>
 </head>
 <body class="shimmer">
@@ -100,7 +92,7 @@
       <div class="jelly" aria-hidden="true"></div>
       <div>
         <h1>Clarity Field · <span class="small">Sigrid ↔ You</span></h1>
-        <div class="small">Root in the Air — 128 Hz + 256 Hz · Featured full-width • Auto-advance • Emoji score</div>
+        <div class="small">Root in the Air — 128 Hz + 256 Hz · Featured full-width player • Auto-advance</div>
       </div>
     </a>
     <span class="tag">jellyfish · bright</span>
@@ -128,7 +120,7 @@
       <button id="snipOff" aria-selected="false">Hide Snippets</button>
     </div>
 
-    <!-- Auto-advance & CC -->
+    <!-- NEW: Auto-advance & CC -->
     <div class="switch" role="tablist" aria-label="Playback" style="margin-left:6px">
       <button id="autoOn" class="active" aria-selected="true">Auto-Advance</button>
       <button id="autoOff" aria-selected="false">Manual</button>
@@ -144,16 +136,8 @@
 
     <span class="pill">Status: <span id="statusTone" class="pill" style="background:#fff8e1;border-color:#ffecb5;color:#664d03">silent</span></span>
 
-    <!-- SCOREBOARD -->
-    <div class="score" aria-live="polite">
-      <b>Score</b>
-      <span id="scoreNum" class="pill">0</span>
-      <span id="scoreEmojis" class="emojis" title="Local score"></span>
-      <button id="scoreReset" class="btn" style="padding:6px 10px">Reset</button>
-    </div>
-
     <div class="small" style="width:100%;margin-top:6px">
-      Earn an emoji every 10s while: tones ON • video PLAYING • player CENTERED • tab VISIBLE.
+      Tip: breathe 4–6 cycles with 128 Hz (root), then blend 256 Hz (air). PiP may help background play; OS rules apply.
     </div>
   </section>
 
@@ -162,7 +146,7 @@
   </section>
 
   <!-- FEATURED PLAYER -->
-  <section class="featured" aria-live="polite" id="featuredSection">
+  <section class="featured" aria-live="polite">
     <div id="fpBox" class="fp-box"><div id="fp"></div></div>
     <div class="fp-meta">
       <div>
@@ -206,15 +190,13 @@ Morse hint:  -.-. .-.. .- .-. .. - -.--   .--- . .-.. .-.. -.-- ..-. .. ... ....
 
 <script>
 /* ---------- Core state ---------- */
-const STATE_KEY = 'clarity.playlists.v5';
-const SCORE_KEY = 'clarity.score.emojis';
+const STATE_KEY = 'clarity.playlists.v4';
 const state = {
   tab:'sigrid', set:'official', showSnippets:true, autoAdvance:true,
   ccOn:true, ccLang:'en',
   sigrid:[], you:[],
-  bonusPlayers:{},
-  fp:null, fpIndex:0, ctx:null, nodes:{},
-  ytState: -1
+  players:{}, bonusPlayers:{},
+  fp:null, fpIndex:0, ctx:null, nodes:{}
 };
 
 /* ---------- Presets ---------- */
@@ -303,15 +285,6 @@ function load(){
 }
 load();
 
-/* ---------- Score (emoji string) ---------- */
-const EMOJI_SET = ['❄️','✨','🫧','🌊','💙','🐚','🌟','🧊','🎧','🪙'];
-function getScoreStr(){ return localStorage.getItem(SCORE_KEY) || ''; }
-function setScoreStr(s){ localStorage.setItem(SCORE_KEY, s.slice(-300)); renderScore(); }
-function addEmojiPoint(){
-  const e = EMOJI_SET[Math.floor(Math.random()*EMOJI_SET.length)];
-  setScoreStr(getScoreStr()+e);
-}
-
 /* ---------- YouTube API ---------- */
 let YT_READY=false;
 function injectYT(){
@@ -325,16 +298,13 @@ window.onYouTubeIframeAPIReady = ()=>{ YT_READY=true; buildUI(); };
 /* ---------- UI Build ---------- */
 const grid = document.getElementById('grid');
 const bonusGrid = document.getElementById('bonusGrid');
+const fpBox = document.getElementById('fp');
 const fpTitle = document.getElementById('fpTitle');
 const fpCaption = document.getElementById('fpCaption');
-const scoreNum = document.getElementById('scoreNum');
-const scoreEmojisEl = document.getElementById('scoreEmojis');
-const scoreReset = document.getElementById('scoreReset');
-function renderScore(){ const s=getScoreStr(); scoreEmojisEl.textContent=s; scoreNum.textContent=[...s].length; }
-scoreReset.onclick = ()=> setScoreStr('');
-renderScore();
 
 function currentList(){ return state[state.tab]||[]; }
+function setCurrentList(arr){ state[state.tab]=arr; }
+
 function buildUI(){
   buildFeatured();
   buildSlots();
@@ -359,9 +329,8 @@ function buildFeatured(){
     events:{
       onReady: (e)=>{ try{ e.target.setPlaybackQuality('hd1080'); }catch{} setMediaSession(item); },
       onStateChange: (e)=>{
-        state.ytState = e.data;
         if(e.data === YT.PlayerState.PLAYING){
-          stopAllBonus();
+          stopAllSlots(); stopAllBonus();
           try{ e.target.setPlaybackQuality('hd1080'); }catch{}
         }
         if(e.data === YT.PlayerState.ENDED && state.autoAdvance){
@@ -428,6 +397,7 @@ function prevTrack(){
   state.fpIndex = idx; save(); buildFeatured();
   setTimeout(()=>{ try{ state.fp.playVideo(); }catch{} }, 200);
 }
+function stopAllSlots(){ /* only featured plays now */ }
 function stopAllBonus(){
   for(const k of Object.keys(state.bonusPlayers)){
     try{ state.bonusPlayers[k].pauseVideo(); }catch{}
@@ -440,10 +410,11 @@ document.getElementById('fpPause').onclick = ()=>{ try{ state.fp.pauseVideo(); }
 document.getElementById('fpNext').onclick = ()=> nextTrack();
 document.getElementById('fpPrev').onclick = ()=> prevTrack();
 document.getElementById('fpPiP').onclick = async ()=>{
+  // Best-effort: request PiP if browser bridges YT iframe to PiP (varies by platform)
   const el = document.querySelector('video'); if(el && el.requestPictureInPicture){ try{ await el.requestPictureInPicture(); }catch{} }
 };
 
-/* Set/Tab/Snippets/Auto/CC buttons */
+/* Set/Tab/Snippets/Auto buttons */
 const tabS = document.getElementById('tabSigrid');
 const tabY = document.getElementById('tabYou');
 const setOfficialBtn = document.getElementById('setOfficial');
@@ -478,7 +449,7 @@ autoOff.onclick = ()=>{ state.autoAdvance=false; save(); reflectButtons(); };
 ccToggle.onclick = ()=>{ state.ccOn=!state.ccOn; save(); buildFeatured(); reflectButtons(); };
 ccLang.onchange = ()=>{ state.ccLang=ccLang.value; save(); buildFeatured(); };
 
-/* Add/Import/Export */
+/* Add/Import/Export (optional – kept from earlier versions) */
 document.getElementById('exportList').addEventListener('click', ()=>{
   const data = JSON.stringify({set:state.set,showSnippets:state.showSnippets,autoAdvance:state.autoAdvance,ccOn:state.ccOn,ccLang:state.ccLang,sigrid:state.sigrid,you:state.you,fpIndex:state.fpIndex}, null, 2);
   const blob = new Blob([data], {type:'application/json'}); const a = document.createElement('a');
@@ -501,7 +472,7 @@ document.getElementById('addVideo').addEventListener('click', ()=> addVideoPromp
 document.getElementById('playAll').addEventListener('click', ()=>{ try{ state.fp.playVideo(); }catch{} });
 document.getElementById('stopAll').addEventListener('click', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
 
-/* Add one slot helper */
+/* Add/Remove one slot */
 function addVideoPrompt(tab, index){
   const raw = prompt('Paste YouTube link or 11-char ID:'); if(!raw) return;
   const id = parseYouTubeId(raw.trim()); if(!id){ alert('Could not detect a YouTube ID.'); return; }
@@ -522,6 +493,12 @@ function parseYouTubeId(url){
 
 /* Audio (128 & 256 Hz) */
 const statusTone = document.getElementById('statusTone');
+function setToneBadge(on){
+  statusTone.textContent = on ? 'tones on' : 'silent';
+  statusTone.style.background = on ? '#e7fff0' : '#fff8e1';
+  statusTone.style.borderColor = on ? '#c8f5da' : '#ffecb5';
+  statusTone.style.color = on ? '#0b5130' : '#664d03';
+}
 document.getElementById('enableAudio').addEventListener('click', async ()=>{
   if(state.ctx) { try{ await state.ctx.resume(); }catch{} setToneBadge(true); return; }
   const ctx=new (window.AudioContext||window.webkitAudioContext)();
@@ -533,19 +510,10 @@ document.getElementById('enableAudio').addEventListener('click', async ()=>{
   const lfo=ctx.createOscillator(); lfo.type='sine'; lfo.frequency.value=0.12;
   const lfoGain=ctx.createGain(); lfoGain.gain.value=0.6; lfo.connect(lfoGain); lfoGain.connect(osc256.detune); lfo.start();
   state.ctx=ctx; state.nodes={main,osc128,g128,osc256,g256,lfo,lfoGain}; setToneBadge(true);
-  const btn=document.getElementById('enableAudio'); btn.classList.remove('glow'); btn.textContent='Sound Enabled';
+  document.getElementById('enableAudio').classList.remove('glow'); document.getElementById('enableAudio').textContent='Sound Enabled';
 });
-function setToneBadge(on){
-  statusTone.textContent = on ? 'tones on' : 'silent';
-  statusTone.style.background = on ? '#e7fff0' : '#fff8e1';
-  statusTone.style.borderColor = on ? '#c8f5da' : '#ffecb5';
-  statusTone.style.color = on ? '#0b5130' : '#664d03';
-}
-function tonesOn(){
-  return !!(state.ctx && state.nodes && ((state.nodes.g128?.gain?.value||0) > 0.001 || (state.nodes.g256?.gain?.value||0) > 0.001));
-}
 
-/* Media Session */
+/* Media Session: better lock-screen controls (when supported) */
 function setMediaSession(item){
   if(!('mediaSession' in navigator) || !item) return;
   try{
@@ -561,30 +529,6 @@ function setMediaSession(item){
     navigator.mediaSession.setActionHandler('pause', ()=>{ try{ state.fp.pauseVideo(); }catch{} });
   }catch{}
 }
-
-/* Centering check for scoring */
-function isFeaturedCentered(){
-  const sec = document.getElementById('featuredSection');
-  const r = sec.getBoundingClientRect();
-  const cx = window.innerWidth/2;
-  const cy = window.innerHeight/2;
-  const inBounds = (cx > r.left && cx < r.right && cy > r.top && cy < r.bottom);
-  const coverage = Math.min(1, Math.max(0, (Math.min(r.bottom,window.innerHeight)-Math.max(r.top,0)) / r.height));
-  return inBounds && coverage > 0.3;
-}
-
-/* Flow scoring loop */
-let tick=0;
-setInterval(()=>{
-  const visible = document.visibilityState === 'visible';
-  const playing = (state.ytState === 1); // PLAYING
-  if(visible && playing && tonesOn() && isFeaturedCentered()){
-    tick++;
-    if(tick>=10){ tick=0; addEmojiPoint(); }
-  }else{
-    tick=0;
-  }
-}, 1000);
 
 /* Parallax snow */
 (function snow(){
@@ -621,6 +565,9 @@ document.getElementById('autoOff').classList.toggle('active', !state.autoAdvance
 document.getElementById('autoOff').setAttribute('aria-selected', !state.autoAdvance);
 document.getElementById('ccLang').value = state.ccLang;
 document.getElementById('ccToggle').textContent = state.ccOn ? 'CC On' : 'CC Off';
+
+/* Quick instruction line, keep for iOS quirks */
+document.querySelector('.notice .mono')?.remove();
 </script>
 </body>
 </html>
