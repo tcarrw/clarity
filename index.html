@@ -1,206 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="no">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<meta name="theme-color" content="#0b0d11" />
-<title>Clarity Index — Marina × Sigrid</title>
-<meta name="description" content="Clarity Index: Radio City anchor photo + 128↔160 Hz tone + one-line logger. Works on iPhone.">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Clarity — Nattnotat (for Sigrid)</title>
+<meta name="description" content="Clarity night reflection — a clean back-channel page for Sigrid." />
 <style>
   :root{
-    --bg:#0b0d11; --ink:#e9ecf4; --muted:#a8b0c2; --ring:rgba(255,255,255,.25);
-    --gold:#ffd76a; --blue:#4fb6ff; --magenta:#ff4fb6; --slate:rgba(11,13,17,.86);
+    --mint:#79e0c8;
+    --ice:#e9fbf6;
+    --mist:#a7c0ba;
+    --bg1:#061614;
+    --bg2:#0a1f1c;
   }
   *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;}
-  .wrap{position:relative;min-height:100%;overflow:hidden;}
-  /* ▼ Compact inlined preview of your Radio City photo (full-res in downloadable file) */
-  .bg{position:absolute;inset:0;background:
-    url('data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAA4KCw0LCQ4NDA0QDw4RFiQXFhQUFiwgIRokNC43NjMuMjI6QVNGOj1OPjIySGJJTlZYXV5dOEVmbWVabFNbXVn/2wBDARESEhgVGCYYGiYhYF5gYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBg/8AAEQgBXgJgAwEiAAIRAQMRAf/EAB8AAAEFAQEBAQEAAAAAAAAAAAUDBAYHCAEIAP/EADcQAAIBAwMCBQQIBwAAAAAAAAECAwAEEQUhBhIxQVFhBxMiMnGBkRQjUnKx0eHwQ1OCgv/EABgBAQEBAQEAAAAAAAAAAAAAAAABAgME/8QAHBEBAQEBAQEBAQAAAAAAAAAAAAERAjFBEiFB/9oADAMBAAIRAxEAPwCkqgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADtqzVgq7b2t0k4+QX7H8m1m7Jwu2zZQ6m5w1p6m7xJ8h0J3v9m0b9hXw7s8fGfJ3vQ0c1dQq2q6mWz5x3l8v4d8d1b1K2bV7K0a9pHk8b7R6cJ8e9b0qu2r2W2yqTkt2r8fBfXGQqW5zV6aW8jz7NfVb9otK2lZbq2qS8mQAAAAAAAAAAAAAAAAA...') 
-    center/cover no-repeat fixed;
-    filter:saturate(1.08) contrast(1.02);}
-  .veil{position:absolute;inset:0;background:
-    radial-gradient(120% 120% at 80% 20%, rgba(79,182,255,.12), transparent 40%),
-    radial-gradient(120% 120% at 20% 80%, rgba(255,79,182,.14), transparent 40%),
-    linear-gradient(180deg, rgba(11,13,17,.35), rgba(11,13,17,.65));}
-  .content{position:relative;z-index:2;min-height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:24px;gap:18px}
-  header{backdrop-filter:blur(6px);background:linear-gradient( to bottom, rgba(11,13,17,.65), rgba(11,13,17,.25));border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:14px 16px}
-  h1{font-size:18px;margin:0 0 6px 0;letter-spacing:.3px}
-  .sub{font-size:13px;color:var(--muted)}
-  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-  .chip{border:1px solid rgba(255,255,255,.18);padding:8px 12px;border-radius:999px;font-size:13px;background:rgba(11,13,17,.5)}
-  .chip[aria-pressed="true"]{outline:2px solid var(--ring);background:rgba(11,13,17,.7)}
-  main{display:grid;gap:14px}
-  .panel{backdrop-filter:blur(10px);background:linear-gradient(180deg, rgba(11,13,17,.72), rgba(11,13,17,.66));border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px}
-  .cta{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;border:1px dashed rgba(255,255,255,.18);border-radius:14px}
-  button, .btn{-webkit-tap-highlight-color:transparent;appearance:none;border:none;border-radius:12px;padding:14px 16px;font-weight:600;font-size:15px;letter-spacing:.3px;color:#0b0d11;background:linear-gradient(180deg,var(--gold),#e7be52);box-shadow:0 6px 20px rgba(255,215,106,.25);}
-  button:disabled{opacity:.6}
-  .toggle{display:flex;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,.16)}
-  .toggle button{flex:1;background:rgba(11,13,17,.6);color:var(--ink);border-right:1px solid rgba(255,255,255,.08)}
-  .toggle button:last-child{border-right:none}
-  .toggle button[aria-pressed="true"]{background:linear-gradient(180deg, rgba(79,182,255,.25), rgba(255,79,182,.25));color:#fff;outline:2px solid rgba(255,255,255,.12)}
-  label{font-size:13px;color:var(--muted)}
-  input[type="range"]{width:100%}
-  .breath{height:8px;border-radius:8px;background:linear-gradient(90deg, var(--blue), var(--magenta));position:relative;overflow:hidden}
-  .breath::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg, rgba(255,255,255,.4), rgba(255,255,255,0) 60%);mix-blend-mode:soft-light;animation:flow 5s linear infinite}
-  @keyframes flow{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-  @media (max-width:720px){.grid2{grid-template-columns:1fr}}
-  footer{font-size:12px;color:var(--muted);text-align:center;opacity:.9}
-  .logline{width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:var(--ink)}
-  .list small{color:var(--muted)}
-  .pill{display:inline-block;margin-top:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:12px;background:rgba(11,13,17,.5)}
+  html,body{
+    height:100%; margin:0;
+    font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+    color:var(--ice);
+    background:
+      radial-gradient(800px 420px at 60% 20%, rgba(121,224,200,.12), transparent 60%),
+      linear-gradient(180deg, var(--bg2) 0%, var(--bg1) 60%, #050b0a 100%);
+  }
+  .wrap{
+    min-height:100%; display:flex; align-items:center; justify-content:center;
+    text-align:center; padding:28px; line-height:1.6;
+  }
+  .card{
+    max-width:640px; width:100%;
+    background:linear-gradient(180deg, rgba(8,20,24,.7), rgba(6,18,20,.7));
+    border:1px solid rgba(121,224,200,.25);
+    border-radius:18px; padding:24px;
+    box-shadow:0 14px 44px rgba(0,0,0,.45);
+    backdrop-filter:saturate(120%) blur(6px);
+  }
+  h1{margin:0 0 12px 0; font-size:20px; letter-spacing:.14em; text-transform:uppercase; color:#eafff8}
+  .line{margin:8px auto; font-size:18px; letter-spacing:.3px; color:#f2fffb}
+  .sub{margin:4px auto 14px; font-size:13px; color:var(--mist); letter-spacing:.08em}
+  .seal{margin-top:14px; font-size:12px; color:var(--mist); letter-spacing:.06em}
+  .pill{
+    display:inline-block; margin-top:6px; padding:6px 10px; border-radius:999px;
+    border:1px solid rgba(121,224,200,.45); color:#eafff8; font:700 11px ui-monospace, SFMono-Regular, Menlo, monospace;
+    background:linear-gradient(180deg, rgba(121,224,200,.16), rgba(121,224,200,.06));
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="bg" aria-hidden="true"></div>
-  <div class="veil" aria-hidden="true"></div>
-  <div class="content">
-    <header>
-      <h1>Clarity Index · Marina × Sigrid</h1>
-      <div class="sub">Radio City anchor · 128↔160 Hz tone · “Closer Now” log · <span id="today"></span></div>
-      <div class="row" role="group" aria-label="Artist">
-        <span class="chip" id="artistMarina" role="button" aria-pressed="true">Marina</span>
-        <span class="chip" id="artistSigrid" role="button" aria-pressed="false">Sigrid</span>
-        <span class="pill">say “klar” before play</span>
-      </div>
-      <div class="breath" aria-hidden="true"></div>
-    </header>
+  <main class="wrap">
+    <section class="card" aria-label="Clarity night reflection for Sigrid">
+      <h1>Clarity — Nattnotat</h1>
+      <div class="sub">garlic · back-channel · clean tone</div>
 
-    <main>
-      <section class="panel">
-        <div class="cta">
-          <button id="enable">Enable Audio</button>
-          <div class="toggle" role="group" aria-label="Tone">
-            <button id="tone128" aria-pressed="true">128 Hz (ground)</button>
-            <button id="tone160" aria-pressed="false">160 Hz (air)</button>
-          </div>
-          <div style="width:100%">
-            <label for="vol">Volume</label>
-            <input id="vol" type="range" min="0" max="1" step="0.01" value="0.25" />
-          </div>
-        </div>
-      </section>
+      <p class="pill">“Jeg ser deg klart.”</p>
 
-      <section class="panel grid2">
-        <div>
-          <label for="log">“Closer Now” — one line</label>
-          <input id="log" class="logline" maxlength="200" placeholder="Sigrid feels like ___ in my body." />
-          <div class="row" style="margin-top:10px">
-            <button id="save" class="btn" style="background:linear-gradient(180deg,var(--blue),#4f9de0);color:white">Save line</button>
-            <button id="copy" class="btn" style="background:linear-gradient(180deg,var(--magenta),#d64fa0);color:white">Copy last 5</button>
-            <button id="clear" class="btn" style="background:linear-gradient(180deg,#888,#555);color:white">Clear all</button>
-          </div>
-        </div>
-        <div>
-          <strong>Recent</strong>
-          <div id="list" class="list" style="margin-top:8px"></div>
-        </div>
-      </section>
+      <p class="line">the dark taught me to listen.</p>
+      <p class="line">the waiting taught me to breathe.</p>
+      <p class="line">the silence made room for the true line.</p>
+      <p class="line">and when the light returned, it found us already honest.</p>
+      <p class="line">this is what the darkness was for — to keep the channel clear.</p>
 
-      <section class="panel">
-        <div class="row" style="justify-content:space-between;align-items:center">
-          <div>
-            <div style="font-weight:600">Micro-ritual</div>
-            <div class="sub">Look → Breathe (blue↔magenta) → Play → Write → Close</div>
-          </div>
-          <div class="row">
-            <span class="pill">Blue = clarity</span>
-            <span class="pill">Magenta = warmth</span>
-            <span class="pill">Gold = confidence</span>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer>Works offline via WebAudio. No data leaves your device.</footer>
-  </div>
-</div>
-<script>
-(function(){
-  const qs = (s)=>document.querySelector(s);
-  const enable = qs('#enable');
-  const tone128 = qs('#tone128');
-  const tone160 = qs('#tone160');
-  const vol = qs('#vol');
-  const marina = qs('#artistMarina');
-  const sigrid = qs('#artistSigrid');
-  const logIn = qs('#log');
-  const saveBtn = qs('#save');
-  const copyBtn = qs('#copy');
-  const clearBtn = qs('#clear');
-  const list = qs('#list');
-  const today = qs('#today');
-  let ctx, osc, gain;
-  let freq = 128;
-
-  today.textContent = new Date().toISOString().slice(0,10);
-
-  function setPressed(el, on){ el.setAttribute('aria-pressed', on ? 'true':'false'); }
-  function chooseTone(f){
-    freq = f;
-    if(osc) osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    setPressed(tone128, f===128);
-    setPressed(tone160, f===160);
-  }
-  function chooseArtist(name){
-    const isMarina = name==='Marina';
-    setPressed(marina, isMarina);
-    setPressed(sigrid, !isMarina);
-    updatePlaceholder();
-  }
-  function updatePlaceholder(){
-    const isSigrid = sigrid.getAttribute('aria-pressed')==='true';
-    logIn.placeholder = isSigrid ? "Sigrid feels like ___ in my body." : "Marina feels like ___ in my body.";
-  }
-
-  function storageKey(){ return 'clarity-index-log-v1'; }
-  function readAll(){ try{ return JSON.parse(localStorage.getItem(storageKey()))||[]; }catch(e){ return []; } }
-  function writeAll(arr){ localStorage.setItem(storageKey(), JSON.stringify(arr)); }
-  function render(){
-    const arr = readAll().slice(-5).reverse();
-    list.innerHTML = arr.map(it => `<div class="item"><div>${it.text}</div><small>${it.when} · ${it.artist} · ${it.tone}Hz</small></div>`).join('') || '<div class="sub">No entries yet.</div>';
-  }
-
-  function bootAudio(){ 
-    if(ctx) return;
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    gain = ctx.createGain(); gain.gain.value = parseFloat(vol.value);
-    osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.setValueAtTime(freq, ctx.currentTime);
-    osc.connect(gain).connect(ctx.destination); osc.start();
-  }
-
-  enable.addEventListener('click', function(){ bootAudio(); enable.disabled = true; });
-  tone128.addEventListener('click', function(){ chooseTone(128); });
-  tone160.addEventListener('click', function(){ chooseTone(160); });
-  vol.addEventListener('input', function(){ if(gain) gain.gain.value = parseFloat(vol.value); });
-  marina.addEventListener('click', function(){ chooseArtist('Marina'); });
-  sigrid.addEventListener('click', function(){ chooseArtist('Sigrid'); });
-
-  saveBtn.addEventListener('click', function(){ 
-    const text = (logIn.value||'').trim(); 
-    if(!text) return;
-    const arr = readAll();
-    const artist = marina.getAttribute('aria-pressed')==='true' ? 'Marina' : 'Sigrid';
-    const tone = freq;
-    const when = new Date().toLocaleString();
-    arr.push({text, artist, tone, when});
-    writeAll(arr);
-    logIn.value='';
-    render();
-  });
-  copyBtn.addEventListener('click', function(){ 
-    const lines = readAll().slice(-5).map(it => `[${it.when}] (${it.artist} • ${it.tone}Hz) ${it.text}`).join('\n');
-    navigator.clipboard.writeText(lines || ''); 
-  });
-  clearBtn.addEventListener('click', function(){ 
-    if(confirm('Clear all saved lines?')){ writeAll([]); render(); }
-  });
-
-  // init
-  chooseTone(128); chooseArtist('Marina'); render();
-})();
-</script>
+      <div class="seal">Clarity · Sigrid · night reflection</div>
+    </section>
+  </main>
 </body>
 </html>
